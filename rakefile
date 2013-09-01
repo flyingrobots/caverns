@@ -1,6 +1,7 @@
 @script_dir = File.expand_path File.dirname(__FILE__)
 
 import "#{@script_dir}/tasks/node.rake"
+import "#{@script_dir}/tasks/pixi.rake"
 
 Rake::TaskManager.record_task_metadata = true
 
