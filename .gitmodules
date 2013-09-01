@@ -10,3 +10,6 @@
 [submodule "deps/underscore.git"]
 	path = deps/underscore.git
 	url = https://github.com/jashkenas/underscore.git
+[submodule "deps/seedrandom.git"]
+	path = deps/seedrandom.git
+	url = https://github.com/davidbau/seedrandom.git
