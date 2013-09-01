@@ -1,5 +1,5 @@
 var CavernGenerator = new Class({
-	
+  
   Implements:Options,
 
   options:
@@ -16,11 +16,11 @@ var CavernGenerator = new Class({
     numWaterfalls:4
   },
 
-	initialize:function(options)
-	{
+  initialize:function(options)
+  {
     this.setOptions(options);
-		this.width = this.options.width;
-		this.height = this.options.height;
+    this.width = this.options.width;
+    this.height = this.options.height;
     this.tiles = [];
     this.validMoves = [
       {x:1,y:0},
@@ -30,10 +30,10 @@ var CavernGenerator = new Class({
     ];
     this.islands = [];
     this.lowestPoint = 0;
-	},
+  },
 
-	generate:function()
-	{
+  generate:function()
+  {
     var oldRandom = Math.random;
     if (this.options.seed != undefined)
     {
@@ -43,15 +43,15 @@ var CavernGenerator = new Class({
     // Create filled tile map
     this.tiles = [];
     this.lowestPoint = 0;
-		for (var y = 0; y <= this.height; ++y)
-		{
-			var row = [];
-			for (var x = 0; x <= this.width; ++x)
-			{
-				row.push({type:TILE_TYPE_FILLED, islandId:undefined});
-			}
-			this.tiles.push(row);
-		}
+    for (var y = 0; y <= this.height; ++y)
+    {
+      var row = [];
+      for (var x = 0; x <= this.width; ++x)
+      {
+        row.push({type:TILE_TYPE_FILLED, islandId:undefined});
+      }
+      this.tiles.push(row);
+    }
 
     // Create initial miners
     var miners = [];
@@ -141,8 +141,8 @@ var CavernGenerator = new Class({
       height:this.height,
       tiles:tileMap
     };
-		return cavernDef;
-	},
+    return cavernDef;
+  },
 
   digTile:function(x,y)
   {
