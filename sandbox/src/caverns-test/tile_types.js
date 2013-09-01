@@ -1,3 +1,4 @@
 const TILE_TYPE_FILLED = 0;
 const TILE_TYPE_CLEAR = 1;
 const TILE_TYPE_LAVA = 2;
+const TILE_TYPE_WATER = 3;

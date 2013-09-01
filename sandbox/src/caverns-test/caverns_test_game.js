@@ -34,7 +34,23 @@ var CavernsTestGame = new Class({
   			for (var x = 0; x <= cavernDef.width; ++x)
   			{
           var tile = cavernDef.tiles[x][y];
-  				graphics.beginFill(tile == TILE_TYPE_FILLED ? 0x000000 : tile == TILE_TYPE_LAVA ? 0xff0000 : 0xffffff);
+          var color = 0xffffff;
+          switch (tile)
+          {
+            case TILE_TYPE_FILLED:
+              color = 0x000000;
+              break;
+            case TILE_TYPE_CLEAR:
+              color = 0xffffff;
+              break;
+            case TILE_TYPE_LAVA:
+              color = 0xff0000;
+              break;
+            case TILE_TYPE_WATER:
+              color = 0x0000ff;
+              break;
+          }
+  				graphics.beginFill(color);
   				graphics.drawRect(x*cellWidth,y*cellHeight,cellWidth,cellHeight);
   			}
   		}

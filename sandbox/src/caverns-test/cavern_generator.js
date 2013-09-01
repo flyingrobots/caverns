@@ -15,7 +15,7 @@ var CavernGenerator = new Class({
     this.islands = [];
     this.lowestPoint = 0;
     this.lavaHeight = 10;
-    this.numLavafalls = 4;
+    this.numWaterfalls = 4;
 	},
 
 	generate:function(numIterations)
@@ -82,6 +82,9 @@ var CavernGenerator = new Class({
     // Add lava to the map
     this.addLavaToMap();
 
+    // Add water to the map
+    this.addWaterToMap();
+
     // Build final tile map
     var tileMap = [];
     for (var y = 0; y <= this.height; ++y)
@@ -126,15 +129,19 @@ var CavernGenerator = new Class({
         }
       }
     }
+  },
 
-    // Add lava falls
-    for (var i = 0; i < this.numLavafalls; ++i)
+
+  addWaterToMap:function()
+  {
+    // Add waterfalls
+    for (var i = 0; i < this.numWaterfalls; ++i)
     {
-      this.addRandomLavafall();
+      this.addRandomWaterfall();
     }
   },
 
-  addRandomLavafall:function()
+  addRandomWaterfall:function()
   {
     // Get a random tile
     var tile = {x:0,y:0}
@@ -147,36 +154,36 @@ var CavernGenerator = new Class({
     // Move up until we find the ceiling
     while (tile.y-1 >= 0 && this.tiles[tile.x][tile.y-1].type == TILE_TYPE_CLEAR) { tile.y -= 1; }
 
-    // Start the lava flow
-    var lavaCreators = [tile];
-    while (lavaCreators.length > 0)
+    // Start the water flow
+    var waterCreators = [tile];
+    while (waterCreators.length > 0)
     {
-      var tile = lavaCreators.splice(0,1)[0];
-      this.tiles[tile.x][tile.y].type = TILE_TYPE_LAVA;
+      var tile = waterCreators.splice(0,1)[0];
+      this.tiles[tile.x][tile.y].type = TILE_TYPE_WATER;
 
       // Can the flow move down?
-      if (this.isViableLavaLocation(tile.x,tile.y+1))
+      if (this.isViableWaterLocation(tile.x,tile.y+1))
       {
-        lavaCreators.push({x:tile.x,y:tile.y+1});
+        waterCreators.push({x:tile.x,y:tile.y+1});
         continue;
       }
 
       // If the thing below us is filled, move left and right
       if (this.isTileFilled(tile.x, tile.y+1))
       {
-        if (this.isViableLavaLocation(tile.x-1,tile.y))
+        if (this.isViableWaterLocation(tile.x-1,tile.y))
         {
-          lavaCreators.push({x:tile.x-1,y:tile.y});
+          waterCreators.push({x:tile.x-1,y:tile.y});
         }
-        if (this.isViableLavaLocation(tile.x+1,tile.y))
+        if (this.isViableWaterLocation(tile.x+1,tile.y))
         {
-          lavaCreators.push({x:tile.x+1,y:tile.y});
+          waterCreators.push({x:tile.x+1,y:tile.y});
         }
       }
     }
   },
 
-  isViableLavaLocation:function(x,y)
+  isViableWaterLocation:function(x,y)
   {
     return this.isOnMap(x, y) && this.tiles[x][y].type == TILE_TYPE_CLEAR
   },
