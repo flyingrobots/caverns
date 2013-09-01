@@ -38,7 +38,7 @@ var resolveFilepath = function(filepath) {
 }
 
 var app = express();
-app.get('/', function(req, res) {
+app.get('/*', function(req, res) {
   filepath = resolveFilepath(url.parse(req.url).pathname);
   console.log('GET ' + filepath);
   res.sendfile(path.resolve(filepath));
