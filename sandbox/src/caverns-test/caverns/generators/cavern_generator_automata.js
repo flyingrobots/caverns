@@ -29,7 +29,6 @@ var CavernGeneratorAutomata = new Class({
     // Run automata functions on tiles
     for (var i = 0; i < this.options.numIterations; ++i)
     {
-      console.log("running iteration")
       for (var x = 0; x < this.width; ++x)
       {
         for (var y = 0; y < this.height; ++y)
@@ -50,7 +49,6 @@ var CavernGeneratorAutomata = new Class({
         }
       }
     }
-    console.log("all iterations done")
   },
 
   getNumAdjacent:function(x,y)
@@ -61,7 +59,7 @@ var CavernGeneratorAutomata = new Class({
       for (var j = -1; j <= 1; ++j)
       {
         if (i == 0 && j == 0) continue;
-        if (!this.isOnMap(x+i,y+j) || this.tiles[x+i][y+j].type == TILE_TYPE_FILLED)
+        if (this.isOnMap(x+i,y+j) && this.tiles[x+i][y+j].type == TILE_TYPE_FILLED)
         {
           count++;
         }
