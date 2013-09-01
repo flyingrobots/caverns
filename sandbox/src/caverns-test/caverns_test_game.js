@@ -50,7 +50,7 @@ var CavernsTestGame = new Class({
               color = 0x333333;
               break;
             case TILE_TYPE_CLEAR:
-              color = 0xffffff;
+              color = 0x715F78;
               break;
             case TILE_TYPE_LAVA:
               color = 0xD1262E;
