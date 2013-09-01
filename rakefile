@@ -10,4 +10,5 @@ task :default do
   Rake.application.display_tasks_and_comments()
 end
 
+desc "Installs everything you'll need"
 task :install => ['node:install']
