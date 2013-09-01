@@ -29,12 +29,12 @@ var CavernsTestGame = new Class({
       graphics.width = cavernDef.width*cellWidth;
       graphics.height = cavernDef.height*cellHeight;
 
-      	for (var y = 0; y <= cavernDef.height; ++y)
+      for (var y = 0; y <= cavernDef.height; ++y)
   		{
   			for (var x = 0; x <= cavernDef.width; ++x)
   			{
           var tile = cavernDef.tiles[x][y];
-  				graphics.beginFill(tile == 1 ? 0x000000 : 0xffffff);
+  				graphics.beginFill(tile == TILE_TYPE_FILLED ? 0x000000 : tile == TILE_TYPE_LAVA ? 0xff0000 : 0xffffff);
   				graphics.drawRect(x*cellWidth,y*cellHeight,cellWidth,cellHeight);
   			}
   		}

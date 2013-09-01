@@ -13,20 +13,24 @@ var CavernGenerator = new Class({
       {x:0,y:-1}
     ];
     this.islands = [];
+    this.lowestPoint = 0;
+    this.lavaHeight = 10;
+    this.numLavafalls = 4;
 	},
 
 	generate:function(numIterations)
 	{
     numIterations = numIterations || 500
-    
+
     // Create filled tile map
     this.tiles = [];
+    this.lowestPoint = 0;
 		for (var y = 0; y <= this.height; ++y)
 		{
 			var row = [];
 			for (var x = 0; x <= this.width; ++x)
 			{
-				row.push({filled:true, islandId:undefined});
+				row.push({type:TILE_TYPE_FILLED, islandId:undefined});
 			}
 			this.tiles.push(row);
 		}
@@ -68,12 +72,15 @@ var CavernGenerator = new Class({
         miner.y = Math.max(0, Math.min(miner.y, this.height-1));
 
         // Clear the current tile
-        this.tiles[miner.x][miner.y].filled = false;
+        this.digTile(miner.x,miner.y);
       }
     }
 
     // Clean the tile map
     this.cleanMap();
+
+    // Add lava to the map
+    this.addLavaToMap();
 
     // Build final tile map
     var tileMap = [];
@@ -82,7 +89,7 @@ var CavernGenerator = new Class({
       var row = [];
       for (var x = 0; x <= this.width; ++x)
       {
-        row.push(this.tiles[x][y].filled ? 1 : 0);
+        row.push(this.tiles[y][x].type);
       }
       tileMap.push(row);
     }
@@ -95,6 +102,84 @@ var CavernGenerator = new Class({
     };
 		return cavernDef;
 	},
+
+  digTile:function(x,y)
+  {
+    this.tiles[x][y].type = TILE_TYPE_CLEAR;
+    if (y > this.lowestPoint)
+    {
+      this.lowestPoint = y;
+    }
+  },
+
+  addLavaToMap:function()
+  {
+    // Add basin lava
+    for (var y = this.lowestPoint; y >= this.lowestPoint - this.lavaHeight && y >= 0; --y)
+    {
+      for (var x = 0; x < this.width; ++x)
+      {
+        var tile = this.tiles[x][y];
+        if (tile.type == TILE_TYPE_CLEAR)
+        {
+          tile.type = TILE_TYPE_LAVA;
+        }
+      }
+    }
+
+    // Add lava falls
+    for (var i = 0; i < this.numLavafalls; ++i)
+    {
+      this.addRandomLavafall();
+    }
+  },
+
+  addRandomLavafall:function()
+  {
+    // Get a random tile
+    var tile = {x:0,y:0}
+    do
+    {
+      tile.x = Math.floor(Math.random()*this.width);
+      tile.y = Math.floor(Math.random()*this.height);
+    } while(this.tiles[tile.x][tile.y].type != TILE_TYPE_CLEAR);
+
+    // Move up until we find the ceiling
+    while (tile.y-1 >= 0 && this.tiles[tile.x][tile.y-1].type == TILE_TYPE_CLEAR) { tile.y -= 1; }
+
+    // Start the lava flow
+    var lavaCreators = [tile];
+    while (lavaCreators.length > 0)
+    {
+      var tile = lavaCreators.splice(0,1)[0];
+      this.tiles[tile.x][tile.y].type = TILE_TYPE_LAVA;
+
+      // Can the flow move down?
+      if (this.isViableLavaLocation(tile.x,tile.y+1))
+      {
+        lavaCreators.push({x:tile.x,y:tile.y+1});
+        continue;
+      }
+
+      // If the thing below us is filled, move left and right
+      if (this.isTileFilled(tile.x, tile.y+1))
+      {
+        if (this.isViableLavaLocation(tile.x-1,tile.y))
+        {
+          lavaCreators.push({x:tile.x-1,y:tile.y});
+        }
+        if (this.isViableLavaLocation(tile.x+1,tile.y))
+        {
+          lavaCreators.push({x:tile.x+1,y:tile.y});
+        }
+      }
+    }
+  },
+
+  isViableLavaLocation:function(x,y)
+  {
+    return this.isOnMap(x, y) && this.tiles[x][y].type == TILE_TYPE_CLEAR
+  },
 
   cleanMap:function()
   {
@@ -127,7 +212,7 @@ var CavernGenerator = new Class({
       for (var x = 0; x <= this.width; ++x)
       {
         var tile = this.tiles[x][y];
-        if (!tile.filled || tile.islandId != undefined)
+        if (tile.type != TILE_TYPE_FILLED || tile.islandId != undefined)
         {
           continue;
         }
@@ -149,17 +234,22 @@ var CavernGenerator = new Class({
       var y = tile.y;
       var left = tile.x;
       var right = tile.x;
-      while (this.isOnMap(left,y) && this.tiles[left][y].filled && this.tiles[left][y].islandId == undefined) { left-=1; }
-      while (this.isOnMap(right,y) && this.tiles[right][y].filled && this.tiles[right][y].islandId == undefined) { right+=1; }
+      while (this.isViableIslandLocation(left,y)) { left-=1; }
+      while (this.isViableIslandLocation(right,y)) { right+=1; }
       for (var i=left+1; i < right; ++i)
       {
         var islandTile = this.tiles[i][y];
         islandTile.islandId = islandId;
         island.push({x:i,y:y});
-        if (this.isOnMap(i,y-1) && this.tiles[i][y-1].filled && this.tiles[i][y-1].islandId == undefined) { tilesToConsider.push({x:i,y:y-1}); }
-        if (this.isOnMap(i,y+1) && this.tiles[i][y+1].filled && this.tiles[i][y+1].islandId == undefined) { tilesToConsider.push({x:i,y:y+1}); }
+        if (this.isViableIslandLocation(i,y-1)) { tilesToConsider.push({x:i,y:y-1}); }
+        if (this.isViableIslandLocation(i,y+1)) { tilesToConsider.push({x:i,y:y+1}); }
       }
     }
+  },
+
+  isViableIslandLocation:function(x,y)
+  {
+    return this.isTileFilled(x,y) && this.tiles[x][y].islandId == undefined;
   },
 
   destroyIsland:function(island)
@@ -167,7 +257,7 @@ var CavernGenerator = new Class({
     for (var i = 0; i < island.length; ++i)
     {
       var tile = island[i];
-      this.tiles[tile.x][tile.y].filled = false;
+      this.digTile(tile.x,tile.y);
     }
   },
 
@@ -187,7 +277,7 @@ var CavernGenerator = new Class({
         var tile = this.tiles[x][y];
         if (this.getNumAdjacencies(x,y,true) < 3 || this.getNumAdjacencies(x,y,false) < 2)
         {
-          tile.filled = false;
+          this.digTile(x,y);
           numCleared++;
         }
       }
@@ -265,7 +355,7 @@ var CavernGenerator = new Class({
 
   isTileFilled:function(x,y)
   {
-    return this.isOnMap(x,y) && this.tiles[x][y].filled == true;
+    return this.isOnMap(x,y) && this.tiles[x][y].type == TILE_TYPE_FILLED;
   },
 
   createMinerAtRandomLocation:function()
