@@ -3,31 +3,48 @@ var CavernsTestGame = new Class({
 
     initialize: function(width, height, bgColor)
     {
-    	this.parent(width, height, bgColor)
+    	this.parent(width, height, bgColor);
 
-		// create a texture from an image path
-		var texture = PIXI.Texture.fromImage("content/bunny.png");
+    	this.cavernWidth = 200;
+    	this.cavernHeight = 200;
 
-		// create a new Sprite using the texture
-		this.bunny = new PIXI.Sprite(texture);
-		
-		// center the sprites anchor point
-		this.bunny.anchor.x = 0.5;
-		this.bunny.anchor.y = 0.5;
-		
-		// move the sprite t the center of the screen
-		this.bunny.position.x = 200;
-		this.bunny.position.y = 150;
-		
-		this.stage.addChild(this.bunny);
+      // Generate cavern data
+    	var generator = new CavernGenerator(this.cavernWidth, this.cavernHeight);
+      var cavernData = generator.generate();
+
+      // Render cavern data
+  		var cavernGfx = this.generateCavernSprite(cavernData);
+      var cavernTex = new PIXI.RenderTexture(cavernGfx.width, cavernGfx.height);
+      cavernTex.render(cavernGfx);
+      var cavernSprite = new PIXI.Sprite(cavernTex);
+  		this.stage.addChild(cavernSprite);
+    },
+
+    generateCavernSprite: function(cavernDef)
+    {
+    	const cellWidth = 4;
+    	const cellHeight = 4;
+
+  		var graphics = new PIXI.Graphics();
+      graphics.width = cavernDef.width*cellWidth;
+      graphics.height = cavernDef.height*cellHeight;
+
+      	for (var y = 0; y <= cavernDef.height; ++y)
+  		{
+  			for (var x = 0; x <= cavernDef.width; ++x)
+  			{
+          var tile = cavernDef.tiles[x][y];
+  				graphics.beginFill(tile == 1 ? 0x000000 : 0xffffff);
+  				graphics.drawRect(x*cellWidth,y*cellHeight,cellWidth,cellHeight);
+  			}
+  		}
+
+  		return graphics;
     },
 
     render: function()
     {	
-	    // just for fun, lets rotate mr rabbit a little
-	    this.bunny.rotation += 0.1;
-		
 	    // render the stage   
-	    this.parent()
+	    this.parent();
     }
 });
