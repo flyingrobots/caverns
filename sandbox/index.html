@@ -12,13 +12,14 @@
 	<script src="../client/deps/pixi-js/bin/pixi.dev.js"></script>
 	<script src="../deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
 	<script src="src/game.js"></script>
-	<script src="src/bunny_game.js"></script>
+	<script src="src/sprite-example/sprite_example_game.js"></script>
+	<script src="src/caverns-test/caverns_test_game.js"></script>
 
 </head>
 <body>
 	<script>
 
-		var game = new BunnyGame(400, 300);
+		var game = new CavernsTestGame(400, 300);
 		requestAnimFrame(animate);
 
 		function animate()

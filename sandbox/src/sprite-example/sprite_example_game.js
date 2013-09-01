@@ -1,4 +1,4 @@
-var BunnyGame = new Class({
+var SpriteExampleGame = new Class({
 	Extends:Game,
 
     initialize: function(width, height, bgColor)
