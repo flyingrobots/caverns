@@ -2,6 +2,10 @@ class Utils
   def self.project_dir
     File.expand_path "#{File.expand_path File.dirname(__FILE__)}/../"
   end
+
+  def self.gitnuke 
+    doit "git checkout . && git clean -df"
+  end
 end
 
 def doit command, opts = {}

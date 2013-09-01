@@ -18,7 +18,7 @@ def pixi_update
       doit "mv pixi-js.git/examples pixi-js"
       doit "mv pixi-js.git/bin pixi-js"
     end
-    doit "git checkout ."
+    Utils.gitnuke
   end
 end
 
