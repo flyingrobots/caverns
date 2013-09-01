@@ -10,3 +10,6 @@
 [submodule "deps/underscore.git"]
 	path = deps/underscore.git
 	url = https://github.com/jashkenas/underscore.git
+[submodule "deps/mootools.git"]
+	path = deps/mootools.git
+	url = https://github.com/mootools/mootools-core.git
