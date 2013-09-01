@@ -5,7 +5,7 @@ var CavernGenerator = new Class({
 		this.width = width || 100;
 		this.height = height || 100;
     this.tiles = [];
-    this.minIslandSize = 3;
+    this.minIslandSize = 5;
     this.validMoves = [
       {x:1,y:0},
       {x:-1,y:0},
@@ -15,8 +15,10 @@ var CavernGenerator = new Class({
     this.islands = [];
 	},
 
-	generate:function()
+	generate:function(numIterations)
 	{
+    numIterations = numIterations || 500
+    
     // Create filled tile map
     this.tiles = [];
 		for (var y = 0; y <= this.height; ++y)
@@ -30,7 +32,6 @@ var CavernGenerator = new Class({
 		}
 
     // Run miners
-    const numIterations = 500;
     const minerSpawnPercent = 8;
 
     var firstMiner = this.createMiner(this.width/2, this.height/2);
@@ -97,11 +98,16 @@ var CavernGenerator = new Class({
 
   cleanMap:function()
   {
+    //TODO This step could be optimized!
+    while(this.cleanLonelyTiles());
+    this.cleanSmallIslands();
+  },
+
+  cleanSmallIslands:function()
+  {
     // Build island map
     this.islands = [];
     this.buildIslandMap();
-
-    console.log("Num islands tagged : ",this.islands.length);
 
     //Destroy islands that are too small
     for (var i = 0; i < this.islands.length; ++i)
@@ -116,10 +122,8 @@ var CavernGenerator = new Class({
 
   buildIslandMap:function()
   {
-    var tiles = this.tiles;
     for (var y = 0; y <= this.height; ++y)
     {
-      var row = this.tiles[y];
       for (var x = 0; x <= this.width; ++x)
       {
         var tile = this.tiles[x][y];
@@ -165,6 +169,54 @@ var CavernGenerator = new Class({
       var tile = island[i];
       this.tiles[tile.x][tile.y].filled = false;
     }
+  },
+
+  cleanLonelyTiles:function()
+  {
+    var numCleared = 0;
+
+    //Find and destroy all tiles with less than 3 adjacencies
+    for (var y = 0; y <= this.height; ++y)
+    {
+      for (var x = 0; x <= this.width; ++x)
+      {
+        if (!this.isTileFilled(x,y))
+        {
+          continue;
+        }
+        var tile = this.tiles[x][y];
+        if (this.getNumAdjacencies(x,y,true) < 3 || this.getNumAdjacencies(x,y,false) < 2)
+        {
+          tile.filled = false;
+          numCleared++;
+        }
+      }
+    }
+    return numCleared;
+  },
+
+  getNumAdjacencies:function(baseX,baseY,allowDiagonals)
+  {
+    var count = 0;
+    for (var x = -1; x <= 1; ++x)
+    {
+      for (var y = -1; y <= 1; ++y)
+      {
+        if (x == 0 && y == 0)
+        {
+          continue;
+        }
+        if (!allowDiagonals && x != 0 && y != 0)
+        {
+          continue;
+        }
+        if (this.isTileFilled(baseX+x, baseY+y))
+        {
+          count++;
+        }
+      }
+    }
+    return count;
   },
 
   isMinerOrphaned:function(miner)
