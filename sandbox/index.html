@@ -9,14 +9,23 @@
 			background-color: #000000;
 		}
 	</style>
-	<script src="../client/deps/pixi-js.git/bin/pixi.dev.js"></script>
+	<script src="../client/deps/pixi-js/bin/pixi.dev.js"></script>
 	<script src="../deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
 	<script src="src/game.js"></script>
+	<script src="src/bunny_game.js"></script>
 
 </head>
 <body>
 	<script>
-		var game = new Game();
+
+		var game = new BunnyGame(400, 300);
+		requestAnimFrame(animate);
+
+		function animate()
+		{
+    		requestAnimFrame(animate);
+			game.render()
+		}
 	</script>
 
 	</body>
