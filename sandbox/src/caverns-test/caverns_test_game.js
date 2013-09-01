@@ -9,7 +9,7 @@ var CavernsTestGame = new Class({
     	this.cavernHeight = 200;
 
       // Generate cavern data
-    	var generator = new CavernGenerator({
+    	var generator = new CavernGeneratorMiner({
           width:this.cavernWidth, 
           height:this.cavernHeight,
           numSegments:5,

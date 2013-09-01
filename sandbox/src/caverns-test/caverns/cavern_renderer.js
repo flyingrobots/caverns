@@ -16,9 +16,9 @@ var CavernRenderer = new Class({
       graphics.width = cavernDef.width*cellWidth;
       graphics.height = cavernDef.height*cellHeight;
 
-      for (var y = 0; y <= cavernDef.height; ++y)
+      for (var y = 0; y < cavernDef.height; ++y)
       {
-        for (var x = 0; x <= cavernDef.width; ++x)
+        for (var x = 0; x < cavernDef.width; ++x)
         {
           var tile = cavernDef.tiles[x][y];
           var color = 0xffffff;
