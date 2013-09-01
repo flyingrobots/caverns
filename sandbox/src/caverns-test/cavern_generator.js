@@ -1,11 +1,26 @@
 var CavernGenerator = new Class({
 	
-	initialize:function(width, height)
+  Implements:Options,
+
+  options:
+  {
+    width:100,
+    height:100,
+    numIterations:500,
+    minerSpawnPercent:8,
+    numSegments:6,
+    minersStartInSegmentCenters:false,
+    minIslandSize:5,
+    lavaHeight:10,
+    numWaterfalls:4
+  },
+
+	initialize:function(options)
 	{
-		this.width = width || 100;
-		this.height = height || 100;
+    this.setOptions(options);
+		this.width = this.options.width;
+		this.height = this.options.height;
     this.tiles = [];
-    this.minIslandSize = 5;
     this.validMoves = [
       {x:1,y:0},
       {x:-1,y:0},
@@ -14,14 +29,10 @@ var CavernGenerator = new Class({
     ];
     this.islands = [];
     this.lowestPoint = 0;
-    this.lavaHeight = 10;
-    this.numWaterfalls = 4;
 	},
 
-	generate:function(numIterations)
+	generate:function()
 	{
-    numIterations = numIterations || 500
-
     // Create filled tile map
     this.tiles = [];
     this.lowestPoint = 0;
@@ -35,14 +46,28 @@ var CavernGenerator = new Class({
 			this.tiles.push(row);
 		}
 
+    // Create initial miners
+    var miners = [];
+
+    var cellWidth = this.width/this.options.numSegments;
+    var cellHeight = this.height/this.options.numSegments;
+
+    for (var i = 0; i < this.options.numSegments; ++i)
+    {
+      var baseX =  i*cellWidth;
+      for (var j = 0; j < this.options.numSegments; ++j)
+      {
+        var baseY = j*cellHeight;
+        var minerX = this.options.minersStartInSegmentCenters ? Math.floor(baseX+cellWidth/2) : Math.floor(Math.random()*cellWidth+baseX);
+        var minerY = this.options.minersStartInSegmentCenters ? Math.floor(baseY+cellHeight/2) : Math.floor(Math.random()*cellHeight+baseY);
+        var miner = this.createMiner(minerX, minerY);
+        miners.push(miner);
+      }
+    }
+
     // Run miners
-    const minerSpawnPercent = 8;
-
-    var firstMiner = this.createMiner(this.width/2, this.height/2);
-    var miners = [firstMiner];
-
     var curIter = 0;
-    while (curIter++ < numIterations)
+    while (curIter++ < this.options.numIterations)
     {
       for (var i = 0; i < miners.length; ++i)
       {
@@ -56,7 +81,7 @@ var CavernGenerator = new Class({
         }
 
         // Spawn a new miner?
-        if (Math.random()*100 < minerSpawnPercent)
+        if (Math.random()*100 < this.options.minerSpawnPercent)
         {
           var newMiner = this.createMiner(miner.x, miner.y);
           miners.push(newMiner);
@@ -121,7 +146,7 @@ var CavernGenerator = new Class({
   addLavaToMap:function()
   {
     // Add basin lava
-    for (var y = this.lowestPoint; y >= this.lowestPoint - this.lavaHeight && y >= 0; --y)
+    for (var y = this.lowestPoint; y >= this.lowestPoint - this.options.lavaHeight && y >= 0; --y)
     {
       for (var x = 0; x < this.width; ++x)
       {
@@ -137,7 +162,7 @@ var CavernGenerator = new Class({
   addWaterToMap:function()
   {
     // Add waterfalls
-    for (var i = 0; i < this.numWaterfalls; ++i)
+    for (var i = 0; i < this.options.numWaterfalls; ++i)
     {
       this.addRandomWaterfall();
     }
@@ -228,7 +253,7 @@ var CavernGenerator = new Class({
     for (var i = 0; i < this.islands.length; ++i)
     {
       var island = this.islands[i];
-      if (island.length < this.minIslandSize)
+      if (island.length < this.options.minIslandSize)
       {
         this.destroyIsland(island);
       }

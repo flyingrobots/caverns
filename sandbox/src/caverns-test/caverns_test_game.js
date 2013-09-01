@@ -9,7 +9,16 @@ var CavernsTestGame = new Class({
     	this.cavernHeight = 200;
 
       // Generate cavern data
-    	var generator = new CavernGenerator(this.cavernWidth, this.cavernHeight);
+    	var generator = new CavernGenerator({
+          width:this.cavernWidth, 
+          height:this.cavernHeight,
+          numSegments:5,
+          minersStartInSegmentCenters:false,
+          numWaterfalls:6,
+          minerSpawnPercent:8,
+          numIterations:500,
+          minIslandSize:6
+      });
       var cavernData = generator.generate();
 
       // Render cavern data
