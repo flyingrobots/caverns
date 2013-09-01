@@ -38,16 +38,19 @@ var CavernsTestGame = new Class({
           switch (tile)
           {
             case TILE_TYPE_FILLED:
-              color = 0x000000;
+              color = 0x333333;
               break;
             case TILE_TYPE_CLEAR:
               color = 0xffffff;
               break;
             case TILE_TYPE_LAVA:
-              color = 0xff0000;
+              color = 0xD1262E;
               break;
             case TILE_TYPE_WATER:
-              color = 0x0000ff;
+              color = 0x787FDE;
+              break;
+            case TILE_TYPE_GRASS:
+              color = 0x3AC73C;
               break;
           }
   				graphics.beginFill(color);

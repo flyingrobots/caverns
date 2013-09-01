@@ -85,6 +85,9 @@ var CavernGenerator = new Class({
     // Add water to the map
     this.addWaterToMap();
 
+    // Add grass to the map
+    this.addGrassToMap();
+
     // Build final tile map
     var tileMap = [];
     for (var y = 0; y <= this.height; ++y)
@@ -130,7 +133,6 @@ var CavernGenerator = new Class({
       }
     }
   },
-
 
   addWaterToMap:function()
   {
@@ -186,6 +188,27 @@ var CavernGenerator = new Class({
   isViableWaterLocation:function(x,y)
   {
     return this.isOnMap(x, y) && this.tiles[x][y].type == TILE_TYPE_CLEAR
+  },
+
+  addGrassToMap:function()
+  {
+    //Find and destroy all tiles with less than 3 adjacencies
+    for (var y = 0; y <= this.height; ++y)
+    {
+      for (var x = 0; x <= this.width; ++x)
+      {
+        var tile = this.tiles[x][y];
+        if (tile.type != TILE_TYPE_CLEAR)
+        {
+          continue;
+        }
+
+        if (y-1 >= 0 && this.tiles[x][y-1].type == TILE_TYPE_CLEAR && y+1 < this.height && this.tiles[x][y+1].type == TILE_TYPE_FILLED)
+        {
+          tile.type = TILE_TYPE_GRASS;
+        }
+      }
+    }
   },
 
   cleanMap:function()
