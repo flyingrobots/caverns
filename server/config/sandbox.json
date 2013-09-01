@@ -1,0 +1,6 @@
+{
+    "root": "sandbox",
+    "content": "sandbox/content",
+    "src": "sandbox/src",
+    "port": 1337
+}

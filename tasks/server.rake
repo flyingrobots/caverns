@@ -12,6 +12,7 @@ namespace :server do
   desc 'Spins up a sandbox server'
   task :sandbox do
     doit "node #{Utils.project_dir}/server/src/app.js sandbox"
+    browseToWebsite "http://localhost/1337"
   end
 
 end

@@ -1,0 +1,6 @@
+{
+    "root": "client",
+    "content": "client/content",
+    "src": "client/src",
+    "port": 1337
+}

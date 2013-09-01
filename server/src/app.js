@@ -1,53 +1,51 @@
 var path = require('path');
 var url = require('url');
 var express = require('express');
-var config = require('./config');
+var config = null;
 
 var useSandbox = false;
-
-// process command line arguments
 process.argv.forEach(function(val, index, array) {
-  if(val == 'sandbox') {
+  if(val == 'sandbox')
     useSandbox = true;
-  }
 });
 
-var joinPath = function(root, path) {
-  return root + '/' + path;
+// TODO production.json and test.json configs
+if (useSandbox) {
+  console.log("== SANDBOX ==");
+  config = require('../config/sandbox.json');
+} else {
+  console.log("== DEV ==");
+  config = require('../config/dev.json');
 }
+console.log(JSON.stringify(config));
 
-var resolveFilepath = function(filepath) {
-  console.log("filepath is " + filepath);
-  // default to index.html
-  if (filepath == '/')
-    filepath = 'index.html';
-  // index.html lives in the client root dir
-  if (filepath == 'index.html') {
-    if (useSandbox)
-      return joinPath(config.getSandboxPath(), filepath);
-    else
-      return joinPath(config.getClientPath(), filepath);
-  }
-  // other assets live under the 'content' subdirectory
-  else {
-    if (useSandbox)
-      return joinPath(config.getSandboxContentPath(), filepath);
-    else
-      return config.getContentPath() + '/' + filepath;
-  }
+var expandPath = function(root, filepath) {
+  p = __dirname + '/../../' + root + '/' + filepath;
+  return path.resolve(p);
 }
 
 var app = express();
-app.get('/*', function(req, res) {
-  filepath = resolveFilepath(url.parse(req.url).pathname);
-  console.log('GET ' + filepath);
-  res.sendfile(path.resolve(filepath));
+
+app.get('/', function(req, res) {
+  p = expandPath(config.root, 'index.html');
+  console.log(p);
+  res.sendfile(p);
 });
 
-// spin up the server
-var port = 1337;
-app.listen(port);
-console.log("Sweet\nhttp://localhost:" + port + "\nCTRL + C to stop");
-if (useSandbox) {
-  console.log("[SANDBOX]");
-}
+app.get('/*.js', function(req, res) {
+  console.log(req.route);
+  res.sendfile(expandPath(config.root, url.parse(req.url).pathname));
+});
+
+app.get('/*.png', function(req, res) {
+  console.log(req.route);
+  res.sendfile(expandPath(config.content, url.parse(req.url).pathname));
+});
+
+console.log("== STARTING ==")
+app.listen(config.port);
+
+console.log("Sweet. http://localhost:" + config.port);
+console.log("CTRL + C to stop");
+
+console.log("== LOG ==");
