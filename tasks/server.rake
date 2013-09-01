@@ -9,4 +9,9 @@ namespace :server do
     doit "node #{Utils.project_dir}/server/src/app.js"
   end
 
+  desc 'Spins up a sandbox server'
+  task :sandbox do
+    doit "node #{Utils.project_dir}/server/src/app.js sandbox"
+  end
+
 end
