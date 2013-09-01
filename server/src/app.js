@@ -17,13 +17,14 @@ var joinPath = function(root, path) {
 }
 
 var resolveFilepath = function(filepath) {
+  console.log("filepath is " + filepath);
   // default to index.html
   if (filepath == '/')
     filepath = 'index.html';
   // index.html lives in the client root dir
   if (filepath == 'index.html') {
     if (useSandbox)
-      return joinPath(config.getSandboxPath(), + filepath);
+      return joinPath(config.getSandboxPath(), filepath);
     else
       return joinPath(config.getClientPath(), filepath);
   }
