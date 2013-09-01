@@ -29,22 +29,14 @@ var CavernGenerator = new Class({
     }
 
     // Create filled tile map
-    this.tiles = [];
+    this.tiles = this.makeTilesArray(this.width, this.height, TILE_TYPE_FILLED);
     this.lowestPoint = 0;
-
-    // Fill initial tiles
-    for (var y = 0; y < this.height; ++y)
-    {
-      var row = [];
-      for (var x = 0; x < this.width; ++x)
-      {
-        row.push(this.createNewTile(TILE_TYPE_FILLED));
-      }
-      this.tiles.push(row);
-    }
 
     // Call concrete generate function
     this.generateInternal();
+
+    // Find the new lowest
+    this.findLowestPoint();
 
     // Add lava to the map
     this.addLavaToMap();
@@ -92,10 +84,111 @@ var CavernGenerator = new Class({
   digTile:function(x,y)
   {
     this.tiles[x][y].type = TILE_TYPE_CLEAR;
-    if (y > this.lowestPoint)
+  },
+
+  fillRect:function(tiles,baseX,baseY,rectWidth,rectHeight,type)
+  {
+    var width = tiles.length;
+    var height = tiles[0].length;
+    for (var x = 0; x < rectWidth; ++x)
     {
-      this.lowestPoint = y;
+      if (baseX+x >= width) continue;
+      for (var y = 0; y < rectHeight; ++y)
+      {
+        if (baseY+y >= height) continue;
+        tiles[baseX+x][baseY+y].type = type;
+      }
     }
+  },
+
+  makeTilesArray:function(width, height, defaultState)
+  {
+    var tiles = [];
+    // Fill initial tiles
+    for (var y = 0; y < height; ++y)
+    {
+      var row = [];
+      for (var x = 0; x < width; ++x)
+      {
+        row.push(this.createNewTile(defaultState));
+      }
+      tiles.push(row);
+    }
+    return tiles;
+  },  
+
+  findLowestPoint:function()
+  {
+    this.lowestPoint = 0;
+    for (var y = this.height-1; y >= 0; --y)
+    {
+      for (var x = 0; x < this.width; ++x)
+      {
+        if (this.tiles[x][y].type == TILE_TYPE_CLEAR)
+        {
+          this.lowestPoint = y;
+          return;
+        }
+      }
+    }
+  },
+
+  applyAutomaton:function(tiles, bornList, surviveList, cellSize, iterations)
+  {
+    var width = tiles.length;
+    var height = tiles[0].length;
+
+    // Run automata functions on tiles
+    for (var i = 0; i < iterations; ++i)
+    {
+      var newTiles = this.makeTilesArray(width, height, TILE_TYPE_FILLED);
+
+      for (var x = cellSize; x < width-cellSize; x += cellSize)
+      {
+        for (var y = cellSize; y < height-cellSize; y += cellSize)
+        {
+          var numAdjacent = this.getNumAdjacent(tiles,x,y,cellSize);
+          var tile = tiles[x][y];
+
+          // Should tile survive?
+          var liveCondition = (tile.type == TILE_TYPE_FILLED && surviveList.indexOf(numAdjacent) != -1) ||
+                              (tile.type == TILE_TYPE_CLEAR  && bornList.indexOf(numAdjacent) != -1);
+          var type = liveCondition ? TILE_TYPE_FILLED : TILE_TYPE_CLEAR;
+          this.fillRect(newTiles,x,y,cellSize,cellSize,type);
+        }
+      }
+
+      // Copy new tile array to old one
+      for (var x = 0; x < width; ++x)
+      {
+        for (var y = 0; y < height; ++y)
+        {
+          tiles[x][y] = newTiles[x][y];
+        }
+      }
+    }
+  },
+
+  getNumAdjacent:function(tiles,x,y,cellSize)
+  {
+    var width = tiles.length;
+    var height = tiles[0].length;
+
+    var leftOutOfBounds  = x-cellSize < 0;
+    var rightOutOfBounds = x+cellSize >= width;
+    var topOutOfBounds  = y-cellSize < 0;
+    var bottomOutOfBounds = y+cellSize >= height;
+
+    var count = 0;
+    count += leftOutOfBounds   || topOutOfBounds || tiles[x-cellSize][y-cellSize].type == TILE_TYPE_FILLED;
+    count += leftOutOfBounds   || tiles[x-cellSize][y].type == TILE_TYPE_FILLED;
+    count += leftOutOfBounds   || bottomOutOfBounds ||  tiles[x-cellSize][y+cellSize].type == TILE_TYPE_FILLED;
+    count += topOutOfBounds    || tiles[x][y-cellSize].type == TILE_TYPE_FILLED;
+    count += bottomOutOfBounds || tiles[x][y+cellSize].type == TILE_TYPE_FILLED;
+    count += rightOutOfBounds  || topOutOfBounds || tiles[x+cellSize][y-cellSize].type == TILE_TYPE_FILLED;
+    count += rightOutOfBounds  || tiles[x+cellSize][y].type == TILE_TYPE_FILLED;
+    count += rightOutOfBounds  || bottomOutOfBounds || tiles[x+cellSize][y+cellSize].type == TILE_TYPE_FILLED;
+    return count;
   },
 
   addLavaToMap:function()

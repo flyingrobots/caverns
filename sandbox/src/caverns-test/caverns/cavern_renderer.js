@@ -25,16 +25,16 @@ var CavernRenderer = new Class({
           switch (tile)
           {
             case TILE_TYPE_FILLED:
-              color = 0x333333;
+              color = Math.random() > 0.5 ? 0x333333 : 0x303030;
               break;
             case TILE_TYPE_CLEAR:
               color = 0x715F78;
               break;
             case TILE_TYPE_LAVA:
-              color = 0xD1262E;
+              color = y%3 != x%3 ? 0xD1262E : 0xC71C24;
               break;
             case TILE_TYPE_WATER:
-              color = 0x787FDE;
+              color = y%2==0 ? 0x787FDE : 0x7C84EB;
               break;
             case TILE_TYPE_GRASS:
               color = 0x3AC73C;

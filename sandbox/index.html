@@ -28,6 +28,13 @@
 	<script>
 
 		var game = new CavernsTestGame(800, 800);
+
+	    document.onkeypress = function(e)
+	    {
+	    	var keyCode = (window.event) ? e.which : e.keyCode;
+	    	game.onKeyPress(keyCode);
+	    };
+
 		requestAnimFrame(animate);
 
 		function animate()
