@@ -4,6 +4,7 @@ var CavernGenerator = new Class({
 
   options:
   {
+    seed:undefined,
     width:100,
     height:100,
     numIterations:500,
@@ -33,6 +34,12 @@ var CavernGenerator = new Class({
 
 	generate:function()
 	{
+    var oldRandom = Math.random;
+    if (this.options.seed != undefined)
+    {
+      Math.seedrandom(this.options.seed);
+    }
+
     // Create filled tile map
     this.tiles = [];
     this.lowestPoint = 0;
@@ -124,6 +131,9 @@ var CavernGenerator = new Class({
       }
       tileMap.push(row);
     }
+
+    // Reset random
+    Math.random = oldRandom;
 
     // Build definition
     var cavernDef = {
