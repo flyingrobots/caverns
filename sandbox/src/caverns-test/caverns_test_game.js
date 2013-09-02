@@ -3,7 +3,7 @@ var CavernsTestGame = new Class({
 
     initialize: function(width, height, bgColor)
     {
-    	this.parent(width, height, bgColor);
+    	this.parent(width, height, bgColor, true);
 
     	this.cavernWidth = 200;
     	this.cavernHeight = 200;

@@ -3,6 +3,7 @@ var Game = new Class({
     initialize: function(width, height, bgColor, useCanvas)
     {
   		bgColor = bgColor || 0x66FF99
+      useCanvas = useCanvas || false
 
       // create an new instance of a pixi stage
   		this.stage = new PIXI.Stage(bgColor);
