@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 var createBoxSprite = function(width, height, color) {
   var sprite = new PIXI.Graphics();
-  var hw = width/2;
-  var hh = height/2;
+  var hw = width;
+  var hh = height;
   
   //sprite.beginFill(color);
   sprite.lineStyle(1, color, 1);
