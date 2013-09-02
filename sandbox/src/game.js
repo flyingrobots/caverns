@@ -12,7 +12,7 @@ var Game = new Class({
       if (useCanvas) {
     		this.renderer = new PIXI.CanvasRenderer(width, height);
       } else {
-        this.renderer = new PIXI.autoDetectRenderer(width, height, null, false, true);
+        this.renderer = new PIXI.autoDetectRenderer(width, height, null, false, false);
       }
 		
   		// add the renderer view element to the DOM
