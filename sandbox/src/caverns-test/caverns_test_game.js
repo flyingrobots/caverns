@@ -39,6 +39,13 @@ var CavernsTestGame = new Class({
       this.currentGeneratorIndex = 0;
       this.generator = this.generators[this.currentGeneratorIndex];
 
+      this.stage.setInteractive(true);
+      this.stage.mouseDown = function()
+      {
+        alert("clicked!");
+        this.refresh();
+      };
+
       this.generateAndRender();
     },
 
@@ -57,10 +64,13 @@ var CavernsTestGame = new Class({
     {
       if (keyCode == 13)
       {
-        this.currentGeneratorIndex = (this.currentGeneratorIndex + 1) % this.generators.length;
-        this.generator = this.generators[this.currentGeneratorIndex];
-        this.generateAndRender();
+        this.refresh();
       }
+    },
+
+    refresh:function()
+    {
+
     },
 
     render: function()

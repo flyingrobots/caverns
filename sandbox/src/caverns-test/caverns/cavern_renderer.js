@@ -5,6 +5,7 @@ var CavernRenderer = new Class({
     var cavernTex = new PIXI.RenderTexture(cavernGfx.width, cavernGfx.height);
     cavernTex.render(cavernGfx);
     this.sprite = new PIXI.Sprite(cavernTex);
+    //this.sprite.scale.x = this.sprite.scale.y = 4;
   },
 
   generateCavernSprite: function(cavernDef)

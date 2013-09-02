@@ -9,15 +9,18 @@ def pixi_install_deps
   end
 end
 
+def pixi_copy_bin_to dir
+  doit "rm -r #{dir}/pixi-js"
+  doit "mkdir #{dir}/pixi-js"
+  doit "cp -r #{Utils.project_dir}/client/deps/pixi-js.git/examples #{dir}/pixi-js/examples/"
+  doit "cp -r #{Utils.project_dir}/client/deps/pixi-js.git/bin #{dir}/pixi-js/bin/"
+end
+
 def pixi_update
   Dir.chdir "#{Utils.project_dir}/client/deps/pixi-js.git/" do
     doit "grunt"
-    Dir.chdir "#{Utils.project_dir}/client/deps/" do
-      doit "rm -r pixi-js"
-      doit "mkdir pixi-js"
-      doit "mv pixi-js.git/examples pixi-js"
-      doit "mv pixi-js.git/bin pixi-js"
-    end
+    pixi_copy_bin_to "#{Utils.project_dir}/client/deps"
+    pixi_copy_bin_to "#{Utils.project_dir}/sandbox/deps"
     Utils.gitnuke
   end
 end
