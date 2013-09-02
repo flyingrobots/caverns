@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>Physics Demo</title>
+    
+    <!-- pixi -->
+    <script src="deps/pixi-js/bin/pixi.dev.js"></script>
+
+    <!-- mootools -->
+    <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
+    
+    <!-- box2d -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js" ></script>
+    <script type="text/javascript">
+      jQuery.noConflict();
+      Object.extend = jQuery.extend;
+    </script>
+    <script src="src/physics/jquery.svg.min.js"></script>
+    <script src="src/physics/box2d.js"></script>
+
+    <!-- our junk -->
+    <script src="src/game.js"></script>
+    <script src="src/physics/game_object_pool.js"></script>
+    <script src="src/physics/sprite.js"></script>
+    <script src="src/physics/graphics.js"></script>
+    <script src="src/physics/physics.js"></script>
+    <script src="src/physics/demo.js"></script>
+
+    <!-- it looks like poop if there's any sort of border -->
+    <style type="text/css">
+      body {
+        margin: 0 0 0 0;
+        padding: 0 0 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      var demo = new PhysicsDemo($(document).width, $(document).height);
+      demo.setup();
+      var draw = function() {
+        demo.render();
+        requestAnimFrame(draw);
+      }
+      requestAnimFrame(draw);
+    </script>
+  </body>
+</html>

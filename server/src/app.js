@@ -21,6 +21,11 @@ var getPathname = function(uri) {
 }
 
 //-----------------------------------------------------------------------------
+var logRequest = function(uri) {
+  console.log('GET ' + uri);
+}
+
+//-----------------------------------------------------------------------------
 var loadConfig = function() {
   process.argv.forEach(function(val, index, array) {
     switch (val) {
@@ -50,28 +55,32 @@ var loadConfig = function() {
 
 //-----------------------------------------------------------------------------
 app.get('/', function(req, res) {
+  logRequest(req.url);
   p = expandPath(config.root, 'index.html');
   res.sendfile(p);
 });
 
 //-----------------------------------------------------------------------------
 app.get('/*.(html)', function(req, res) {
-  console.log('html');
+  logRequest(req.url);
   res.sendfile(expandPath(config.root, getPathname(req.url)));
 });
 
 //-----------------------------------------------------------------------------
 app.get('/*.js', function(req, res) {
+  logRequest(req.url);
   res.sendfile(expandPath(config.root, getPathname(req.url)));
 });
 
 //-----------------------------------------------------------------------------
 app.get('/*.png', function(req, res) {
+  logRequest(req.url);
   res.sendfile(expandPath(config.content, getPathname(req.url)));
 });
 
 //-----------------------------------------------------------------------------
 app.get('/*', function(req, res) {
+  logRequest(req.url);
   console.log(req.route);
 });
 
