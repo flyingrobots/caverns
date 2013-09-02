@@ -11,6 +11,7 @@ var createBoxSprite = function(width, height, color) {
   sprite.lineTo(hw, -hh);
   sprite.lineTo(hw, hh);
   sprite.lineTo(-hw, hh);
+  sprite.lineTo(-hw, -hh);
 
   //sprite.endFill();
 

@@ -26,8 +26,10 @@ var PhysicsDemo = new Class({ Extends: Game,
   },
   //---------------------------------------------------------------------------
   setup: function() {
-    this.objectPool.addBoxObject(400, 300, 1000, 45, colors.orange, true);
-    this.objectPool.addBoxObject(500, 30, 30, 30, colors.blue, false);
+    this.objectPool.addBoxObject(100, 250, 100, 5, colors.orange, true);
+    this.objectPool.addBoxObject(100, 0, 10, 10, colors.blue, false);
+    this.objectPool.addBoxObject(100, 20, 10, 10, colors.blood, false);
+    this.objectPool.addBoxObject(100, 40, 10, 10, colors.orange, false);
   },
   //---------------------------------------------------------------------------
   render: function() {
