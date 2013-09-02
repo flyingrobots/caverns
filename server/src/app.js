@@ -1,46 +1,83 @@
 var path = require('path');
 var url = require('url');
 var express = require('express');
+
+// app vars ///////////////////////////////////////////////////////////////////
+
 var config = null;
+var app = express();
 
-var useSandbox = false;
-process.argv.forEach(function(val, index, array) {
-  if(val == 'sandbox')
-    useSandbox = true;
-});
+// helper funcs ///////////////////////////////////////////////////////////////
 
-// TODO production.json and test.json configs
-if (useSandbox) {
-  console.log("== SANDBOX ==");
-  config = require('../config/sandbox.json');
-} else {
-  console.log("== DEV ==");
-  config = require('../config/dev.json');
-}
-console.log(JSON.stringify(config));
-
+//-----------------------------------------------------------------------------
 var expandPath = function(root, filepath) {
   p = __dirname + '/../../' + root + '/' + filepath;
   return path.resolve(p);
 }
 
-var app = express();
+//-----------------------------------------------------------------------------
+var getPathname = function(uri) {
+  return url.parse(uri).pathname;
+}
 
+//-----------------------------------------------------------------------------
+var loadConfig = function() {
+  process.argv.forEach(function(val, index, array) {
+    switch (val) {
+      case 'sandbox': {
+        config = require('../config/sandbox.json');
+        break;
+      }
+      case 'dev': {
+        config = require('../config/dev.json');
+        break;
+      }
+      case 'test': {
+        config = require('../config/test.json');
+        break;
+      }
+    }
+  });
+  // dev config is fallback
+  if (config == null) {
+    console.warn('No config given, using \'dev\'');
+    config = require('../config/dev.json');
+  }
+  console.log(JSON.stringify(config));
+}
+
+// http routes ////////////////////////////////////////////////////////////////
+
+//-----------------------------------------------------------------------------
 app.get('/', function(req, res) {
   p = expandPath(config.root, 'index.html');
-  console.log(p);
   res.sendfile(p);
 });
 
-app.get('/*.js', function(req, res) {
-  console.log(req.route);
-  res.sendfile(expandPath(config.root, url.parse(req.url).pathname));
+//-----------------------------------------------------------------------------
+app.get('/*.(html)', function(req, res) {
+  console.log('html');
+  res.sendfile(expandPath(config.root, getPathname(req.url)));
 });
 
-app.get('/*.png', function(req, res) {
-  console.log(req.route);
-  res.sendfile(expandPath(config.content, url.parse(req.url).pathname));
+//-----------------------------------------------------------------------------
+app.get('/*.js', function(req, res) {
+  res.sendfile(expandPath(config.root, getPathname(req.url)));
 });
+
+//-----------------------------------------------------------------------------
+app.get('/*.png', function(req, res) {
+  res.sendfile(expandPath(config.content, getPathname(req.url)));
+});
+
+//-----------------------------------------------------------------------------
+app.get('/*', function(req, res) {
+  console.log(req.route);
+});
+
+///////////////////////////////////////////////////////////////////////////////
+
+loadConfig();
 
 console.log("== STARTING ==")
 app.listen(config.port);

@@ -1,3 +1,5 @@
+require 'stringio'
+
 class Utils
   def self.project_dir
     File.expand_path "#{File.expand_path File.dirname(__FILE__)}/../"
@@ -9,9 +11,12 @@ class Utils
 end
 
 def doit command, opts = {}
-  $stdout.puts opts[:desc] if opts.has_key? :desc
-  $stdout.puts "#{command}"
-  system "#{command}"
+  if opts[:quiet]
+    system "#{command} > /dev/null"
+  else
+    $stdout.puts "#{command}"
+    system "#{command}"
+  end
 end
 
 def sudoit command, opts = {}
