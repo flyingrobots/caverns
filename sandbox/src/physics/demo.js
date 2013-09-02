@@ -39,6 +39,7 @@ var PhysicsDemo = new Class({ Extends: Game,
     this.objectPool.forEach(function(elem, index) {
       var physPos = elem.physics.GetCenterPosition();
       elem.sprite.setPosition(physPos.x, physPos.y);
+      elem.sprite.sprite.rotation = elem.physics.GetRotation();
     });
     // draw
     this.parent();

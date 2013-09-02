@@ -4,7 +4,7 @@ var createBoxSprite = function(width, height, color) {
   var hw = width;
   var hh = height;
   
-  //sprite.beginFill(color);
+  sprite.beginFill(color);
   sprite.lineStyle(1, color, 1);
   
   sprite.moveTo(-hw, -hh);
@@ -13,7 +13,7 @@ var createBoxSprite = function(width, height, color) {
   sprite.lineTo(-hw, hh);
   sprite.lineTo(-hw, -hh);
 
-  //sprite.endFill();
+  sprite.endFill();
 
   return new Sprite(sprite, width, height, function(x, y) {
     sprite.position.x = x;
