@@ -39,29 +39,53 @@ var CavernsTestGame = new Class({
       this.currentGeneratorIndex = 0;
       this.generator = this.generators[this.currentGeneratorIndex];
 
+/*
       this.stage.setInteractive(true);
       var self = this;
       this.stage.mousedown = function(data)
       {
         self.refresh();
       };
+*/
+      this.levelLayer = new PIXI.DisplayObjectContainer();
+      this.stage.addChild(this.levelLayer);
+
+      this.actorLayer = new PIXI.DisplayObjectContainer();
+      this.stage.addChild(this.actorLayer);
 
       this.generateAndRender();
+
+      Input.registerKeyDownCallback(this, this.handleKeyDown);
+    },
+
+    handleKeyDown:function(data)
+    {
+      if (data.keyCode == 13 || data.keyCode == 32)
+      {
+        this.refresh();
+      }
     },
 
     generateAndRender:function()
     {
-      if (this.cavernRenderer != null)
-      {
-        this.stage.removeChild(this.cavernRenderer.getSprite());
-      }
-      var cavernDef = this.generator.generate();
-      this.cavernRenderer = new CavernRenderer(cavernDef);
-      this.stage.addChild(this.cavernRenderer.getSprite());
-    },
 
-    onKeyPress:function(keyCode)
-    {
+      if (this.selector)
+      {
+        this.selector.sprite.parent.removeChild(this.selector.sprite);
+        this.selector.destroy();
+      }
+      if (this.cavernRenderer)
+      {
+        this.cavernRenderer.sprite.parent.removeChild(this.cavernRenderer.sprite);
+      }
+
+      var cavernDef = this.generator.generate();
+      
+      this.cavernRenderer = new CavernRenderer(cavernDef);
+      this.levelLayer.addChild(this.cavernRenderer.sprite);
+
+      this.selector = new Selector(cavernDef);
+      this.actorLayer.addChild(this.selector.sprite);
     },
 
     refresh:function()

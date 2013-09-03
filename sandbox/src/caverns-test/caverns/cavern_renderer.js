@@ -5,17 +5,13 @@ var CavernRenderer = new Class({
     var cavernTex = new PIXI.RenderTexture(cavernGfx.width, cavernGfx.height);
     cavernTex.render(cavernGfx);
     this.sprite = new PIXI.Sprite(cavernTex);
-    //this.sprite.scale.x = this.sprite.scale.y = 4;
   },
 
   generateCavernSprite: function(cavernDef)
     {
-      const cellWidth = 4;
-      const cellHeight = 4;
-
       var graphics = new PIXI.Graphics();
-      graphics.width = cavernDef.width*cellWidth;
-      graphics.height = cavernDef.height*cellHeight;
+      graphics.width = cavernDef.width*cavernDef.tileWidth;
+      graphics.height = cavernDef.height*cavernDef.tileHeight;
 
       for (var y = 0; y < cavernDef.height; ++y)
       {
@@ -42,7 +38,7 @@ var CavernRenderer = new Class({
               break;
           }
           graphics.beginFill(color);
-          graphics.drawRect(x*cellWidth,y*cellHeight,cellWidth,cellHeight);
+          graphics.drawRect(x*cavernDef.tileWidth,y*cavernDef.tileHeight,cavernDef.tileWidth,cavernDef.tileHeight);
         }
       }
 

@@ -16,25 +16,26 @@
 
 	<script src="src/sprite-example/sprite_example_game.js"></script>
 
+	<script src="src/caverns-test/utils/input.js"></script>
+	<script src="src/caverns-test/utils/sprite_utils.js"></script>
+
 	<script src="src/caverns-test/caverns/tile_types.js"></script>
 	<script src="src/caverns-test/caverns/generators/cavern_generator.js"></script>
 	<script src="src/caverns-test/caverns/generators/cavern_generator_miner.js"></script>
 	<script src="src/caverns-test/caverns/generators/cavern_generator_automata.js"></script>
+	<script src="src/caverns-test/caverns/selector.js"></script>
 	<script src="src/caverns-test/caverns/cavern_renderer.js"></script>
 	<script src="src/caverns-test/caverns_test_game.js"></script>
 
 </head>
 <body>
 	<script>
+		var width = 800;
+		var height = 800;
 
-		var game = new CavernsTestGame(800, 800);
+		Input.initialize();
 
-	    document.onkeypress = function(e)
-	    {
-	    	var keyCode = (window.event) ? e.which : e.keyCode;
-	    	game.onKeyPress(keyCode);
-	    };
-
+		var game = new CavernsTestGame(width, height);
 		requestAnimFrame(animate);
 
 		function animate()

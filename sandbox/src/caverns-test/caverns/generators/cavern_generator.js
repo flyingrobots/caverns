@@ -7,6 +7,8 @@ var CavernGenerator = new Class({
     seed:undefined,
     width:100,
     height:100,
+    tileWidth:4,
+    tileHeight:4,
     lavaHeight:10,
     numWaterfalls:4
   },
@@ -66,6 +68,8 @@ var CavernGenerator = new Class({
     var cavernDef = {
       width:this.width,
       height:this.height,
+      tileWidth:this.options.tileWidth,
+      tileHeight:this.options.tileHeight,
       tiles:tileMap
     };
     return cavernDef;
