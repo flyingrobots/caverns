@@ -1,0 +1,24 @@
+{
+	"selector":
+	{
+		"components":
+		{
+			"brain":
+			{
+				"_t":"SelectorBrain"
+			},
+			"position":
+			{
+				"_t":"TilePosition",
+				"tileX":0,
+				"tileY":0
+			},
+			"renderer":
+			{
+				"_t":"BoxRenderer",
+				"color":"0xffffff",
+				"alpha":0.6
+			}
+		}
+	}
+}

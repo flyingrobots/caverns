@@ -4,9 +4,17 @@ var Entity = Class({
   id:0,
   name:null,
 
-  initialize:function()
+  initialize:function(data)
   {
     this.id = Entity.idCounter++;
+
+    if (data.components)
+    {
+      for (var componentName in data.components)
+      {
+        this.addComponent(componentName, data.components[componentName]);
+      }
+    }
   },
 
   setup:function(game)
@@ -51,3 +59,10 @@ var Entity = Class({
 });
 
 Entity.idCounter = 0;
+
+Entity.fromJSON = function(json)
+{
+  var parsedJSON = TypedJSON.parse(json);
+  var entity = new Entity(parsedJSON.components);
+  return entity;
+};

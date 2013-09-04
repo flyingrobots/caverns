@@ -14,9 +14,15 @@
 	<script src="deps/seedrandom/seedrandom.js"></script>
 
 	<script src="src/core/input.js"></script>
+	<script src="src/core/utils.js"></script>
+	<script src="src/core/typed_json.js"></script>
 	<script src="src/core/game.js"></script>
 	<script src="src/core/system.js"></script>
 	<script src="src/core/entity.js"></script>
+	<script src="src/core/component.js"></script>
+
+	<script src="src/systems/brains.js"></script>
+	<script src="src/components/brain.js"></script>
 
 	<script src="src/game/utils/sprite_utils.js"></script>
 	<script src="src/game/levels/tile_types.js"></script>
@@ -35,6 +41,22 @@
 		var height = 800;
 
 		var game = new CavernsTestGame(width, height);
+
+		/* TEST ENTITY REVIVAL FROM JSON
+		var testEntityJSON = {
+			_t:"Entity",
+			components:
+			{
+				brain:
+				{
+					_t:"Brain"
+				}
+			}
+		};
+		var testEntity = TypedJSON.parse(JSON.encode(testEntityJSON));
+		alert (testEntity instanceof Entity);
+		alert(testEntity.components.brain instanceof Brain);
+		*/
 	</script>
 
 	</body>
