@@ -1,9 +1,41 @@
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <title>CAVERNS</title>
-  </head>
-  <body>
-    <p>This is hot.</p>
-    <p><img src="3pugmoon.png" /></p>
-  </body>
+<head>
+	<title>Caverns</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+	</style>
+	<script src="deps/pixi-js/bin/pixi.dev.js"></script>
+	<script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
+	<script src="deps/seedrandom/seedrandom.js"></script>
+
+	<script src="src/core/input.js"></script>
+	<script src="src/core/game.js"></script>
+	<script src="src/core/system.js"></script>
+	<script src="src/core/entity.js"></script>
+
+	<script src="src/game/utils/sprite_utils.js"></script>
+	<script src="src/game/levels/tile_types.js"></script>
+	<script src="src/game/levels/generators/cavern_generator.js"></script>
+	<script src="src/game/levels/generators/cavern_generator_miner.js"></script>
+	<script src="src/game/levels/generators/cavern_generator_automata.js"></script>
+	<script src="src/game/levels/selector.js"></script>
+	<script src="src/game/levels/cavern_renderer.js"></script>
+	
+	<script src="src/caverns_test_game.js"></script>
+
+</head>
+<body>
+	<script>
+		var width = 800;
+		var height = 800;
+
+		var game = new CavernsTestGame(width, height);
+	</script>
+
+	</body>
 </html>
