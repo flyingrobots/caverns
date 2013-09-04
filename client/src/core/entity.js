@@ -59,10 +59,3 @@ var Entity = Class({
 });
 
 Entity.idCounter = 0;
-
-Entity.fromJSON = function(json)
-{
-  var parsedJSON = TypedJSON.parse(json);
-  var entity = new Entity(parsedJSON.components);
-  return entity;
-};
