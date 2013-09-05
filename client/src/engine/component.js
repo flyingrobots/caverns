@@ -27,6 +27,7 @@ var Component = new Class({
   onRemoved:function()
   {
     this.destroy();
+    this.ownder = null;
     this.game = null;
   }
 });

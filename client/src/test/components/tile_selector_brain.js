@@ -17,13 +17,14 @@ var TileSelectorBrain = new Class({ Extends:Brain,
 
   move:function(dX,dY)
   {
-    var tilePosition = this.components.tilePosition;
+    var tilePosition = this.owner.components.tilePosition;
+    var renderer = this.owner.compoenents.renderer;
 
     tilePosition.x += dX;
     tilePosition.x = Math.max(0,Math.min(this.levelDefinition.width-1,tilePosition.x));
     tilePosition.y += dY;
     tilePosition.y = Math.max(0,Math.min(this.levelDefinition.height-1,tilePosition.y));
-    this.components.renderer.setPosition(tilePosition.x * this.levelDefinition.tileWidth, tilePosition.y * this.levelDefinition.tileHeight);
+    renderer.setPosition(tilePosition.x * this.levelDefinition.tileWidth, tilePosition.y * this.levelDefinition.tileHeight);
   },
 
   handleKeyDown:function(data)
