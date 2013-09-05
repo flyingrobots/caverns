@@ -1,15 +1,20 @@
-var CavernsTestGame = new Class({
-	Extends:Game,
+var GenerateLevelState = new Class({ Extends:State,
 
-    initialize: function(width, height, bgColor)
+    initialize:function(stage)
     {
-    	this.parent(width, height, bgColor, true);
+      this.parent();
+      this.stage = stage;
+    },
 
-    	this.cavernWidth = 200;
-    	this.cavernHeight = 200;
+    enter:function()
+    {
+      this.parent();
+
+      this.cavernWidth = 200;
+      this.cavernHeight = 200;
 
       // Generate cavern data
-    	var minerGenerator = new CavernGeneratorMiner({
+      var minerGenerator = new CavernGeneratorMiner({
           width:this.cavernWidth, 
           height:this.cavernHeight,
           numSegments:5,
@@ -39,14 +44,6 @@ var CavernsTestGame = new Class({
       this.currentGeneratorIndex = 0;
       this.generator = this.generators[this.currentGeneratorIndex];
 
-/*
-      this.stage.setInteractive(true);
-      var self = this;
-      this.stage.mousedown = function(data)
-      {
-        self.refresh();
-      };
-*/
       this.levelLayer = new PIXI.DisplayObjectContainer();
       this.stage.addChild(this.levelLayer);
 
@@ -68,7 +65,6 @@ var CavernsTestGame = new Class({
 
     generateAndRender:function()
     {
-
       if (this.selector)
       {
         this.selector.sprite.parent.removeChild(this.selector.sprite);
@@ -93,11 +89,5 @@ var CavernsTestGame = new Class({
         this.currentGeneratorIndex = (this.currentGeneratorIndex + 1) % this.generators.length;
         this.generator = this.generators[this.currentGeneratorIndex];
         this.generateAndRender();
-    },
-
-    render: function()
-    {	
-	    // render the stage   
-	    this.parent();
     }
 });

@@ -5,7 +5,7 @@ var World = new Class({ Extends:System,
 
   initialize:function()
   {
-    this.super();
+    this.parent();
   },
 
   setup:function(game)

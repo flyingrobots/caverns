@@ -13,16 +13,19 @@
 	<script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
 	<script src="deps/seedrandom/seedrandom.js"></script>
 
-	<script src="src/core/input.js"></script>
-	<script src="src/core/utils.js"></script>
-	<script src="src/core/typed_json.js"></script>
-	<script src="src/core/game.js"></script>
-	<script src="src/core/system.js"></script>
-	<script src="src/core/entity.js"></script>
-	<script src="src/core/component.js"></script>
+	<script src="src/engine/input.js"></script>
+	<script src="src/engine/utils.js"></script>
+	<script src="src/engine/typed_json.js"></script>
+	<script src="src/engine/game.js"></script>
+	<script src="src/engine/system.js"></script>
+	<script src="src/engine/entity.js"></script>
+	<script src="src/engine/component.js"></script>
+	<script src="src/engine/state.js"></script>
 
-	<script src="src/systems/brains.js"></script>
-	<script src="src/components/brain.js"></script>
+	<script src="src/engine/systems/brains.js"></script>
+	<script src="src/engine/systems/world.js"></script>
+	<script src="src/engine/systems/states.js"></script>
+	<script src="src/engine/components/brain.js"></script>
 
 	<script src="src/game/utils/sprite_utils.js"></script>
 	<script src="src/game/levels/tile_types.js"></script>
@@ -32,7 +35,8 @@
 	<script src="src/game/levels/selector.js"></script>
 	<script src="src/game/levels/cavern_renderer.js"></script>
 	
-	<script src="src/caverns_test_game.js"></script>
+	<script src="src/test/states/generate_level_state.js"></script>
+	<script src="src/test/caverns_test_game.js"></script>
 
 </head>
 <body>
