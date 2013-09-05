@@ -25,8 +25,6 @@ The player will be able to see a tile-based world and control some sort of avata
 
 * Pixi and box2d demo apps are consolidated into a single client app
 * Works both 'offline' and against a live server
-* Caves can be randomly generated
-* Game world is created using generated cave data
 * Basic game engine:
     * Component-based game object system exists
     * Game object serialization to/from JSON works
@@ -45,6 +43,8 @@ The player will be able to see a tile-based world and control some sort of avata
     * Avatar movement
     * Jumping
     * Double jump
+    * Game world is created using generated cave data
+    * Caves can be randomly generated
 
 ## workflow automation
 
@@ -56,7 +56,7 @@ We wanna `rake` these tasks:
 * Sync, build, and export external dependencies to `./bin`
 * Deploy the client app (code, assets, dependencies) to the server's public directory
 
-No magnification. No obfuscation. No concatenation. No concept of development build vs release build for client app or server. Everything is obviously under heavy development.
+No minification. No obfuscation. No concatenation. No concept of development build vs release build for client app or server. Everything is obviously under heavy development.
 
 ### Acceptance Critera
 
