@@ -1,7 +1,23 @@
 var World = new Class({ Extends:System,
 
   entities:[],
+  entityDefs:{},
   game:null,
+
+  addEntityDefinitions:function(entityDefs)
+  {
+    this.entityDefs.extend(entityDefs);
+  },
+
+  createEntity:function(entityName)
+  {
+    var entityDefJSON = this.entityDefs[entityName];
+    if (!entityDefJSON)
+    {
+      throw "Cannot find entity def with name: "+entityName;
+    }
+    return TypedJSON.parse(JSON.encode(entityDefJSON));
+  },
 
   addEntity:function(entity)
   {
