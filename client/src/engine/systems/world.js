@@ -3,16 +3,6 @@ var World = new Class({ Extends:System,
   entities:[],
   game:null,
 
-  initialize:function()
-  {
-    this.parent();
-  },
-
-  setup:function(game)
-  {
-    this.parent(game);
-  },
-
   addEntity:function(entity)
   {
     this.entities.push(entity);
@@ -77,6 +67,5 @@ var World = new Class({ Extends:System,
   destroy:function()
   {
     this.removeAllEntities();
-    this.parent();
   }
 });

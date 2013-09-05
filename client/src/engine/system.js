@@ -3,11 +3,18 @@ var System = new Class({
   
   initialize: function()
   {
+    
   },
 
-  setup: function(game)
+  onAdded: function(game)
   {
     this.game = game;
+    this.setup();
+  },
+
+  setup:function()
+  {
+
   },
 
   preUpdate:function(dT)
@@ -25,8 +32,14 @@ var System = new Class({
 
   },
 
-  destroy: function()
+  destroy:function()
   {
+
+  },
+
+  onRemoved: function()
+  {
+    this.destroy();
     this.game = null;
   }
 });

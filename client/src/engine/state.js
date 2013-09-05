@@ -6,9 +6,15 @@ var State = new Class({
 
   },
 
-  setup:function(game)
+  onAdded:function(game)
   {
     this.game = game;
+    this.setup();
+  },
+
+  setup:function()
+  {
+
   },
 
   enter:function()
@@ -28,6 +34,12 @@ var State = new Class({
 
   destroy:function()
   {
+
+  },
+
+  onRemoved:function()
+  {
+    this.destroy();
     this.game = null;
   }
 });

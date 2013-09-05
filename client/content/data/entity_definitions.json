@@ -1,21 +1,23 @@
 {
-	"selector":
+	"tile_selector":
 	{
+		"_t":"Entity",
 		"components":
 		{
 			"brain":
 			{
-				"_t":"SelectorBrain"
+				"_t":"TileSelectorBrain"
 			},
-			"position":
+			"tilePosition":
 			{
-				"_t":"TilePosition",
 				"tileX":0,
 				"tileY":0
 			},
 			"renderer":
 			{
-				"_t":"BoxRenderer",
+				"_t":"PixiBoxRenderer",
+				"width":4,
+				"height":4,
 				"color":"0xffffff",
 				"alpha":0.6
 			}

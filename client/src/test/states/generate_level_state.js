@@ -75,12 +75,12 @@ var GenerateLevelState = new Class({ Extends:State,
         this.cavernRenderer.sprite.parent.removeChild(this.cavernRenderer.sprite);
       }
 
-      var cavernDef = this.generator.generate();
+      this.levelDefinition = this.generator.generate();
       
-      this.cavernRenderer = new CavernRenderer(cavernDef);
+      this.cavernRenderer = new CavernRenderer(this.levelDefinition);
       this.levelLayer.addChild(this.cavernRenderer.sprite);
 
-      this.selector = new Selector(cavernDef);
+      this.selector = new Selector(this.levelDefinition);
       this.actorLayer.addChild(this.selector.sprite);
     },
 

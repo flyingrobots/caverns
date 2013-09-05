@@ -1,4 +1,4 @@
-var Entity = Class({
+var Entity = Class({ 
   game:null,
   components:{},
   id:0,
@@ -17,12 +17,18 @@ var Entity = Class({
     }
   },
 
-  setup:function(game)
+  onAdded:function(game)
   {
     this.game = game;
     components.forEach(function(component){
-      component.setup(game);
+      component.onAdded(game, owner);
     });
+    this.setup();
+  },
+
+  setup:function()
+  {
+
   },
 
   addComponent:function(componentName, component)
@@ -44,16 +50,22 @@ var Entity = Class({
     {
       throw "Cannot find component with name "+componentName;
     }
-    component.destroy();
+    component.onRemoved();
     delete this.components[componentName];
   },
 
   destroy:function()
   {
+
+  },
+
+  onRemoved:function()
+  {
     for (componentName in components)
     {
       removeComponent(componentName);
     }
+    this.destroy();
     this.game = null;
   }
 });
