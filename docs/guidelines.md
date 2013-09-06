@@ -46,9 +46,8 @@ Avoid using bash, python, and other friends. Ruby only, pls.
 
 Let's be smart about using git.
 
-1. **For the love of God**, do `git pull --rebase origin master` before pushing changes to `origin master`.
-2. Until we establish a test-driven workflow, **keep `origin master` in working order**.
-3. External code should be added to the project as a submodule.
+1. Until we establish a test-driven workflow, **keep `origin master` in working order**.
+2. External code should be added to the project as a submodule.
 
 #### branch names
 
