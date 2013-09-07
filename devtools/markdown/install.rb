@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-command = "mv ./Markdown/ ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/Markdown"
+command = 'cp -r Markdown/ "~/Library/Application\ Support/Sublime\ Text\ 2/Packages/Markdown"'
 
 $stdout.puts "#{command}"
 
