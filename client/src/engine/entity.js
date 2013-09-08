@@ -1,8 +1,15 @@
 var Entity = Class({ 
+
   game:null,
   components:{},
   id:0,
   name:null,
+
+  // Signal fired when a component is added : (entity, component)
+  componentAdded:new signals.Signal(),
+
+  // Signal fired when a component is removed : (entity, component)
+  componentRemoved:new signals.Signal(),
 
   initialize:function(data)
   {
@@ -36,6 +43,7 @@ var Entity = Class({
     }
     this.components[componentName] = component;
     component.onAdded();
+    this.componentAdded.dispatch(this, component);
   },
 
   removeComponent:function(componentName)
@@ -44,8 +52,9 @@ var Entity = Class({
     {
       throw "Cannot find component with name "+componentName;
     }
-    component.onRemoved();
     delete this.components[componentName];
+    component.onRemoved();
+    this.componentRemoved.dispatch(this, component);
   },
 
   destroy:function()
