@@ -18,7 +18,7 @@
 	<script src="src/game/utils/array_utils.js"></script>
 
 	<script src="src/game/levels/tilemap_definition.js"></script>
-	<script src="src/game/levels/cavern_test_renderer.js"></script>
+	<script src="src/game/levels/cavern_renderer.js"></script>
 	<script src="src/game/levels/generators/tilemap_generator.js"></script>
 	<script src="src/game/levels/generators/cellular_automata.js"></script>
 	<script src="src/game/levels/generators/steps/create_collision_step.js"></script>
@@ -67,7 +67,7 @@
 	    var tilemapDefinition = generator.generate();
 	    //console.log(JSON.encode(tilemapDefinition));
 
-	    var tilemapRenderer = new CavernTestRenderer(tilemapDefinition);
+	    var tilemapRenderer = new CavernRenderer(tilemapDefinition);
 
 
 		// create an new instance of a pixi stage
