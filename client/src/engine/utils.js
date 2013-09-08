@@ -1,3 +1,38 @@
+var js = (function() 
+{
+  var api = {}
+  
+  api.defaults = function(object) {
+    Array.prototype.slice.call(arguments).forEach(function(arg) {
+      if (arg) {
+        for (var property in arg) {
+          if (object[property] === void 0) {
+            object[property] = arg[property];
+          }
+        }
+      }
+    });
+    return object;
+  }
+  
+  api.isFunction = function(object) {
+    return typeof object === 'function';
+  }
+
+  api.select = function(array, iterator) {
+    result = []
+    array.forEach(function(object) {
+      if (iterator(object)) {
+        result.push(object);
+      }
+    });
+    return result;
+  }
+
+  return api;
+}).call();
+
+//-----------------------------------------------------------------------------
 var stringToFunction = function(str) {
   var arr = str.split(".");
 
