@@ -1,5 +1,21 @@
 {
+	"tile_none":
+	{
+		"blocking":false
+	},
 	"tile_rock":
+	{
+		"blocking":true
+	},
+	"tile_water":
+	{
+		"blocking":false
+	},
+	"tile_lava":
+	{
+		"blocking":false
+	},
+	"tile_grass":
 	{
 		"blocking":true
 	}

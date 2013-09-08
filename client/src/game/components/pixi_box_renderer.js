@@ -2,6 +2,8 @@ var PixiBoxRenderer = new Class({Extends:PixiRenderer
 
   initialize:function(data)
   {
+    this.parent();
+    
     data.width = data.width || 100;
     data.height = data.height || 100;
     data.color = data.color || 0x000000;
@@ -10,6 +12,6 @@ var PixiBoxRenderer = new Class({Extends:PixiRenderer
       data.color = parseInt(data.color, 16);
     }
     data.alpha = data.alpha || 1;
-    this.parent(SpriteUtils.createBox(data.width, data.height, data.color, data.alpha));
+    this.sprite = SpriteUtils.createBox(data.width, data.height, data.color, data.alpha);
   }
 });

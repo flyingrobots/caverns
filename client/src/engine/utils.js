@@ -1,3 +1,11 @@
+var assert = function(assertion, failureMessage) {
+  failureMessage = failureMessage || "Assertion failed";
+  if (!assertion)
+  {
+    throw failureMessage;
+  }
+};
+
 var stringToFunction = function(str) {
   var arr = str.split(".");
 

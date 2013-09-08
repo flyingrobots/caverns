@@ -28,10 +28,10 @@ var CavernGeneratorAutomata = new Class({
     this.randomizeMap(this.options.generateCellSize);
     
     // Generate map
-    this.applyAutomaton(this.tiles,this.options.generateBornList,this.options.generateSurviveList,this.options.generateCellSize,this.options.generateNumIterations);
+    CellularAutomata.applyAutomaton(this.tiles,this.options.generateBornList,this.options.generateSurviveList,this.options.generateCellSize,this.options.generateNumIterations);
 
     // Smooth map
-    this.applyAutomaton(this.tiles,this.options.smoothBornList,this.options.smoothSurviveList,this.options.smoothCellSize,this.options.smoothNumIterations);
+    CellularAutomata.applyAutomaton(this.tiles,this.options.smoothBornList,this.options.smoothSurviveList,this.options.smoothCellSize,this.options.smoothNumIterations);
   },
 
   randomizeMap:function(cellSize)
@@ -57,5 +57,20 @@ var CavernGeneratorAutomata = new Class({
       var y = Math.floor(Math.random()*(this.height-splotchSize));
       this.fillRect(this.tiles,x,y,splotchSize,splotchSize,TILE_TYPE_FILLED);
     }
-  }
+  },
+
+  fillRect:function(tiles,baseX,baseY,rectWidth,rectHeight,type)
+  {
+    var width = tiles.length;
+    var height = tiles[0].length;
+    for (var x = 0; x < rectWidth; ++x)
+    {
+      if (baseX+x >= width) continue;
+      for (var y = 0; y < rectHeight; ++y)
+      {
+        if (baseY+y >= height) continue;
+        tiles[baseX+x][baseY+y].type = type;
+      }
+    }
+  },
 });

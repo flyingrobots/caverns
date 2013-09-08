@@ -1,37 +1,24 @@
-var CavernGenerator = new Class({
-  
-  Implements:Options,
+var CavernGenerator = new Class({ Extends:TileMapGenerator, Implements:Options,
 
   options:
   {
-    seed:undefined,
-    width:100,
-    height:100,
-    tileWidth:4,
-    tileHeight:4,
     lavaHeight:10,
     numWaterfalls:4
   },
 
+  lowestPoint:0,
+
   initialize:function(options)
   {
-    this.setOptions(options);
-    this.width = this.options.width;
-    this.height = this.options.height;
-    this.tiles = [];
-    this.lowestPoint = 0;
+    this.parent(options);
+
+    this.tilemapDefinition.addTileDefinitions(tile_definitions_json);
   },
 
   generate:function()
   {
-    var oldRandom = Math.random;
-    if (this.options.seed != undefined)
-    {
-      Math.seedrandom(this.options.seed);
-    }
-
     // Create filled tile map
-    this.tiles = this.makeTilesArray(this.width, this.height, TILE_TYPE_FILLED);
+    this.tiles = this.makeTilesArray(this.numTilesY, this.numTilesX, TILE_TYPE_FILLED);
     this.lowestPoint = 0;
 
     // Call concrete generate function
@@ -51,23 +38,21 @@ var CavernGenerator = new Class({
     
     // Build final tile map
     var tileMap = [];
-    for (var y = 0; y < this.height; ++y)
+    for (var y = 0; y < this.numTilesX; ++y)
     {
       var row = [];
-      for (var x = 0; x < this.width; ++x)
+      for (var x = 0; x < this.numTilesY; ++x)
       {
         row.push(this.tiles[y][x].type);
       }
       tileMap.push(row);
     }
 
-    // Reset random
-    Math.random = oldRandom;
 
     // Build definition
     var cavernDef = {
-      width:this.width,
-      height:this.height,
+      numTilesX:this.numTilesY,
+      numTilesY:this.numTilesX,
       tileWidth:this.options.tileWidth,
       tileHeight:this.options.tileHeight,
       tiles:tileMap
@@ -124,9 +109,9 @@ var CavernGenerator = new Class({
   findLowestPoint:function()
   {
     this.lowestPoint = 0;
-    for (var y = this.height-1; y >= 0; --y)
+    for (var y = this.numTilesX-1; y >= 0; --y)
     {
-      for (var x = 0; x < this.width; ++x)
+      for (var x = 0; x < this.numTilesY; ++x)
       {
         if (this.tiles[x][y].type == TILE_TYPE_CLEAR)
         {
@@ -200,7 +185,7 @@ var CavernGenerator = new Class({
     // Add basin lava
     for (var y = this.lowestPoint; y >= this.lowestPoint - this.options.lavaHeight && y >= 0; --y)
     {
-      for (var x = 0; x < this.width; ++x)
+      for (var x = 0; x < this.numTilesY; ++x)
       {
         var tile = this.tiles[x][y];
         if (tile.type == TILE_TYPE_CLEAR)
@@ -228,8 +213,8 @@ var CavernGenerator = new Class({
     const maxAttempts = 1000;
     do
     {
-      tile.x = Math.floor(Math.random()*this.width);
-      tile.y = Math.floor(Math.random()*this.height);
+      tile.x = Math.floor(Math.random()*this.numTilesY);
+      tile.y = Math.floor(Math.random()*this.numTilesX);
     } while(this.tiles[tile.x][tile.y].type != TILE_TYPE_CLEAR && attempts++ < maxAttempts);
     if (attempts >= maxAttempts)
     {
@@ -276,9 +261,9 @@ var CavernGenerator = new Class({
   addGrassToMap:function()
   {
     //Find and destroy all tiles with less than 3 adjacencies
-    for (var y = 0; y < this.height; ++y)
+    for (var y = 0; y < this.numTilesX; ++y)
     {
-      for (var x = 0; x < this.width; ++x)
+      for (var x = 0; x < this.numTilesY; ++x)
       {
         var tile = this.tiles[x][y];
         if (tile.type != TILE_TYPE_CLEAR)
@@ -286,7 +271,7 @@ var CavernGenerator = new Class({
           continue;
         }
 
-        if (y-1 >= 0 && this.tiles[x][y-1].type == TILE_TYPE_CLEAR && y+1 < this.height && this.tiles[x][y+1].type == TILE_TYPE_FILLED)
+        if (y-1 >= 0 && this.tiles[x][y-1].type == TILE_TYPE_CLEAR && y+1 < this.numTilesX && this.tiles[x][y+1].type == TILE_TYPE_FILLED)
         {
           tile.type = TILE_TYPE_GRASS;
         }
@@ -296,7 +281,7 @@ var CavernGenerator = new Class({
 
   isOnMap:function(x,y)
   {
-    return x >= 0 && x < this.width && y >= 0 && y < this.height;
+    return x >= 0 && x < this.numTilesY && y >= 0 && y < this.numTilesX;
   },
 
   isTileFilled:function(x,y)

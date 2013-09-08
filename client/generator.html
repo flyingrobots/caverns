@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Caverns</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+	</style>
+	<script src="deps/pixi-js/bin/pixi.dev.js"></script>
+	<script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
+	<script src="deps/seedrandom/seedrandom.js"></script>
+
+	<script src="src/engine/utils.js"></script>
+
+	<script src="src/game/utils/array_utils.js"></script>
+
+	<script src="src/game/levels/tilemap_definition.js"></script>
+	<script src="src/game/levels/cavern_test_renderer.js"></script>
+	<script src="src/game/levels/generators/tilemap_generator.js"></script>
+	<script src="src/game/levels/generators/cellular_automata.js"></script>
+	<script src="src/game/levels/generators/steps/create_collision_step.js"></script>
+	<script src="src/game/levels/generators/steps/create_collision_cavern_automata_step.js"></script>
+	<script src="src/game/levels/generators/steps/create_collision_cavern_miner_step.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_collision_step.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_collision_remove_small_islands_step.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_collision_smooth_step.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_tilemap_step.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_tilemap_add_tile_fluid_streams_step.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_tilemap_collision_to_tile.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_tilemap_fill_empty_tiles_from_bottom_step.js"></script>
+	<script src="src/game/levels/generators/steps/mutate_tilemap_fill_on_predicate_step.js"></script>
+</head>
+<body>
+	<script>
+		var generator = new TilemapGenerator({
+	      numTilesX:100,
+	      numTilesY:100,
+	      tileWidth:4,
+	      tileHeight:4
+	    });
+	    generator.addStep(new CreateCollisionCavernMinerStep({numIterations:400}));
+	    generator.addStep(new MutateCollisionSmoothStep());
+	    generator.addStep(new MutateCollisionRemoveSmallIslandsStep());
+	    generator.addStep(new MutateTilemapCollisionToTileStep({tileId:"tile_rock"}));
+	    generator.addStep(new MutateTilemapFillEmptyTilesFromBottomStep({tileId:"tile_lava"}));
+	    generator.addStep(new MutateTilemapAddTileFluidStreamsStep({tileId:"tile_water"}));
+	    generator.addStep(new MutateTilemapFillOnPredicateStep({
+	      predicate:function(tilemap,x,y)
+	      {
+	        if (tilemap.tiles[x][y] != null)
+	        {
+	          return false;
+	        }
+
+	        if (y-1 >= 0 && tilemap.tiles[x][y-1] == null && y+1 < tilemap.numTilesY && tilemap.collisionMap[x][y+1] == 1)
+	        {
+	          return true;
+	        }
+	        return false;
+	      },
+	      tileId:"tile_grass"
+	    }));
+
+	    var tilemapDefinition = generator.generate();
+	    //console.log(JSON.encode(tilemapDefinition));
+
+	    var tilemapRenderer = new CavernTestRenderer(tilemapDefinition);
+
+
+		// create an new instance of a pixi stage
+		this.stage = new PIXI.Stage(0xffffff);
+
+		// create a renderer instance
+		this.renderer = new PIXI.CanvasRenderer(400, 400);
+
+		// add the renderer view element to the DOM
+		document.body.appendChild(this.renderer.view);
+
+		this.stage.addChild(tilemapRenderer.sprite);
+
+		requestAnimFrame(animate);
+
+		function animate()
+		{
+			requestAnimFrame(animate);
+      		this.renderer.render(this.stage);
+		}
+	</script>
+
+	</body>
+</html>

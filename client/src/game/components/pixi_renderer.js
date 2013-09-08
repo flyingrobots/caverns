@@ -2,10 +2,9 @@ var PixiRenderer = new Class({Extends:Component,
 
   sprite:null,
 
-  initialize:function(sprite)
+  initialize:function()
   {
     this.parent();
-    this.sprite = sprite;
   }
 
   setPosition:function(x,y)
