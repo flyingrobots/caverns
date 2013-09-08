@@ -27,6 +27,12 @@ var game = (function()
       unpauseable: false
     });
 
+    if (!js.isString(system.name)) {
+      throw "System must have a name";
+    }
+
+    var name = system.name;
+
     if (_systems[name]) {
       throw "Existing system with name " + name;
     }

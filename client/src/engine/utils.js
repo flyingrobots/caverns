@@ -29,6 +29,10 @@ var js = (function()
     return result;
   }
 
+  api.isString = function(object) {
+    return typeof object === 'string';
+  }
+
   return api;
 }).call();
 
