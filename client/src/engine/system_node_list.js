@@ -20,11 +20,11 @@ var SystemNodeList = new Class({
   nodeList:[],
   entityList:{},
 
-  // Signal fired when an entity is added : (entity)
-  entityAdded:new signals.Signal(),
+  // Signal fired when an node is added : (node)
+  nodeAdded:new signals.Signal(),
 
-  // Signal fired when an entity is removed : (entity)
-  entityRemoved:new signals.Signal(),
+  // Signal fired when a node is removed : (node)
+  nodeRemoved:new signals.Signal(),
 
   initialize:function(contract)
   {
@@ -63,7 +63,7 @@ var SystemNodeList = new Class({
       }
       this.entities[entity.id] = this.nodeList.length;
       this.nodeList.push(node);
-      this.entityAdded.dispatch(entity);
+      this.nodeAdded.dispatch(node);
     }
   },
 
@@ -73,8 +73,8 @@ var SystemNodeList = new Class({
     {
       var idx = this.entities[entity.id];
       delete this.entities[entity.id];
-      this.nodeList.splice(idx,1);
-      this.entityRemoved.dispatch(entity);
+      var node = this.nodeList.splice(idx,1)[0];
+      this.nodeRemoved.dispatch(node);
     }
   },
 

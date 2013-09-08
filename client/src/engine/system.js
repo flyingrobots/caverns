@@ -40,6 +40,9 @@ var System = new Class({ Implements:Options,
   {
     var nodeList = new SystemNodeList(contract);
     this.nodeLists.push(nodeList);
+    nodeList.nodeAdded.add(this.nodeAdded.bind(this));
+    nodeList.nodeRemoved.add(this.nodeRemoved.bind(this));
+
     this.nodeListAdded.dispatch(nodeList);
     return nodeList;
   },
@@ -63,9 +66,25 @@ var System = new Class({ Implements:Options,
   },
 
   /*
+      Called when a node is added to any node list which the system manages.
+  */
+  nodeAdded:function(node)
+  {
+
+  },
+
+  /*
       Called once a frame when the game updates.
   */
   update:function(dT)
+  {
+
+  },
+
+  /*
+      Called when a node is removed from any node list which the system manages.
+  */
+  nodeRemoved:function(node)
   {
 
   },
