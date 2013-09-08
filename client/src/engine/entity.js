@@ -20,9 +20,6 @@ var Entity = Class({
   onAdded:function(game)
   {
     this.game = game;
-    components.forEach(function(component){
-      component.onAdded(game, owner);
-    });
     this.setup();
   },
 
@@ -38,10 +35,7 @@ var Entity = Class({
       throw "Existing component with name "+componentName;
     }
     this.components[componentName] = component;
-    if (this.game != null)
-    {
-      component.setup(this.game);
-    }
+    component.onAdded();
   },
 
   removeComponent:function(componentName)

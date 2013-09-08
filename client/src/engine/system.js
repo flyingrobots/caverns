@@ -2,26 +2,10 @@ var System = new Class({ Implements:Options,
 
   options:
   {
-    priority:0,
   },
 
-  _priority:0, 
   nodeLists:[],
   game:null,
-
-  get priority() { return this._priority; },
-  set priority(value) 
-  { 
-    if (this._priority == value)
-    {
-      return;
-    }
-    this._priority = value; 
-    this.priorityChanged.dispatch();
-  },
-
-  // Signal fired when a system's priority changes : ()
-  priorityChanged:new signals.Signal(),
 
   // Signal fired when a system adds a node list : (nodeList)
   nodeListAdded:new signals.Signal(),
@@ -29,7 +13,6 @@ var System = new Class({ Implements:Options,
   initialize: function(options)
   {
     this.setOptions(options);
-    this.priority = priority;
   },
 
   /*
@@ -74,12 +57,11 @@ var System = new Class({ Implements:Options,
   },
 
   /*
-      Called once a frame when the game updates.
+      Define functions in concrete classes for :
+        - preUpdate(dT)
+        - update(dT)
+        - postUpdate(dT)
   */
-  update:function(dT)
-  {
-
-  },
 
   /*
       Called when a node is removed from any node list which the system manages.
