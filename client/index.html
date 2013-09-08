@@ -51,19 +51,30 @@
 </head>
 <body>
 	<script>
+
+		var playCaveDemo = function () {
+			var width = 800;
+			var height = 800;
+			var game = new CavernsTestGame(width, height);
+		}
+
+		var playGame = function() {
+			var graphicsOptions = {
+				useCanvas: true,
+				width: document.width,
+				height: document.height
+			};
+
+			var gameOptions = {
+				graphics: graphicsOptions
+			};
+
+			game.initialize(gameOptions);
+			game.start();
+		}
 	
-		var graphicsOptions = {
-			useCanvas: true,
-			width: document.width,
-			height: document.height
-		};
-
-		var gameOptions = {
-			graphics: graphicsOptions
-		};
-
-		game.initialize(gameOptions);
-		game.start();
+		// playCaveDemo();
+		playGame();
 
 	</script>
 	</body>
