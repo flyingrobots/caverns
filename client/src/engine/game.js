@@ -1,6 +1,6 @@
 var game = (function()
 {
-  var _systems = {};
+  var _systems = [];
   var _world = null;
   
   var _systemsThatDoPreupdate = [];
@@ -39,7 +39,7 @@ var game = (function()
   };
   
   api.initialize = function(options) {
-    js.defaults(options, {
+    options = js.defaults(options, {
       graphics: {}
     });
 
@@ -52,21 +52,11 @@ var game = (function()
   }
 
   api.addSystem = function(system, options) {
-    js.defaults(options, {
+    options = js.defaults(options, {
       unpauseable: false
     });
 
-    if (!js.isString(system.name)) {
-      throw "System must have a name";
-    }
-
-    var name = system.name;
-
-    if (_systems[name]) {
-      throw "Existing system with name " + name;
-    }
-
-    _systems.name = system;
+    _systems.push(system);
     system.setup(this);
 
     if (js.isFunction(system.preUpdate)) {
@@ -88,13 +78,12 @@ var game = (function()
     });
   }
 
-  api.removeSystem = function(name) {
-    if (!_systems[name]) {
-      throw "Cannot find system with name " + name;
+  api.removeSystem = function(system) {
+    if (_systems.erase(system).length == 0)
+    {
+      throw "Cannot find system";
     }
-
-    _systems[name].destroy();
-    delete _systems[name];
+    system.destroy();
   }
 
   api.pause = function() {

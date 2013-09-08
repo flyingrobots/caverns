@@ -5,20 +5,20 @@
     through at update time instead of having to build them anew with each update loop.
 
     The user passes in a contract on initialization which has the structure:
-      [{ComponentType:Name},...]
+      [{Name:ComponentType},...]
 
-    The ComponentType key of each entry should specify the class name of the component which is being added.
-    The Name value will be the key of the component in the resulting node.
-
+    The Name key will be the key of the component in the resulting node.
+    The ComponentType value of each entry should specify the class name of the component which is being added.
+    
     Example:
-      If the specified contract is : { PositionComponent:position, RenderableComponent:renderable }
+      If the specified contract is : { position:PositionComponent, renderable:RenderableComponent }
       the resulting nodes will look like : { position:PositionComponentInstance, renderable:RenderableComponentInstance }
 */
 var SystemNodeList = new Class({
 
   contract:null,
-  nodeList:[],
-  entityList:{},
+  nodes:[],
+  entities:{},
 
   // Signal fired when a node is added : (nodelist, node)
   nodeAdded:new signals.Signal(),
@@ -31,10 +31,9 @@ var SystemNodeList = new Class({
     assert(contract && contract instanceof Object, "Must specify contract data object");
 
     this.contract = [];
-    for (var componentTypeName in contract)
+    for (var propertyName in contract)
     {
-      var componentType = stringToFunction(componentTypeName);
-      var propertyName   = contract[componentTypeName];
+      var componentType = contract[propertyName];
       this.contract.push({componentType:componentType, propertyName:propertyName});
     }
   },
@@ -61,8 +60,8 @@ var SystemNodeList = new Class({
       {
         node[contractData.propertyName] = entity.getComponentByType(contractData.componentType);
       }
-      this.entities[entity.id] = this.nodeList.length;
-      this.nodeList.push(node);
+      this.entities[entity.id] = this.nodes.length;
+      this.nodes.push(node);
       this.nodeAdded.dispatch(this, node);
     }
   },
@@ -73,7 +72,7 @@ var SystemNodeList = new Class({
     {
       var idx = this.entities[entity.id];
       delete this.entities[entity.id];
-      var node = this.nodeList.splice(idx,1)[0];
+      var node = this.nodes.splice(idx,1)[0];
       this.nodeRemoved.dispatch(this, node);
     }
   },
@@ -92,7 +91,7 @@ var SystemNodeList = new Class({
 
   destroy:function()
   {
-    for (var node in nodeList)
+    for (var node in nodes)
     {
       this.nodeRemoved.dispatch(this, node);
     }
