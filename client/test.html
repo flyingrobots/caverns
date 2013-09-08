@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Caverns</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+	</style>
+	<script src="deps/pixi-js/bin/pixi.dev.js"></script>
+	<script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
+	<script src="deps/seedrandom/seedrandom.js"></script>
+	<script src="deps/signals-js/dist/signals.min.js"></script>
+</head>
+<body>
+	<script>
+		var MyClass = new Class({
+			_value:10,
+			get value() { return this._value*3; }
+		});
+
+		var ClassA = new Class({
+
+		});
+
+		var ClassB = new Class({ Extends:ClassA,
+
+		});
+
+		var objA = new ClassA();
+		var objB = new ClassB();
+		
+		alert(objA instanceof ClassA);
+		alert(objA instanceof ClassB);
+		alert(objB instanceof ClassA);
+		alert(objB instanceof ClassB);
+	</script>
+
+	</body>
+</html>

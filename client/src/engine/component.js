@@ -1,16 +1,12 @@
 var Component = new Class({
-  game:null,
-  owner:null,
 
   initialize:function()
   {
 
   },
 
-  onAdded:function(game, owner)
+  onAdded:function()
   {
-    this.game = game;
-    this.owner = owner;
     this.setup();
   },
 
@@ -27,7 +23,5 @@ var Component = new Class({
   onRemoved:function()
   {
     this.destroy();
-    this.ownder = null;
-    this.game = null;
   }
 });
