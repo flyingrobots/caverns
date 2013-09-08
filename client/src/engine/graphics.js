@@ -1,14 +1,12 @@
 var Graphics = (function() 
 {
-  var pixi = {}
+  var _pixi = {}
   
-  //---------------------------------------------------------------------------
-  pixi.createStage = function(bgColor) {
+  _pixi.createStage = function(bgColor) {
     this.stage = new PIXI.Stage(bgColor);
   }
 
-  //---------------------------------------------------------------------------
-  pixi.createRenderer = function(width, height, useCanvas) {
+  _pixi.createRenderer = function(width, height, useCanvas) {
     if (useCanvas) {
       this.renderer = new PIXI.CanvasRenderer(width, height);
     } else {
@@ -18,13 +16,11 @@ var Graphics = (function()
     document.body.appendChild(this.renderer.view);
   }
 
-  //---------------------------------------------------------------------------
-  pixi.draw = function() {
+  _pixi.draw = function() {
     this.renderer.render(this.stage);
   }
 
-  //---------------------------------------------------------------------------
-  pixi.initialize = function(options) {
+  _pixi.initialize = function(options) {
     js.defaults(options, {
       bgColor: 0x66ff99,
       useCanvas: false,
@@ -38,14 +34,12 @@ var Graphics = (function()
 
   var api = {}
 
-  //---------------------------------------------------------------------------
   api.initialize = function(options) {
-    pixi.initialize(options);
+    _pixi.initialize(options);
   }
 
-  //---------------------------------------------------------------------------
   api.draw = function(dt) {
-    pixi.draw();
+    _pixi.draw();
   }
 
 return api; }).call();
