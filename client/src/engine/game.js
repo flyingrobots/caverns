@@ -7,6 +7,7 @@ var game = (function()
   var _systemsThatDoPostUpdate = []
 
   var _isPaused = false;
+  var _ticker = null;
 
   var api = {}
 
@@ -111,8 +112,6 @@ var game = (function()
 
     Graphics.draw();
   }
-
-  var _ticker = null;
 
   api.start = function() {
     var frequency = 1000.0 / 30.0;
