@@ -21,21 +21,22 @@ var SystemNodeList = new Class({
   entities:{},
 
   // Signal fired when a node is added : (nodelist, node)
-  nodeAdded:new signals.Signal(),
+  nodeAdded:null,
 
   // Signal fired when a node is removed : (nodelist, node)
-  nodeRemoved:new signals.Signal(),
+  nodeRemoved:null,
 
   initialize:function(contract)
   {
     assert(contract && contract instanceof Object, "Must specify contract data object");
 
+    this.nodeAdded = new signals.Signal();
+    this.nodeRemoved = new signals.Signal();
+
     this.contract = [];
-    for (var propertyName in contract)
-    {
-      var componentType = contract[propertyName];
+    Object.each(contract, function(componentType, propertyName) {
       this.contract.push({componentType:componentType, propertyName:propertyName});
-    }
+    }.bind(this));
   },
 
   updateMembership:function(entity)
@@ -56,10 +57,10 @@ var SystemNodeList = new Class({
     if (this.matches(entity))
     {
       var node = {};
-      for (var contractData in this.contract)
+      Array.each(this.contract, function(contractData)
       {
         node[contractData.propertyName] = entity.getComponentByType(contractData.componentType);
-      }
+      });
       this.entities[entity.id] = this.nodes.length;
       this.nodes.push(node);
       this.nodeAdded.dispatch(this, node);
@@ -79,14 +80,10 @@ var SystemNodeList = new Class({
 
   matches:function(entity)
   {
-    for (var contractData in this.contract)
+    return Array.every(this.contract, function(contractData)
     {
-      if (!entity.hasComponentOfType(contractData.componentType))
-      {
-        return false;
-      }
-    }
-    return true;
+      return entity.hasComponentOfType(contractData.componentType);
+    });
   },
 
   destroy:function()

@@ -8,13 +8,12 @@ var System = new Class({ Implements:Options,
   game:null,
 
   // Signal fired when a system adds a node list : (system, nodeList)
-  nodeListAdded:new signals.Signal(),
+  nodeListAdded:null,
   
   initialize: function(options)
   {
     this.setOptions(options);
-    this.boundNodeAdded = this.nodeAdded.bind(this);
-    this.boundNodeRemoved = this.nodeRemoved.bind(this);
+    this.nodeListAdded = new signals.Signal();
   },
 
   /*
@@ -36,8 +35,8 @@ var System = new Class({ Implements:Options,
   {
     var nodeList = new SystemNodeList(contract);
     this.nodeLists.push(nodeList);
-    nodeList.nodeAdded.add(this.boundNodeAdded);
-    nodeList.nodeRemoved.add(this.boundNodeRemoved);
+    nodeList.nodeAdded.add(this.nodeAdded, this);
+    nodeList.nodeRemoved.add(this.nodeRemoved, this);
     this.nodeListAdded.dispatch(this, nodeList);
     return nodeList;
   },
@@ -95,8 +94,8 @@ var System = new Class({ Implements:Options,
   */
   destroyNodeList:function(nodeList)
   {
-    nodeList.nodeAdded.remove(this.boundNodeAdded);
-    nodeList.nodeRemoved.remove(this.boundNodeRemoved);
+    nodeList.nodeAdded.remove(this.nodeAdded, this);
+    nodeList.nodeRemoved.remove(this.nodeRemoved, this);
     nodeList.destroy();
   },
 

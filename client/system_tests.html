@@ -13,7 +13,7 @@
   
   <script src="deps/pixi-js/bin/pixi.dev.js"></script>
   <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
-  <script src="deps/js-signals.git/dist/signals.min.js"></script>
+  <script src="deps/js-signals.git/dist/signals.js"></script>
 
   <script src="src/engine/utils.js"></script>
   <script src="src/engine/graphics.js"></script>
@@ -30,7 +30,7 @@
 
   	// -- Test Components
   	var Animal = new Class({Extends:Component});
-  	var Cat = new Class({Extends:Animal});
+  	var Cat = new Class({Extends:Animal, initialize:function(){var a = 5}});
   	var Dog = new Class({Extends:Animal});
   	var Shoes = new Class({Extends:Component});
   	var Socks = new Class({Extends:Component});
@@ -50,9 +50,9 @@
   		var componentMap = {};
   		for (var i = 0; i < components.length; ++i)
   		{
-  			componentMap[i.toString()] = new components[i]();
+  			componentMap[i.toString()] = new components[i];
   		}
-  		game.world.addEntity(new Entity({components:componentMap}));
+      return game.world.addEntity(new Entity({components:componentMap}));
   	};
 
   	// -- Setup
@@ -71,6 +71,15 @@
   	game.addSystem(system);
 
   	assert(numNodesInSystem(system) == 2);
+
+    var entity = newEntity([Animal,Shoes]);
+    assert(numNodesInSystem(system) == 3);
+
+    entity.removeComponentByName("0");
+    assert(numNodesInSystem(system) == 2);
+
+    entity.addComponent("animal",new Animal());
+    assert(numNodesInSystem(system) == 3);
 
   </script>
   </body>

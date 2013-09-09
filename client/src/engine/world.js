@@ -5,14 +5,16 @@ var World = new Class({
   game:null,
 
   // Signal fired when an entity is added : (world, entity)
-  entityAdded:new signals.Signal(),
+  entityAdded:null,
 
   // Signal fired when an entity is removed : (world, entity)
-  entityRemoved:new signals.Signal(),
+  entityRemoved:null,
 
   initialize:function(game)
   {
     this.game = game;
+    this.entityAdded = new signals.Signal();
+    this.entityRemoved = new signals.Signal();
   },
 
   addEntityDefinitions:function(entityDefs)
@@ -35,6 +37,7 @@ var World = new Class({
     this.entities.push(entity);
     entity.setup(this.game);
     this.entityAdded.dispatch(this, entity);
+    return entity;
   },
 
   findEntityById:function(id)
@@ -83,6 +86,7 @@ var World = new Class({
     entity.destroy();
     this.entities.splice(idx,1);
     this.entityRemoved.dispatch(this, entity);
+    return entity;
   },
 
   removeAllEntities:function()

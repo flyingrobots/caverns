@@ -1,4 +1,4 @@
-var Entity = Class({ 
+var Entity = new Class({
 
   game:null,
   components:{},
@@ -7,21 +7,26 @@ var Entity = Class({
   name:null,
 
   // Signal fired when a component is added : (entity, component)
-  componentAdded:new signals.Signal(),
+  componentAdded:null,
 
   // Signal fired when a component is removed : (entity, component)
-  componentRemoved:new signals.Signal(),
+  componentRemoved:null,
 
-  initialize:function(data)
+  initialize:function(options)
   {
+    options = options || {}
+
     this.id = Entity.idCounter++;
 
-    if (data.components)
+    this.componentAdded = new signals.Signal();
+    this.componentRemoved = new signals.Signal();
+
+    if (options.components)
     {
-      assert(js.isObject(data.components), "Components must be an object");
-      for (var componentName in data.components)
+      assert(js.isObject(options.components), "Components must be an object");
+      for (var componentName in options.components)
       {
-        this.addComponent(componentName, data.components[componentName]);
+        this.addComponent(componentName, options.components[componentName]);
       }
     }
   },
@@ -43,15 +48,16 @@ var Entity = Class({
     {
       throw "Existing component with name "+componentName;
     }
+    component.name = componentName;
     this.components[componentName] = component;
     this.componentList.push(component);
     component.onAdded();
     this.componentAdded.dispatch(this, component);
   },
 
-  getComponentOfType:function(type)
+  getComponentByType:function(type)
   {
-    return this.componentList.each(function(component){
+    return this.componentList.each(function(component) {
       if (component instanceof type)
       {
         return component;
@@ -61,10 +67,22 @@ var Entity = Class({
 
   hasComponentOfType:function(type)
   {
-    return Array.some(this.components, function(component){ return component instanceof type });
+    return Array.some(this.componentList, function(component) { 
+      return component instanceof type;
+    });
   },
 
-  removeComponent:function(componentName)
+  removeComponent:function(component)
+  {
+    var idx = Array.indexOf(this.componentList, component);
+    if (idx == -1)
+    {
+      throw "Cannot find component";
+    }
+    return removeComponentByName(component.name);
+  },
+
+  removeComponentByName:function(componentName)
   {
     var component = this.components[componentName];
     if (!component)

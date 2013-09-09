@@ -33,6 +33,7 @@ var game = (function()
 
   var _onEntityRemoved = function(world, entity)
   {
+    console.log("")
     _updateEntitySystemMembership(entity);
     entity.componentAdded.remove(_updateEntitySystemMembership);
     entity.componentRemoved.remove(_updateEntitySystemMembership);
