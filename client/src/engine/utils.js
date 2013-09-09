@@ -11,14 +11,49 @@ var js = (function()
 {
   var api = {}
   
-  api.defaults = function(object, defaults) {
-    // you and your dirty mootools :-)
-    return object == null ? defaults : Object.append(defaults, object);
-  };
+  // type info
   
   api.isFunction = function(object) {
     return typeof object === 'function';
   };
+
+  api.isString = function(object) {
+    return typeof object === 'string';
+  };
+
+  api.isObject = function(object) {
+    return typeof object === 'object';
+  };
+
+  api.isNull = function(object) {
+    return object === null;
+  }
+
+  api.isUndefined = function(object) {
+    return object === void 0;
+  }
+
+  api.exists = function(object) {
+    return !this.isNull(object) && !this.isUndefined(object);
+  }
+
+  // randomness
+
+  api.randomNumber = function(min, max) {
+    return Math.round(min + Math.random() * (max - min));
+  }
+
+  api.randomColor = function() {
+    // stolen from the interwebs
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
+  }
+  
+  // array
 
   api.select = function(array, iterator) {
     result = []
@@ -30,8 +65,15 @@ var js = (function()
     return result;
   };
 
-  api.isString = function(object) {
-    return typeof object === 'string';
+  api.last = function(array) {
+    if (array) {
+      return array[array.length - 1];
+    }
+  }
+
+  api.defaults = function(object, defaults) {
+    // you and your dirty mootools :-)
+    return object == null ? defaults : Object.append(defaults, object);
   };
 
   api.isObject = function(object) {

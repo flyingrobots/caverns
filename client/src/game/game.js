@@ -16,6 +16,8 @@ var Game = (function()
 
     Graphics.initialize(options.graphics);
     SystemRegistry.initialize(this.world);
+
+    this.stateMachine = new StateMachine();
   }
 
   api.pause = function() {
@@ -36,12 +38,33 @@ var Game = (function()
     Graphics.draw();
   }
 
-  api.start = function() {
+  var _startGameLoop = function () {
     var frequency = 1000.0 / 30.0;
     var gameLoop = function() {
       api.tick(frequency);
     }
     _ticker = window.setInterval(gameLoop, frequency);
+  }
+
+  api.start = function() {
+    _startGameLoop();
+
+    // TODO create a state that does this and use the StateMachine...
+    // but for now, I just want to see stuff on the screen...
+
+    var boxOptions = {
+      color: js.randomColor(),
+      width: js.randomNumber(10, 100),
+      height: js.randomNumber(10, 100),
+      x: js.randomNumber(0, document.width),
+      y: js.randomNumber(0, document.height)
+    };
+
+    var box = Graphics.addDebugBox(boxOptions);
+    box.position.x = boxOptions.x;
+    box.position.y = boxOptions.y;
+
+    Graphics.enableDebugSprites();
   }
 
   api.stop = function() {
