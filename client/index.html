@@ -20,6 +20,15 @@
   <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/js-signals.git/dist/signals.min.js"></script>
 
+  <!-- box2d junk (FIXME how naughty of me to reference files directly in a .git directory) -->
+  <script src="deps/box2d-js/jquery-1.4.2.min.js" ></script>
+  <script type="text/javascript">
+    jQuery.noConflict();
+    Object.extend = jQuery.extend;
+  </script>
+  <script src="deps/box2d-js/jquery.svg.min.js"></script>
+  <script src="deps/box2d-js/box2d.js"></script>
+
   <!-- core junk
   <script src="src/engine/input.js"></script>
   <script src="src/engine/system.js"></script>
@@ -36,6 +45,7 @@
   <script src="src/engine/world.js"></script>
   <script src="src/engine/system_registry.js"></script>
   <script src="src/engine/stateMachine.js"></script>
+  <script src="src/engine/physicsWorld.js"></script>
   <script src="src/game/game.js"></script>
   
   <!-- test junk
@@ -74,8 +84,9 @@
         graphics: graphicsOptions
       };
 
-      Game.initialize(gameOptions);
-      Game.start();
+      var game = new Game();
+      game.initialize(gameOptions);
+      game.start();
     }
   
     // playCaveDemo();

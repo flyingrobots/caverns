@@ -10,7 +10,13 @@ var assert = function(assertion, failureMessage) {
 var js = (function() 
 {
   var api = {}
-  
+
+  api.times = function(n, callback) {
+    for (var iter = 0; iter < n; n++) {
+      callback(iter);
+    }
+  }
+
   // type info
   
   api.isFunction = function(object) {
@@ -44,7 +50,7 @@ var js = (function()
   }
 
   api.randomColor = function() {
-    // stolen from the interwebs
+    // stolen from the interwebs... not quite working?
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
     for (var i = 0; i < 6; i++ ) {
