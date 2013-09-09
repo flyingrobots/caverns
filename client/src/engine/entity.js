@@ -57,12 +57,15 @@ var Entity = new Class({
 
   getComponentByType:function(type)
   {
-    return this.componentList.each(function(component) {
+    for (var i = 0; i < this.componentList.length; ++i)
+    {
+      var component = this.componentList[i];
       if (component instanceof type)
       {
         return component;
       }
-    })
+    }
+    return null;
   },
 
   hasComponentOfType:function(type)

@@ -59,7 +59,7 @@ var SystemRegistry = (function()
     }
 
     // Add world entities to system
-    _world.entities.each(function(entity)
+    Game.world.entities.each(function(entity)
     {
       system.updateEntityMembership(entity);
     });
@@ -101,7 +101,7 @@ var SystemRegistry = (function()
   }
 
   var _tickAllSystems = function(dt) {
-    _doPreUpdate(_systemsThatDoUpdate, dt);
+    _doPreUpdate(_systemsThatDoPreupdate, dt);
     _doUpdate(_systemsThatDoUpdate, dt);
     _doPostUpdate(_systemsThatDoPostUpdate, dt);
   }

@@ -1,10 +1,5 @@
 var Component = new Class({
 
-  initialize:function()
-  {
-
-  },
-
   onAdded:function()
   {
     this.setup();
