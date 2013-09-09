@@ -12,8 +12,8 @@ var js = (function()
   var api = {}
 
   api.times = function(n, callback) {
-    for (var iter = 0; iter < n; n++) {
-      callback(iter);
+    for (var i = 0; i < n; i++) {
+      callback(i);
     }
   }
 

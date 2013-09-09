@@ -65,7 +65,7 @@ Game.prototype.tick = function(dt) {
   Graphics.draw();
 }
 
-var _demoBoxCount = 40;
+var _demoBoxCount = 50;
 
 Game.prototype.start = function() {
   _startGameLoop(this);
@@ -84,18 +84,17 @@ Game.prototype.start = function() {
       js.randomNumber(20, 50),
       js.randomNumber(20, 50)
     );
-    var fixed = js.randomNumber(0, 10) == 10;
+    var fixed = js.randomNumber(0, 4) == 1;
+    var color = (fixed) ? 0x6199cc : 0xc96161;
     return {
       body: physicsWorld.createBoxBody(pos.x, pos.y, size.x, size.y, { fixed: fixed }),
-      sprite: Graphics.addDebugBox({ color: 0x6199cc, width: size.x, height: size.y })
+      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y })
     };
   }
 
-  //js.times(_demoBoxCount, function() {
-  for (var i = 0; i < 100; ++i) {
+  js.times(_demoBoxCount, function(n) {
     _demoObjects.push(createDemoBox());
-  }
-  //});
+  });
   
   Graphics.enableDebugSprites();
 }
