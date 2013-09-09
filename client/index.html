@@ -34,6 +34,7 @@
   <script src="src/engine/utils.js"></script>
   <script src="src/engine/graphics.js"></script>
   <script src="src/engine/world.js"></script>
+  <script src="src/engine/system_registry.js"></script>
   <script src="src/engine/game.js"></script>
   
   <!-- test junk
@@ -72,8 +73,8 @@
         graphics: graphicsOptions
       };
 
-      game.initialize(gameOptions);
-      game.start();
+      Game.initialize(gameOptions);
+      Game.start();
     }
   
     // playCaveDemo();

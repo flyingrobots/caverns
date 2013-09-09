@@ -12,6 +12,7 @@ var js = (function()
   var api = {}
   
   api.defaults = function(object, defaults) {
+    // you and your dirty mootools :-)
     return object == null ? defaults : Object.append(defaults, object);
   };
   
@@ -39,6 +40,7 @@ var js = (function()
 
   api.instanceOfClass = function(object, classType)
   {
+    // instanceof operator???
       assert(object.constructor);
       assert(classType.prototype && classType.prototype.constructor);
       var constructor = object.constructor;
@@ -56,16 +58,6 @@ var js = (function()
 
   return api;
 }).call();
-
-
-var assert = function(assertion, failureMessage) {
-  failureMessage = failureMessage || "Assertion failed";
-  if (!assertion)
-  {
-    throw failureMessage;
-  }
-};
-
 
 var stringToFunction = function(str) {
   var arr = str.split(".");
