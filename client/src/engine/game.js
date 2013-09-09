@@ -1,10 +1,11 @@
 var game = (function()
 {
-  var _systems = {}
+  var _systems = [];
+  var _world = null;
   
-  var _systemsThatDoPreupdate = []
-  var _systemsThatDoUpdate = []
-  var _systemsThatDoPostUpdate = []
+  var _systemsThatDoPreupdate = [];
+  var _systemsThatDoUpdate = [];
+  var _systemsThatDoPostUpdate = [];
 
   var _isPaused = false;
   var _ticker = null;
@@ -12,32 +13,51 @@ var game = (function()
   var api = {}
 
   api.systems = _systems;
+  api.world = null;
   api.timeScale = 1.0;
+
+  var _updateEntitySystemMembership = function(entity)
+  {
+    _systems.each(function(system)
+    {
+      system.updateEntityMembership(entity);
+    });
+  };
+
+  var _onEntityAdded = function(world, entity)
+  {
+    entity.componentAdded.add(_updateEntitySystemMembership);
+    entity.componentRemoved.add(_updateEntitySystemMembership);
+    _updateEntitySystemMembership(entity);
+  };
+
+  var _onEntityRemoved = function(world, entity)
+  {
+    console.log("")
+    _updateEntitySystemMembership(entity);
+    entity.componentAdded.remove(_updateEntitySystemMembership);
+    entity.componentRemoved.remove(_updateEntitySystemMembership);
+  };
   
   api.initialize = function(options) {
-    js.defaults(options, {
+    options = js.defaults(options, {
       graphics: {}
     });
 
     Graphics.initialize(options.graphics);
+
+    _world = new World(api);
+    api.world = _world;
+    _world.entityAdded.add(_onEntityAdded);
+    _world.entityRemoved.add(_onEntityRemoved)
   }
 
   api.addSystem = function(system, options) {
-    js.defaults(options, {
+    options = js.defaults(options, {
       unpauseable: false
     });
 
-    if (!js.isString(system.name)) {
-      throw "System must have a name";
-    }
-
-    var name = system.name;
-
-    if (_systems[name]) {
-      throw "Existing system with name " + name;
-    }
-
-    _systems.name = system;
+    _systems.push(system);
     system.setup(this);
 
     if (js.isFunction(system.preUpdate)) {
@@ -51,15 +71,20 @@ var game = (function()
     if (js.isFunction(system.postUpdate)) {
       _systemsThatDoPostUpdate.push(system);
     }
+
+    // Add world entities to system
+    _world.entities.each(function(entity)
+    {
+      system.updateEntityMembership(entity);
+    });
   }
 
-  api.removeSystem = function(name) {
-    if (!_systems[name]) {
-      throw "Cannot find system with name " + name;
+  api.removeSystem = function(system) {
+    if (_systems.erase(system).length == 0)
+    {
+      throw "Cannot find system";
     }
-
-    _systems[name].destroy();
-    delete _systems[name];
+    system.destroy();
   }
 
   api.pause = function() {

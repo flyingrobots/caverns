@@ -1,3 +1,4 @@
+
 var assert = function(assertion, failureMessage) {
   failureMessage = failureMessage || "Assertion failed";
   if (!assertion)
@@ -10,22 +11,13 @@ var js = (function()
 {
   var api = {}
   
-  api.defaults = function(object) {
-    Array.prototype.slice.call(arguments).forEach(function(arg) {
-      if (arg) {
-        for (var property in arg) {
-          if (object[property] === void 0) {
-            object[property] = arg[property];
-          }
-        }
-      }
-    });
-    return object;
-  }
+  api.defaults = function(object, defaults) {
+    return object == null ? defaults : Object.append(defaults, object);
+  };
   
   api.isFunction = function(object) {
     return typeof object === 'function';
-  }
+  };
 
   api.select = function(array, iterator) {
     result = []
@@ -35,14 +27,45 @@ var js = (function()
       }
     });
     return result;
-  }
+  };
 
   api.isString = function(object) {
     return typeof object === 'string';
-  }
+  };
+
+  api.isObject = function(object) {
+    return typeof object === 'object';
+  };
+
+  api.instanceOfClass = function(object, classType)
+  {
+      assert(object.constructor);
+      assert(classType.prototype && classType.prototype.constructor);
+      var constructor = object.constructor;
+      var typeConstructor = classType.prototype.constructor;
+      while(constructor)
+      {
+        if (constructor === typeConstructor)
+        {
+          return true;
+        }
+        constructor = constructor.parent;
+      }
+      return false;
+  };
 
   return api;
 }).call();
+
+
+var assert = function(assertion, failureMessage) {
+  failureMessage = failureMessage || "Assertion failed";
+  if (!assertion)
+  {
+    throw failureMessage;
+  }
+};
+
 
 var stringToFunction = function(str) {
   var arr = str.split(".");
