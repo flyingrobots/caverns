@@ -6,11 +6,11 @@ var _isPaused = false;
 var _ticker = null;
 
 var _startGameLoop = function (game) {
-  var frequency = 1000.0 / 30.0;
+  var frequency = 1.0 / 30.0;
   var gameLoop = function() {
-    game.tick(frequency / 1000.0);
+    game.tick(frequency);
   }
-  _ticker = window.setInterval(gameLoop, frequency);
+  _ticker = window.setInterval(gameLoop, frequency * 1000.0);
 }
 
 var _demoObjects = [];
@@ -76,7 +76,7 @@ Game.prototype.tick = function(dt) {
   Graphics.draw();
 }
 
-var _wireframe = js.randomInteger(1, 2) % 2;
+var _wireframe = true;
 
 Game.prototype.start = function() {
   _startGameLoop(this);
@@ -105,7 +105,7 @@ Game.prototype.start = function() {
     );
 
     if (fixed) {
-      size.x *= 4.0;
+      size.x *= 7.0;
       size.h *= 0.5;
     }
     

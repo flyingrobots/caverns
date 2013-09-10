@@ -44,17 +44,22 @@ var Graphics = (function()
 
     var context = new PIXI.Graphics();
     
-    if (!options.wireframe) {
-      context.beginFill(options.color);
+    var fillAlpha = 1.0;
+    
+
+    if (options.wireframe) {
+      fillAlpha = 0.3;
     }
 
-    context.lineStyle(1, options.color, 1);
+    context.beginFill(options.color, fillAlpha);
+
+    var outlineWeight = 1.0;
+    var outlineAlpha = 1.0;
+    context.lineStyle(outlineWeight, options.color, outlineAlpha);
 
     drawCallback(context);
     
-    if (!options.wireframe) {
-      context.endFill();
-    }
+    context.endFill();
 
     return context;
   }
