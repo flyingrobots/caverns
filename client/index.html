@@ -74,10 +74,14 @@
     }
 
     var playGame = function() {
+      var docWidth = document.width;
+      var docHeight = document.height;
+
       var graphicsOptions = {
         useCanvas: true,
-        width: document.width,
-        height: document.height
+        width: docWidth,
+        height: docHeight,
+        bgColor: 0x2d2d2d
       };
 
       var gameOptions = {
@@ -86,6 +90,7 @@
 
       var game = new Game();
       game.initialize(gameOptions);
+
       game.start();
     }
   

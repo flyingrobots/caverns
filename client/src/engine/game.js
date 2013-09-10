@@ -72,20 +72,35 @@ Game.prototype.start = function() {
   var physicsWorld = this.physicsWorld;
 
   var createDemoBox = function() {
+    var fixed = js.randomInteger(0, 4) == 1;
+
     var pos = new b2Vec2();
     pos.Set(
-      js.randomNumber(0, document.width), 
-      js.randomNumber(0, document.height)
+      js.randomInteger(0, document.width), 
+      js.randomInteger(0, document.height)
     );
+    
     var size = new b2Vec2();
     size.Set(
-      js.randomNumber(20, 50),
-      js.randomNumber(20, 50)
+      js.randomInteger(20, 30),
+      js.randomInteger(20, 30)
     );
-    var fixed = js.randomNumber(0, 4) == 1;
+
+    if (fixed) {
+      size.x *= 4.0;
+      size.h *= 0.5;
+    }
+    
     var color = (fixed) ? 0x6199cc : 0xc96161;
+    
+    var physicsOpts = {
+      rotation: (fixed) ? js.randomReal(0.0, 6.28) : 0,
+      fixed: fixed,
+      restitution: (fixed) ? 1.0 : js.randomReal(0.1, 0.6)
+    };
+
     return {
-      body: physicsWorld.createBoxBody(pos.x, pos.y, size.x, size.y, { fixed: fixed }),
+      body: physicsWorld.createBoxBody(pos.x, pos.y, size.x, size.y, physicsOpts),
       sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y })
     };
   }

@@ -45,8 +45,12 @@ var js = (function()
 
   // randomness
 
-  api.randomNumber = function(min, max) {
+  api.randomInteger = function(min, max) {
     return Math.round(min + Math.random() * (max - min));
+  }
+
+  api.randomReal = function(min, max) {
+    return min + Math.random() * (max - min);
   }
 
   api.randomColor = function() {
