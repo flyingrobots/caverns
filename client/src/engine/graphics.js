@@ -32,7 +32,66 @@ var Graphics = (function()
     _pixi.createRenderer(options.width, options.height, options.useCanvas);
   }
 
-  var api = {};
+  var _commonSpriteDefaults = function(options) {
+    return js.defaults(options, {
+      wireframe: false,
+      color: 0xff0000
+    });
+  }
+
+  var _createDebugSprite = function(options, drawCallback) {
+    options = js.defaults(_commonSpriteDefaults(options));
+
+    var context = new PIXI.Graphics();
+    
+    if (!options.wireframe) {
+      context.beginFill(options.color);
+    }
+
+    context.lineStyle(1, options.color, 1);
+
+    drawCallback(context);
+    
+    if (!options.wireframe) {
+      context.endFill();
+    }
+
+    return context;
+  }
+
+  _pixi.createBoxSprite = function(options) {
+    return _createDebugSprite(
+      js.defaults(options, {
+        width: 25,
+        height: 25
+      }),
+      function(context) {
+        var halfWidth = options.width / 2.0;
+        var halfHeight = options.height / 2.0;
+        context.drawRect(-halfWidth, -halfHeight, options.width, options.height);
+        context.moveTo(0, 0);
+        context.lineTo(halfWidth, 0);
+      }
+    );
+  }
+
+  _pixi.createCircleSprite = function(options) {
+    return _createDebugSprite(
+      js.defaults(options, {
+        radius: 3.14
+      }),
+      function(context) {
+        context.drawCircle(0, 0, options.radius);
+        context.moveTo(0,0);
+        context.lineTo(0, options.radius);
+      }
+    );
+  }
+
+  var api = {}
+
+  var _drawDebugSprites = false;
+  var _debugSprites = [];
 
   api.initialize = function(options) {
     _pixi.initialize(options);
@@ -46,5 +105,33 @@ var Graphics = (function()
   api.draw = function(dt) {
     _pixi.draw();
   };
+
+  api.enableDebugSprites = function() {
+    if (!_drawDebugSprites) {
+      _debugSprites.forEach(function(sprite) {
+        _pixi.stage.addChild(sprite);
+      });
+    }
+    _drawDebugSprites = true;
+  }
+
+  api.disableDebugSprites = function() {
+    if (_drawDebugSprites) {
+      _debugSprites.forEach(function(sprite) {
+        _pixi.stage.removeChild(sprite);
+      });
+    }
+    _drawDebugSprites = false;
+  }
+
+  api.addDebugBox = function(options) {
+    _debugSprites.push(_pixi.createBoxSprite(options));
+    return js.last(_debugSprites);
+  }
+
+  api.addDebugCircle = function(options) {
+    _debugSprites.push(_pixi.createCircleSprite(options));
+    return js.last(_debugSprites);
+  }
 
 return api; }).call();

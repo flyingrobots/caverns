@@ -1,4 +1,4 @@
-var StateMachine = new Class({ Extends:System,
+var StateMachine = new Class({
   currentState:null,
 
   changeState:function(state)
