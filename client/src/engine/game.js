@@ -59,7 +59,7 @@ Game.prototype.tick = function(dt) {
     var bodyPos = object.body.GetCenterPosition();
     var bodyRot = object.body.GetRotation();
 
-    if (bodyPos.y > document.height || bodyPos.x < 0 || bodyPos.x > document.width) {
+    if (bodyPos.y > document.height || bodyPos.y < -3 || bodyPos.x < 0 || bodyPos.x > document.width) {
       var p = new b2Vec2();
       p.Set(js.randomInteger(0, document.width), 0.0);
       object.body.SetOriginPosition(p, bodyRot);
