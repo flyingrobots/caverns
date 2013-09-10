@@ -132,10 +132,10 @@ Game.prototype.start = function() {
     }
   }
 
-  js.times(100, function(n) {
+  js.times(Math.round(document.width / 50), function(n) {
     _demoObjects.push(createDemoBox());
   });
-  js.times(100, function(n) {
+  js.times(Math.round(document.height / 50), function(n) {
     _demoObjects.push(createDemoCircle());
   });
 
