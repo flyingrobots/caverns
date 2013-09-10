@@ -82,6 +82,11 @@ var js = (function()
   }
 
   api.defaults = function(object, defaults) {
+    // allow use case: js.defaults(options) <- ie, no second parameter
+    if (!this.exists(defaults)) {
+      return object;
+    }
+
     // you and your dirty mootools :-)
     return object == null ? defaults : Object.append(defaults, object);
   };

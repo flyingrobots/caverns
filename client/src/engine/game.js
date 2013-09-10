@@ -101,7 +101,7 @@ Game.prototype.start = function() {
 
     return {
       body: physicsWorld.createBoxBody(pos.x, pos.y, size.x, size.y, physicsOpts),
-      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y })
+      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y, wireframe: true })
     };
   }
 

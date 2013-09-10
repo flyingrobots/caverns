@@ -42,7 +42,7 @@ PhysicsWorld.prototype.createBoxBody = function(x, y, width, height, options) {
     var def = new b2BoxDef();
     def.restitution = options.restitution;
     def.friction = options.friction;
-    def.extents.Set(width, height);
+    def.extents.Set(width/2, height/2);
     if (!options.fixed) {
       def.density = 1.0;
     }

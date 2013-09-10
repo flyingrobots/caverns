@@ -32,13 +32,15 @@ var Graphics = (function()
     this.createRenderer(options.width, options.height, options.useCanvas);
   }
 
-  _pixi.createBoxSprite = function(options) {
-    options = js.defaults(options, {
+  var _commonSpriteDefaults = function(options) {
+    return js.defaults(options, {
       wireframe: false,
-      color: 0xff0000,
-      width: 25,
-      height: 25
+      color: 0xff0000
     });
+  }
+
+  var _createDebugSprite = function(options, drawCallback) {
+    options = js.defaults(_commonSpriteDefaults(options));
 
     var context = new PIXI.Graphics();
     
@@ -47,19 +49,39 @@ var Graphics = (function()
     }
 
     context.lineStyle(1, options.color, 1);
-    var w = options.width;
-    var h = options.height;
-    context.moveTo(-w, h);
-    context.lineTo(w, h);
-    context.lineTo(w, -h);
-    context.lineTo(-w, -h);
-    context.lineTo(-w, h);
 
+    drawCallback(context);
+    
     if (!options.wireframe) {
       context.endFill();
     }
 
     return context;
+  }
+
+  _pixi.createBoxSprite = function(options) {
+    return _createDebugSprite(
+      js.defaults(options, {
+        width: 25,
+        height: 25
+      }),
+      function(context) {
+        var halfWidth = options.width / 2.0;
+        var halfHeight = options.height / 2.0;
+        context.drawRect(-halfWidth, -halfHeight, options.width, options.height);
+      }
+    );
+  }
+
+  _pixi.createCircleSprite = function(options) {
+    return _createDebugSprite(
+      js.defaults(options, {
+        radius: 3.14
+      }),
+      function(context) {
+        context.drawCircle(0, 0, options.radius);
+      }
+    );
   }
 
   var api = {}
@@ -94,9 +116,13 @@ var Graphics = (function()
   }
 
   api.addDebugBox = function(options) {
-    var sprite = _pixi.createBoxSprite(options);
-    _debugSprites.push(sprite);
-    return sprite;
+    _debugSprites.push(_pixi.createBoxSprite(options));
+    return js.last(_debugSprites);
+  }
+
+  api.addDebugCircle = function(options) {
+    _debugSprites.push(_pixi.createCircleSprite(options));
+    return js.last(_debugSprites);
   }
 
 return api; }).call();
