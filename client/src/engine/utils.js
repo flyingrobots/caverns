@@ -38,26 +38,30 @@ var js = (function()
     return typeof object === 'object';
   };
 
-  api.instanceOfClass = function(object, classType)
-  {
-    // instanceof operator???
-      assert(object.constructor);
-      assert(classType.prototype && classType.prototype.constructor);
-      var constructor = object.constructor;
-      var typeConstructor = classType.prototype.constructor;
-      while(constructor)
-      {
-        if (constructor === typeConstructor)
-        {
-          return true;
-        }
-        constructor = constructor.parent;
-      }
-      return false;
-  };
-
   return api;
 }).call();
+
+Array.insertWhen = function(array, item, predicate)
+{
+  // Inserts an item into the array when the predicate returns true.
+  // If the predicate never returns true, inserts at the end of the array.
+  // The predicate should have the form : pred(itemToInsert, itemToCompare, index)
+  // Returns the inserted element
+
+  assert(predicate);
+
+  var i = 0;
+  for (i; i < array.length; ++i)
+  {
+    if (predicate(item, array[i], i))
+    {
+      array.splice(i,0,item);
+      return item;
+    }
+  }
+  array.push(item);
+  return item;
+};
 
 var stringToFunction = function(str) {
   var arr = str.split(".");

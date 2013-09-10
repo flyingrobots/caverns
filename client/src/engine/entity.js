@@ -16,7 +16,7 @@ var Entity = new Class({
   {
     options = options || {}
 
-    this.id = Entity.idCounter++;
+    this.id = Entity.IdCounter++;
 
     this.componentAdded = new signals.Signal();
     this.componentRemoved = new signals.Signal();
@@ -114,4 +114,4 @@ var Entity = new Class({
   }
 });
 
-Entity.idCounter = 0;
+Entity.IdCounter = 0;

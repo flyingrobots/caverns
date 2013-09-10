@@ -6,13 +6,16 @@ var System = new Class({ Implements:Options,
 
   nodeLists:[],
   game:null,
+  id:0,
 
   // Signal fired when a system adds a node list : (system, nodeList)
   nodeListAdded:null,
-  
+
   initialize: function(options)
   {
     this.setOptions(options);
+
+    this.id = System.IdCounter++;
     this.nodeListAdded = new signals.Signal();
   },
 
@@ -113,3 +116,4 @@ var System = new Class({ Implements:Options,
     this.game = null;
   }
 });
+System.IdCounter = 0;

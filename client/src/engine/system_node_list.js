@@ -41,7 +41,7 @@ var SystemNodeList = new Class({
 
   forEachNode:function(callback)
   {
-    this.nodes.each(callback);
+    Array.each(this.nodes, callback);
   },
 
   updateMembership:function(entity)

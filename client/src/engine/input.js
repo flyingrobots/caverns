@@ -46,6 +46,16 @@ var Input = {
     };
   },
 
+  isKeyDown:function(keyCode)
+  {
+    return this.keys[keyCode] == true;
+  },
+
+  isKeyUp:function(keyCode)
+  {
+    return this.keys[keyCode] != true;
+  },
+
   registerKeyDownCallback:function(target, callback)
   {
     var callbackData = {target:target, callback:callback};

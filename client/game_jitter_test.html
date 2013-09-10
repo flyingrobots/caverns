@@ -1,4 +1,4 @@
-game_test.html<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 <head>
   <title>Caverns (Athens)</title>
@@ -11,13 +11,27 @@ game_test.html<!DOCTYPE HTML>
     }
   </style>
   
-  <script src="deps/pixi-js/bin/pixi.dev.js"></script>
+  <!-- third party junk
   <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/seedrandom/seedrandom.js"></script>
+  <script src="src/engine/typed_json.js"></script>
+  -->
+  <script src="deps/pixi-js/bin/pixi.dev.js"></script>
+  <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/js-signals.git/dist/signals.min.js"></script>
 
-  <script src="src/engine/utils.js"></script>
+  <!-- core junk
   <script src="src/engine/input.js"></script>
+  <script src="src/engine/system.js"></script>
+  <script src="src/engine/entity.js"></script>
+  <script src="src/engine/component.js"></script>
+  <script src="src/engine/state.js"></script>
+  <script src="src/engine/systems/brains.js"></script>
+  <script src="src/engine/systems/world.js"></script>
+  <script src="src/engine/systems/states.js"></script>
+  <script src="src/engine/components/brain.js"></script>
+  -->
+  <script src="src/engine/utils.js"></script>
   <script src="src/engine/graphics.js"></script>
   <script src="src/engine/world.js"></script>
   <script src="src/engine/system_node_list.js"></script>
@@ -29,17 +43,8 @@ game_test.html<!DOCTYPE HTML>
 
   <script src="src/game/components/pixi_display_component.js"></script>
   <script src="src/game/components/transform_component.js"></script>
-  <script src="src/game/components/bounding_box_component.js"></script>
-  <script src="src/game/components/level_data_component.js"></script>
-  <script src="src/game/components/previous_transform_component.js"></script>
-  <script src="src/game/components/player_component.js"></script>
-  <script src="src/game/components/kinetics_component.js"></script>
-
   <script src="src/game/systems/pixi_rendering_system.js"></script>
-  <script src="src/game/systems/set_previous_transform_system.js"></script>
-  <script src="src/game/systems/tilemap_collision_system.js"></script>
-  <script src="src/game/systems/player_input_system.js"></script>
-  <script src="src/game/systems/movement_system.js"></script>
+  <script src="src/game/systems/jitter_position_system.js"></script>
 
   <script src="src/test/game_priorities.js"></script>
   
@@ -82,12 +87,6 @@ game_test.html<!DOCTYPE HTML>
         return new Entity({components:
           {
             display:new PixiDisplayComponent(createBoxSprite()),
-            kinetics:new KineticsComponent({
-              maxSpeed:{x:25,y:25},
-              acceleration:{x:20,y:20}
-            }),
-            player:new PlayerComponent(),
-            previousTransform:new PreviousTransformComponent(),
             transform:new TransformComponent({
               x:50+Math.random()*(document.width-100),
               y:50+Math.random()*(document.height-100),
@@ -108,15 +107,9 @@ game_test.html<!DOCTYPE HTML>
         graphics: graphicsOptions
       };
 
-      Input.initialize();
       Game.initialize(gameOptions);
-
-      SystemRegistry.addSystem(new SetPreviousTransformSystem(),  {priority:GamePriorities.PreUpdate});
-      SystemRegistry.addSystem(new PlayerInputSystem(Input),      {priority:GamePriorities.Update});
-      SystemRegistry.addSystem(new MovementSystem(),              {priority:GamePriorities.Update});
-      SystemRegistry.addSystem(new TilemapCollisionSystem(),      {priority:GamePriorities.Update});
-      SystemRegistry.addSystem(new PixiRenderingSystem(),         {priority:GamePriorities.PostUpdate});
-      
+      SystemRegistry.addSystem(new JitterPositionSystem(), {priority:GamePriorities.Update});
+      SystemRegistry.addSystem(new PixiRenderingSystem(), {priority:GamePriorities.PostUpdate});
       for(var i = 0; i < 500; ++i)
       {
         Game.world.addEntity(createTestEntity());

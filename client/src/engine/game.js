@@ -37,7 +37,7 @@ var Game = (function()
   }
 
   api.start = function() {
-    var frequency = 1000.0 / 30.0;
+    var frequency = 30.0/1000.0;
     var gameLoop = function() {
       api.tick(frequency);
     }

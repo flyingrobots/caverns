@@ -1,10 +1,7 @@
 var SystemRegistry = (function()
 {
   var _systems = [];
-  
-  var _systemsThatDoPreupdate = [];
-  var _systemsThatDoUpdate = [];
-  var _systemsThatDoPostUpdate = [];
+  var _systemsToUpdate = [];
 
   var api = {}
 
@@ -40,22 +37,21 @@ var SystemRegistry = (function()
 
   api.addSystem = function(system, options) {
     options = js.defaults(options, {
-      unpauseable: false
+      unpauseable: false,
+      priority:0
     });
 
-    _systems.push(system);
-    system.setup(this);
+    system.unpauseable = options.unpauseable;
+    system.priority = options.priority;
 
-    if (js.isFunction(system.preUpdate)) {
-      _systemsThatDoPreupdate.push(system);
-    }
+    Array.insertWhen(_systems, system, function(item, compare) {
+      return item.priority < compare.priority;
+    });
+    system.setup(Game);
 
-    if (js.isFunction(system.update)) {
-      _systemsThatDoUpdate.push(system);
-    }
-
-    if (js.isFunction(system.postUpdate)) {
-      _systemsThatDoPostUpdate.push(system);
+    if (js.isFunction(system.update))
+    {
+      _systemsToUpdate.push(system);
     }
 
     // Add world entities to system
@@ -70,40 +66,20 @@ var SystemRegistry = (function()
     {
       throw "Cannot find system";
     }
+    _systemsToUpdate.erase(system);
     system.destroy();
   }
 
-  var _doPreUpdate = function(systems, dt) {
-    systems.forEach(function(system) {
-      system.preUpdate(dt);
-    });
-  }
-
-  var _doUpdate = function(systems, dt) {
-    systems.forEach(function(system) {
+  var _tickUnpauseableSystems = function(dt) {
+    Array.each(Array.filter(_systemsToUpdate, function(system){return system.unpauseable}), function(system) {
       system.update(dt);
     });
   }
 
-  var _doPostUpdate = function(systems, dt) {
-    systems.forEach(function(system) {
-      system.postUpdate(dt);
-    });
-  }
-
-  var _tickUnpauseableSystems = function(dt) {
-    var unpauseableSystems = function(system) {
-      return system.unpauseable;
-    }
-    _doPreUpdate(js.select(_systemsThatDoPreupdate, unpauseableSystems), dt);
-    _doUpdate(js.select(_systemsThatDoUpdate, unpauseableSystems), dt);
-    _doPostUpdate(js.select(_systemsThatDoPostUpdate, unpauseableSystems), dt);
-  }
-
   var _tickAllSystems = function(dt) {
-    _doPreUpdate(_systemsThatDoPreupdate, dt);
-    _doUpdate(_systemsThatDoUpdate, dt);
-    _doPostUpdate(_systemsThatDoPostUpdate, dt);
+    Array.each(_systemsToUpdate, function(system) {
+      system.update(dt);
+    });
   }
 
   api.tick = function(dt, isPaused) {

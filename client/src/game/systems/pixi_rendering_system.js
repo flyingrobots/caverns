@@ -27,10 +27,10 @@ var PixiRenderingSystem = new Class({ Extends:System,
     this.nodeList.forEachNode(function(node){
       var displayObj = node.display.displayObject;
       var xform = node.transform;
-      displayObj.position.x = xform.x;
-      displayObj.position.y = xform.y;
-      displayObj.scale.x = xform.scaleX;
-      displayObj.scale.y = xform.scaleY;
+      displayObj.position.x = xform.position.x;
+      displayObj.position.y = xform.position.y;
+      displayObj.scale.x = xform.scale.x;
+      displayObj.scale.y = xform.scale.y;
       displayObj.rotation = xform.rotation;
     });
   }
