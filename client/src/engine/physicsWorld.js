@@ -10,8 +10,8 @@ PhysicsWorld.prototype.initialize = function(options) {
   options = js.defaults(options, {
     enableSleepingBodies: true,
     gravity: new b2Vec2(0, 250),
-    minVertex: new b2Vec2(-2000, -2000),
-    maxVertex: new b2Vec2(2000, 2000)
+    minVertex: new b2Vec2(0, 0),
+    maxVertex: new b2Vec2(document.width, document.height)
   });
 
   var worldAABB = new b2AABB();
