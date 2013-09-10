@@ -71,19 +71,24 @@ Game.prototype.start = function() {
   // FIXME move this into a 'physicsTest' game state:
   var physicsWorld = this.physicsWorld;
 
-  var createDemoBox = function() {
-    var fixed = js.randomInteger(0, 4) == 1;
-
-    var pos = new b2Vec2();
-    pos.Set(
+  var randomPosition = function() {
+    var p = new b2Vec2();
+    p.Set(
       js.randomInteger(0, document.width), 
       js.randomInteger(0, document.height)
     );
+    return p;
+  }
+
+  var createDemoBox = function() {
+    var fixed = js.randomInteger(0, 4) == 1;
+
+    var pos = randomPosition();
     
     var size = new b2Vec2();
     size.Set(
-      js.randomInteger(20, 30),
-      js.randomInteger(20, 30)
+      js.randomInteger(30, 50),
+      js.randomInteger(30, 50)
     );
 
     if (fixed) {
@@ -101,12 +106,24 @@ Game.prototype.start = function() {
 
     return {
       body: physicsWorld.createBoxBody(pos.x, pos.y, size.x, size.y, physicsOpts),
-      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y, wireframe: true })
+      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y, wireframe: false })
     };
+  }
+
+  var createDemoCircle = function() {
+    var pos = randomPosition();
+    var radius = js.randomInteger(15, 45);
+    return {
+      body: physicsWorld.createCircleBody(pos.x, pos.y, radius),
+      sprite: Graphics.addDebugCircle({ radius: radius, wireframe: false, color: 0x72B897 })
+    }
   }
 
   js.times(50, function(n) {
     _demoObjects.push(createDemoBox());
+  });
+  js.times(20, function(n) {
+    _demoObjects.push(createDemoCircle());
   });
 
   // warm up the physics sim (we created bodies of random size in random

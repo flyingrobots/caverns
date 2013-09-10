@@ -21,33 +21,44 @@ PhysicsWorld.prototype.initialize = function(options) {
   this.world = new b2World(worldAABB, options.gravity, options.enableSleepingBodies);
 }
 
-PhysicsWorld.prototype.addBody = function(x, y, options, shapeCallback) {
-  options = js.defaults(options, {
+var _commonBodyDefaults = function(options) {
+  return js.defaults(options, {
+    fixed: false,
+    restitution: 0.6,
+    friction: 0.3, 
     rotation: 0
   });
+}
+
+PhysicsWorld.prototype.addBody = function(x, y, options, shapeCallback) {
+  options = _commonBodyDefaults(options);
+  var shape = shapeCallback();
+  shape.restitution = options.restitution;
+  shape.friction = options.friction;
   var body = new b2BodyDef();
-  body.AddShape(shapeCallback());
+  body.AddShape(shape);
   body.position.Set(x, y);
+  if (!options.fixed) {
+      shape.density = 1.0;
+  }
   body.rotation = options.rotation;
   return this.world.CreateBody(body);
 }
 
 PhysicsWorld.prototype.createBoxBody = function(x, y, width, height, options) {
-  options = js.defaults(options, {
-    fixed: false,
-    restitution: 0.6,
-    friction: 0.3
-  });
   return this.addBody(x, y, options, function() {
     var def = new b2BoxDef();
-    def.restitution = options.restitution;
-    def.friction = options.friction;
     def.extents.Set(width/2, height/2);
-    if (!options.fixed) {
-      def.density = 1.0;
-    }
     return def;
   });
+}
+
+PhysicsWorld.prototype.createCircleBody = function(x, y, radius, options) {
+  return this.addBody(x, y, options, function() {
+    var def = new b2CircleDef();
+    def.radius = radius;
+    return def;
+  })
 }
 
 PhysicsWorld.prototype.tick = function(dt) {
