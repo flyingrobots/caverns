@@ -117,18 +117,29 @@ Game.prototype.start = function() {
       restitution: (fixed) ? 1.0 : js.randomReal(0.1, 0.6)
     };
 
+    var graphicsOpts = {
+      transient: false,
+      wireframe: true,
+      color: color
+    };
+
     return {
       body: physicsWorld.createBoxBody(pos.x, pos.y, size.x, size.y, physicsOpts),
-      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y, wireframe: _wireframe })
+      sprite: Graphics.addDebugBox(size.x, size.y, graphicsOpts)
     };
   }
 
   var createDemoCircle = function() {
     var pos = randomPosition();
     var radius = js.randomInteger(15, 45);
+    var graphicsOpts = {
+      transient: false,
+      wireframe: true,
+      color: 0x72B897
+    };
     return {
       body: physicsWorld.createCircleBody(pos.x, pos.y, radius),
-      sprite: Graphics.addDebugCircle({ radius: radius, wireframe: _wireframe, color: 0x72B897 })
+      sprite: Graphics.addDebugCircle(radius, graphicsOpts)
     }
   }
 

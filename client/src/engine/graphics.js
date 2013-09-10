@@ -43,19 +43,13 @@ var Graphics = (function()
     options = js.defaults(_commonSpriteDefaults(options));
 
     var context = new PIXI.Graphics();
-    
-    var fillAlpha = 1.0;
-    
-
-    if (options.wireframe) {
-      fillAlpha = 0.3;
-    }
-
-    context.beginFill(options.color, fillAlpha);
 
     var outlineWeight = 1.0;
     var outlineAlpha = 1.0;
     context.lineStyle(outlineWeight, options.color, outlineAlpha);
+    
+    var fillAlpha = options.wireframe ? 1.0 : 0.3;
+    context.beginFill(options.color, fillAlpha);
 
     drawCallback(context);
     
@@ -64,39 +58,40 @@ var Graphics = (function()
     return context;
   }
 
-  _pixi.createBoxSprite = function(options) {
-    return _createDebugSprite(
-      js.defaults(options, {
-        width: 25,
-        height: 25
-      }),
-      function(context) {
-        var halfWidth = options.width / 2.0;
-        var halfHeight = options.height / 2.0;
-        context.drawRect(-halfWidth, -halfHeight, options.width, options.height);
-        context.moveTo(0, 0);
-        context.lineTo(halfWidth, 0);
-      }
-    );
+  _pixi.drawBoxSprite = function(width, height, options) {
+    return _createDebugSprite(options, function(context) {
+      var halfWidth = width / 2.0;
+      var halfHeight = height / 2.0;
+      context.drawRect(-halfWidth, -halfHeight, width, height);
+      context.moveTo(0, 0);
+      context.lineTo(halfWidth, 0);
+    });
   }
 
-  _pixi.createCircleSprite = function(options) {
-    return _createDebugSprite(
-      js.defaults(options, {
-        radius: 3.14
-      }),
-      function(context) {
-        context.drawCircle(0, 0, options.radius);
-        context.moveTo(0,0);
-        context.lineTo(0, options.radius);
-      }
-    );
+  _pixi.drawCircleSprite = function(radius, options) {
+    return _createDebugSprite(options, function(context) {
+      context.drawCircle(0, 0, radius);
+      context.moveTo(0,0);
+      context.lineTo(0, radius);
+    });
+  }
+
+  _pixi.removeSprite = function(sprite) {
+    this.stage.removeChild(sprite);
   }
 
   var api = {}
 
   var _drawDebugSprites = false;
   var _debugSprites = [];
+
+  var _transientDebugSprites = [];
+
+  var _destroyAllTransientSprites = function() {
+    _transientDebugSprites.forEach(function(sprite) {
+      _pixi.removeSprite(sprite);
+    });
+  }
 
   api.initialize = function(options) {
     _pixi.initialize(options);
@@ -109,12 +104,13 @@ var Graphics = (function()
 
   api.draw = function(dt) {
     _pixi.draw();
+    _destroyAllTransientSprites();
   };
 
   api.enableDebugSprites = function() {
     if (!_drawDebugSprites) {
       _debugSprites.forEach(function(sprite) {
-        _pixi.stage.addChild(sprite);
+        api.addDisplayObject(sprite);
       });
     }
     _drawDebugSprites = true;
@@ -123,20 +119,36 @@ var Graphics = (function()
   api.disableDebugSprites = function() {
     if (_drawDebugSprites) {
       _debugSprites.forEach(function(sprite) {
-        _pixi.stage.removeChild(sprite);
+        _pixi.removeSprite(sprite);
       });
     }
     _drawDebugSprites = false;
   }
 
-  api.addDebugBox = function(options) {
-    _debugSprites.push(_pixi.createBoxSprite(options));
-    return js.last(_debugSprites);
+  var _addDebugSprite = function(options, spriteCallback) {
+    options = js.defaults(options, {
+      transient: true
+    });
+    var sprite = spriteCallback();
+    api.addDisplayObject(sprite);
+    if (options.transient) {
+      _transientDebugSprites.push(sprite);
+    } else {
+      _debugSprites.push(sprite);
+    }
+    return sprite;
   }
 
-  api.addDebugCircle = function(options) {
-    _debugSprites.push(_pixi.createCircleSprite(options));
-    return js.last(_debugSprites);
+  api.addDebugBox = function(width, height, options) {
+    return _addDebugSprite(options, function() {
+      return _pixi.drawBoxSprite(width, height, options)
+    });
+  }
+
+  api.addDebugCircle = function(radius, options) {
+    return _addDebugSprite(options, function() {
+      return _pixi.drawCircleSprite(radius, options)
+    });
   }
 
 return api; }).call();
