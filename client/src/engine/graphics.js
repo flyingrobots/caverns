@@ -69,6 +69,8 @@ var Graphics = (function()
         var halfWidth = options.width / 2.0;
         var halfHeight = options.height / 2.0;
         context.drawRect(-halfWidth, -halfHeight, options.width, options.height);
+        context.moveTo(0, 0);
+        context.lineTo(halfWidth, 0);
       }
     );
   }
@@ -80,6 +82,8 @@ var Graphics = (function()
       }),
       function(context) {
         context.drawCircle(0, 0, options.radius);
+        context.moveTo(0,0);
+        context.lineTo(0, options.radius);
       }
     );
   }

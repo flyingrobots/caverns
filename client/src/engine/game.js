@@ -57,13 +57,26 @@ Game.prototype.tick = function(dt) {
   // FIXME move this into a 'physicsTest' game state:
   _demoObjects.forEach(function(object) {
     var bodyPos = object.body.GetCenterPosition();
+    var bodyRot = object.body.GetRotation();
+
+    if (bodyPos.y > document.height || bodyPos.x < 0 || bodyPos.x > document.width) {
+      var p = new b2Vec2();
+      p.Set(js.randomInteger(0, document.width), 0.0);
+      object.body.SetOriginPosition(p, bodyRot);
+      var v = new b2Vec2();
+      v.SetZero();
+      object.body.SetLinearVelocity(v);
+    }
+
     object.sprite.position.x = bodyPos.x;
     object.sprite.position.y = bodyPos.y;
-    object.sprite.rotation = object.body.GetRotation();
+    object.sprite.rotation = bodyRot;
   });
 
   Graphics.draw();
 }
+
+var _wireframe = js.randomInteger(1, 2) % 2;
 
 Game.prototype.start = function() {
   _startGameLoop(this);
@@ -106,7 +119,7 @@ Game.prototype.start = function() {
 
     return {
       body: physicsWorld.createBoxBody(pos.x, pos.y, size.x, size.y, physicsOpts),
-      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y, wireframe: false })
+      sprite: Graphics.addDebugBox({ color: color, width: size.x, height: size.y, wireframe: _wireframe })
     };
   }
 
@@ -115,7 +128,7 @@ Game.prototype.start = function() {
     var radius = js.randomInteger(15, 45);
     return {
       body: physicsWorld.createCircleBody(pos.x, pos.y, radius),
-      sprite: Graphics.addDebugCircle({ radius: radius, wireframe: false, color: 0x72B897 })
+      sprite: Graphics.addDebugCircle({ radius: radius, wireframe: _wireframe, color: 0x72B897 })
     }
   }
 
