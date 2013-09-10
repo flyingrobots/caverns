@@ -39,6 +39,11 @@ var SystemNodeList = new Class({
     }.bind(this));
   },
 
+  forEachNode:function(callback)
+  {
+    this.nodes.each(callback);
+  },
+
   updateMembership:function(entity)
   {
     // Add if matches

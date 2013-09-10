@@ -10,7 +10,7 @@ var JitterPositionSystem = new Class({Extends:System,
 
   update:function(dT)
   {
-    this.nodeList.nodes.each(function(node) {
+    this.nodeList.forEachNode(function(node) {
       node.transform.x += Math.random()*2-1;
       node.transform.y += Math.random()*2-1;
     });

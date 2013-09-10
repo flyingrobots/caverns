@@ -24,7 +24,7 @@ var PixiRenderingSystem = new Class({ Extends:System,
 
   update:function(dT)
   {
-    this.nodeList.nodes.each(function(node){
+    this.nodeList.forEachNode(function(node){
       var displayObj = node.display.displayObject;
       var xform = node.transform;
       displayObj.position.x = xform.x;
