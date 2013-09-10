@@ -65,8 +65,6 @@ Game.prototype.tick = function(dt) {
   Graphics.draw();
 }
 
-var _demoBoxCount = 50;
-
 Game.prototype.start = function() {
   _startGameLoop(this);
 
@@ -92,7 +90,7 @@ Game.prototype.start = function() {
     };
   }
 
-  js.times(_demoBoxCount, function(n) {
+  js.times(50, function(n) {
     _demoObjects.push(createDemoBox());
   });
   

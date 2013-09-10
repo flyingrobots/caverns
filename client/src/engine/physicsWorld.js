@@ -9,9 +9,9 @@ this.PhysicsWorld = function() {
 PhysicsWorld.prototype.initialize = function(options) {
   options = js.defaults(options, {
     enableSleepingBodies: true,
-    gravity: new b2Vec2(0, 30),
-    minVertex: new b2Vec2(-1000, -1000),
-    maxVertex: new b2Vec2(1000, 1000)
+    gravity: new b2Vec2(0, 250),
+    minVertex: new b2Vec2(-2000, -2000),
+    maxVertex: new b2Vec2(2000, 2000)
   });
 
   var worldAABB = new b2AABB();
