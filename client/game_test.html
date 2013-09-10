@@ -40,6 +40,7 @@ game_test.html<!DOCTYPE HTML>
   <script src="src/game/systems/tilemap_collision_system.js"></script>
   <script src="src/game/systems/player_input_system.js"></script>
   <script src="src/game/systems/movement_system.js"></script>
+  <script src="src/game/systems/jitter_position_system.js"></script>
 
   <script src="src/test/game_priorities.js"></script>
   
@@ -89,11 +90,10 @@ game_test.html<!DOCTYPE HTML>
             player:new PlayerComponent(),
             previousTransform:new PreviousTransformComponent(),
             transform:new TransformComponent({
-              x:50+Math.random()*(document.width-100),
-              y:50+Math.random()*(document.height-100),
+              position:{x:50+Math.random()*(document.width-100),
+                        y:50+Math.random()*(document.height-100)},
               rotation:Math.random()*3.14,
-              scaleX:scale,
-              scaleY:scale
+              scale:{x:scale,y:scale}
             })
           }});
       };
@@ -117,7 +117,7 @@ game_test.html<!DOCTYPE HTML>
       SystemRegistry.addSystem(new TilemapCollisionSystem(),      {priority:GamePriorities.Update});
       SystemRegistry.addSystem(new PixiRenderingSystem(),         {priority:GamePriorities.PostUpdate});
       
-      for(var i = 0; i < 500; ++i)
+      for(var i = 0; i < 1; ++i)
       {
         Game.world.addEntity(createTestEntity());
       }
