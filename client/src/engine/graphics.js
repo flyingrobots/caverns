@@ -48,7 +48,7 @@ var Graphics = (function()
     var outlineAlpha = 1.0;
     context.lineStyle(outlineWeight, options.color, outlineAlpha);
     
-    var fillAlpha = options.wireframe ? 1.0 : 0.3;
+    var fillAlpha = options.wireframe ? 0.3 : 1.0;
     context.beginFill(options.color, fillAlpha);
 
     drawCallback(context);
