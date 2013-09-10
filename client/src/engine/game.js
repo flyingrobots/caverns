@@ -108,6 +108,13 @@ Game.prototype.start = function() {
   js.times(50, function(n) {
     _demoObjects.push(createDemoBox());
   });
+
+  // warm up the physics sim (we created bodies of random size in random
+  // positions, so they are likely overlapping. This resolves some of these
+  // collisions, making the demo look cooler when it starts drawing).
+  js.times(15, function(n) {
+    physicsWorld.tick(1/30);
+  });
   
   Graphics.enableDebugSprites();
 }
