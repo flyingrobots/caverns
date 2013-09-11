@@ -5,22 +5,22 @@
   };
   Brains.prototype = new System();
 
-  brainList:[],
+  Brains.prototype.brainList = [];
 
-  addBrain:function(brain)
+  Brains.prototype.addBrain = function(brain)
   {
     this.brainList.push(brain);
-  },
+  };
 
-  removeBrain:function(brain)
+  Brains.prototype.removeBrain = function(brain)
   {
     this.brainList.erase(brain);
-  },
+  };
 
-  update:function(dT)
+  Brains.prototype.update = function(dT)
   {
     this.brainList.forEach(function(brain){
       brain.update(dT);
     });
-  }
+  };
 })();

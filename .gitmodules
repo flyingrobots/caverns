@@ -19,3 +19,6 @@
 [submodule "client/deps/underscore.git"]
 	path = client/deps/underscore.git
 	url = https://github.com/jashkenas/underscore.git
+[submodule "client/deps/requirejs.git"]
+	path = client/deps/requirejs.git
+	url = https://github.com/jrburke/requirejs.git

@@ -1,8 +1,4 @@
 var Brain = new Class({Extends:Component,
-	initialize:function()
-  {
-    this.parent();
-  },
 
   setup:function(game)
   {
