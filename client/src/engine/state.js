@@ -1,45 +1,51 @@
-var State = new Class({
-  game:null,
+(function() {
 
-  initialize:function(options)
+  this.State = function()
+  {
+    this.initialize();
+  };
+
+  State.prototype.game = null;
+
+  State.prototype.initialize = function(options)
   {
 
-  },
+  };
 
-  onAdded:function(game)
+  State.prototype.onAdded = function(game)
   {
     this.game = game;
     this.setup();
-  },
+  };
 
-  setup:function()
+  State.prototype.setup = function()
   {
 
-  },
+  };
 
-  enter:function()
+  State.prototype.enter = function()
   {
 
-  },
+  };
 
-  update:function(dT)
+  State.prototype.update = function(dT)
   {
 
-  },
+  };
 
-  exit:function()
+  State.prototype.exit = function()
   {
 
-  },
+  };
 
-  destroy:function()
+  State.prototype.destroy = function()
   {
 
-  },
+  };
 
-  onRemoved:function()
+  State.prototype.onRemoved = function()
   {
     this.destroy();
     this.game = null;
-  }
-});
+  };
+})();

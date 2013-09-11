@@ -12,9 +12,9 @@ game_test.html<!DOCTYPE HTML>
   </style>
   
   <script src="deps/pixi-js/bin/pixi.dev.js"></script>
-  <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/seedrandom/seedrandom.js"></script>
   <script src="deps/js-signals.git/dist/signals.min.js"></script>
+  <script src="deps/box2d-js/box2d.js"></script>
 
   <script src="src/engine/utils.js"></script>
   <script src="src/engine/input.js"></script>
@@ -26,6 +26,8 @@ game_test.html<!DOCTYPE HTML>
   <script src="src/engine/game.js"></script>
   <script src="src/engine/component.js"></script>
   <script src="src/engine/entity.js"></script>
+  <script src="src/engine/state_machine.js"></script>
+  <script src="src/engine/physics_world.js"></script>
 
   <script src="src/game/components/pixi_display_component.js"></script>
   <script src="src/game/components/transform_component.js"></script>
@@ -62,12 +64,6 @@ game_test.html<!DOCTYPE HTML>
 </head>
 <body>
   <script>
-
-    var playCaveDemo = function () {
-      var width = 800;
-      var height = 800;
-      var game = new CavernsTestGame(width, height);
-    }
 
     var playGame = function() {
       var createBoxSprite = function()
@@ -109,7 +105,7 @@ game_test.html<!DOCTYPE HTML>
       };
 
       Input.initialize();
-      Game.initialize(gameOptions);
+      var game = new Game(gameOptions);
 
       SystemRegistry.addSystem(new SetPreviousTransformSystem(),  {priority:GamePriorities.PreUpdate});
       SystemRegistry.addSystem(new PlayerInputSystem(Input),      {priority:GamePriorities.Update});
@@ -119,9 +115,9 @@ game_test.html<!DOCTYPE HTML>
       
       for(var i = 0; i < 1; ++i)
       {
-        Game.world.addEntity(createTestEntity());
+        game.world.addEntity(createTestEntity());
       }
-      Game.start();
+      game.start();
     }
   
     // playCaveDemo();

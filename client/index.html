@@ -12,12 +12,10 @@
   </style>
   
   <!-- third party junk
-  <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/seedrandom/seedrandom.js"></script>
   <script src="src/engine/typed_json.js"></script>
   -->
   <script src="deps/pixi-js/bin/pixi.dev.js"></script>
-  <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/js-signals.git/dist/signals.min.js"></script>
 
   <!-- box2d junk -->
@@ -44,8 +42,8 @@
   <script src="src/engine/graphics.js"></script>
   <script src="src/engine/world.js"></script>
   <script src="src/engine/system_registry.js"></script>
-  <script src="src/engine/stateMachine.js"></script>
-  <script src="src/engine/physicsWorld.js"></script>
+  <script src="src/engine/state_machine.js"></script>
+  <script src="src/engine/physics_world.js"></script>
   <script src="src/engine/game.js"></script>
   
   <!-- test junk
@@ -88,9 +86,7 @@
         graphics: graphicsOptions
       };
 
-      var game = new Game();
-      game.initialize(gameOptions);
-
+      var game = new Game(gameOptions);
       game.start();
     }
   

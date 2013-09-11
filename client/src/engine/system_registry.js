@@ -31,8 +31,9 @@ var SystemRegistry = (function()
   };
   
   api.initialize = function(world) {
-    world.entityAdded.add(_onEntityAdded);
-    world.entityRemoved.add(_onEntityRemoved)
+    this.world = world;
+    this.world.entityAdded.add(_onEntityAdded);
+    this.world.entityRemoved.add(_onEntityRemoved)
   }
 
   api.addSystem = function(system, options) {
@@ -55,7 +56,7 @@ var SystemRegistry = (function()
     }
 
     // Add world entities to system
-    Game.world.entities.each(function(entity)
+    this.world.entities.each(function(entity)
     {
       system.updateEntityMembership(entity);
     });

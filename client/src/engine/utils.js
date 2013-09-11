@@ -86,8 +86,6 @@ var js = (function()
     if (!this.exists(defaults)) {
       return object;
     }
-
-    // you and your dirty mootools :-)
     return object == null ? defaults : Object.append(defaults, object);
   };
 

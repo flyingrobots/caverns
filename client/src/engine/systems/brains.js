@@ -1,4 +1,10 @@
-var Brains = new Class({Extends:System,
+(function() {
+
+  Brains = function()
+  {
+  };
+  Brains.prototype = new System();
+
   brainList:[],
 
   addBrain:function(brain)
@@ -17,4 +23,4 @@ var Brains = new Class({Extends:System,
       brain.update(dT);
     });
   }
-});
+})();

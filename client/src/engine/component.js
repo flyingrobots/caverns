@@ -1,22 +1,27 @@
-var Component = new Class({
+(function() {
 
-  onAdded:function()
+  this.Component = function()
+  {
+
+  };
+
+  Component.prototype.onAdded = function()
   {
     this.setup();
-  },
+  };
 
-  setup:function()
+  Component.prototype.setup = function()
   {
 
-  },
+  };
 
-  destroy:function()
+  Component.prototype.destroy = function()
   {
 
-  },
+  };
 
-  onRemoved:function()
+  Component.prototype.onRemoved = function()
   {
     this.destroy();
-  }
-});
+  };
+})();

@@ -1,0 +1,14 @@
+REGEX TO CONVERT FROM MOOTOOLS CLASSES TO JS CLASSES
+----------------------------------------------------
+
+-- To convert header w/o extends
+var (.*) = new Class\(\{
+(function() {\n\n  this.$1 = function()\n  {\n    this.initialize();\n  };\n
+
+-- To convert head w/ extends
+var (.*) = new Class\(\{.*Extends:(.*),
+(function() {\n\n  $1 = function()\n  {\n    this.initialize();\n  };\n  $1.prototype = new $2();\n
+
+-- To convert functions
+( +)(.*):function\((.*)\)
+$1MYCLASS.prototype.$2 = function($3)
