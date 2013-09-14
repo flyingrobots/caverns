@@ -1,27 +1,35 @@
-var StateMachine = new Class({
-  currentState:null,
-
-  changeState:function(state)
+(function(){
+  this.StateMachine = function()
   {
+
+  };
+
+  StateMachine.prototype = 
+  {
+    currentState:null,
+
+    changeState:function(state)
+    {
       if (this.currentState)
-      {
-          this.currentState.exit();
-          this.currentState.destroy();
+      { 
+        js.safeInvoke(this.currentState, this.currentState.exit);
+        js.safeInvoke(this.currentState, this.currentState.destroy);
       }
       this.currentState = state;
       if (this.currentState)
       {
-          this.currentState.setup(this.game);
-          this.currentState.enter();
+        js.safeInvoke(this.currentState, this.currentState.setup, game);
+        js.safeInvoke(this.currentState, this.currentState.enter);
       }
-  },
+    },
 
-  update:function(dT)
-  {
+    update:function(dt)
+    {
       if (!this.currentState)
       {
-          return;
+        return;
       }
-      this.currentState.update(dT);
+      js.safeInvoke(this.currentState, this.currentState.update, dt);
+    }
   }
-});
+})();

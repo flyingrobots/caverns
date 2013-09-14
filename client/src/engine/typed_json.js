@@ -1,22 +1,24 @@
-var TypedJSON = 
-{
-	reviver:function(key,value)
-	{
-    if (typeof value === "object" &&
-        typeof value._t === "string") 
+(function(){
+  this.TypedJSON = 
+  {
+    reviver:function(key,value)
     {
-      var objType = stringToFunction(value._t);
-      if (typeof objType === "function") 
+      if (typeof value === "object" &&
+          typeof value._t === "string") 
       {
-        delete value._t;
-        return new objType(value);
+        var objType = stringToFunction(value._t);
+        if (typeof objType === "function") 
+        {
+          delete value._t;
+          return new objType(value);
+        }
       }
-    }
-    return value;
-	},
+      return value;
+    },
 
-	parse:function(json)
-	{
-    return JSON.parse(json, TypedJSON.reviver);
-	}
-};
+    parse:function(json)
+    {
+      return JSON.parse(json, TypedJSON.reviver);
+    }
+  };
+})();

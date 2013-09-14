@@ -14,88 +14,94 @@
       If the specified contract is : { position:PositionComponent, renderable:RenderableComponent }
       the resulting nodes will look like : { position:PositionComponentInstance, renderable:RenderableComponentInstance }
 */
-var SystemNodeList = new Class({
-
-  contract:null,
-  nodes:[],
-  entities:{},
-
-  // Signal fired when a node is added : (nodelist, node)
-  nodeAdded:null,
-
-  // Signal fired when a node is removed : (nodelist, node)
-  nodeRemoved:null,
-
-  initialize:function(contract)
+(function(){
+  this.SystemNodeList = function(contract)
   {
-    assert(contract && contract instanceof Object, "Must specify contract data object");
+    this.initialize(contract);
+  };
+  SystemNodeList.prototype = {
 
-    this.nodeAdded = new signals.Signal();
-    this.nodeRemoved = new signals.Signal();
+    contract:null,
+    nodes:[],
+    entities:{},
 
-    this.contract = [];
-    Object.each(contract, function(componentType, propertyName) {
-      this.contract.push({componentType:componentType, propertyName:propertyName});
-    }.bind(this));
-  },
+    // Signal fired when a node is added : (nodelist, node)
+    nodeAdded:null,
 
-  forEachNode:function(callback)
-  {
-    Array.each(this.nodes, callback);
-  },
+    // Signal fired when a node is removed : (nodelist, node)
+    nodeRemoved:null,
 
-  updateMembership:function(entity)
-  {
-    // Add if matches
-    if (this.entities[entity.id] == null)
+    initialize:function(contract)
     {
-      this.addIfMatches(entity);
-    }
-    else
-    {
-      this.removeIfNotMatches(entity);
-    }
-  },
+      assert(contract && contract instanceof Object, "Must specify contract data object");
 
-  addIfMatches:function(entity)
-  {
-    if (this.matches(entity))
+      this.nodeAdded = new signals.Signal();
+      this.nodeRemoved = new signals.Signal();
+
+      this.contract = [];
+      Object.each(contract, function(componentType, propertyName) {
+        this.contract.push({componentType:componentType, propertyName:propertyName});
+      }.bind(this));
+    },
+
+    forEachNode:function(callback)
     {
-      var node = {};
-      Array.each(this.contract, function(contractData)
+      Array.each(this.nodes, callback);
+    },
+
+    updateMembership:function(entity)
+    {
+      // Add if matches
+      if (this.entities[entity.id] == null)
       {
-        node[contractData.propertyName] = entity.getComponentByType(contractData.componentType);
+        this.addIfMatches(entity);
+      }
+      else
+      {
+        this.removeIfNotMatches(entity);
+      }
+    },
+
+    addIfMatches:function(entity)
+    {
+      if (this.matches(entity))
+      {
+        var node = {};
+        Array.each(this.contract, function(contractData)
+        {
+          node[contractData.propertyName] = entity.getComponentByType(contractData.componentType);
+        });
+        this.entities[entity.id] = this.nodes.length;
+        this.nodes.push(node);
+        this.nodeAdded.dispatch(this, node);
+      }
+    },
+
+    removeIfNotMatches:function(entity)
+    {
+      if (!this.matches(entity))
+      {
+        var idx = this.entities[entity.id];
+        delete this.entities[entity.id];
+        var node = this.nodes.splice(idx,1)[0];
+        this.nodeRemoved.dispatch(this, node);
+      }
+    },
+
+    matches:function(entity)
+    {
+      return Array.every(this.contract, function(contractData)
+      {
+        return entity.hasComponentOfType(contractData.componentType);
       });
-      this.entities[entity.id] = this.nodes.length;
-      this.nodes.push(node);
-      this.nodeAdded.dispatch(this, node);
-    }
-  },
+    },
 
-  removeIfNotMatches:function(entity)
-  {
-    if (!this.matches(entity))
+    destroy:function()
     {
-      var idx = this.entities[entity.id];
-      delete this.entities[entity.id];
-      var node = this.nodes.splice(idx,1)[0];
-      this.nodeRemoved.dispatch(this, node);
+      for (var node in nodes)
+      {
+        this.nodeRemoved.dispatch(this, node);
+      }
     }
-  },
-
-  matches:function(entity)
-  {
-    return Array.every(this.contract, function(contractData)
-    {
-      return entity.hasComponentOfType(contractData.componentType);
-    });
-  },
-
-  destroy:function()
-  {
-    for (var node in nodes)
-    {
-      this.nodeRemoved.dispatch(this, node);
-    }
-  }
-});
+  };
+})();
