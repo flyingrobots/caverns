@@ -1,5 +1,10 @@
-var PreviousTransformComponent = new Class({ Extends:TransformComponent
+(function(){
+  
+  this.PreviousTransformComponent = function(options)
+  {
+    TransformComponent.prototype.initialize.call(this, options);
+  };
+  PreviousTransformComponent.prototype = new TransformComponent;
 
-  // This component will hold a copy of the transform component's data -- set by the SetPreviousTransformSystem
-
-});
+  Component.register(PreviousTransformComponent);
+})();

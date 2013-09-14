@@ -1,1 +1,8 @@
-var PlayerComponent = new Class({ Extends:Component });
+(function(){
+  this.PlayerComponent = function()
+  {
+
+  };
+  
+  Component.register(PlayerComponent);
+})();

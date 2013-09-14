@@ -1,9 +1,18 @@
-var PixiDisplayComponent = new Class({Extends:Component,
-  
-  displayObject:null,
-
-  initialize:function(displayObject)
+(function(){
+  this.PixiDisplayComponent = function(displayObject)
   {
-    this.displayObject = displayObject;
-  }
-});
+    this.initialize(displayObject);
+  };
+
+  PixiDisplayComponent.prototype = {
+
+    displayObject:null,
+
+    initialize:function(displayObject)
+    {
+      this.displayObject = displayObject;
+    }
+  };
+  
+  Component.register(PixiDisplayComponent);
+})();

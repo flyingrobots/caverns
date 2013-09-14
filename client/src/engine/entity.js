@@ -1,18 +1,5 @@
-var Entity = new Class({
-
-  game:null,
-  components:{},
-  componentList:[],
-  id:0,
-  name:null,
-
-  // Signal fired when a component is added : (entity, component)
-  componentAdded:null,
-
-  // Signal fired when a component is removed : (entity, component)
-  componentRemoved:null,
-
-  initialize:function(options)
+(function(){
+  this.Entity = function(options)
   {
     options = options || {}
 
@@ -23,95 +10,99 @@ var Entity = new Class({
 
     if (options.components)
     {
-      assert(js.isObject(options.components), "Components must be an object");
-      for (var componentName in options.components)
+      assert(_.isArray(options.components), "Components must be an array");
+
+      _.each(options.components, function(component) {
+        this.addComponent(component);
+      });
+    }
+  };
+
+  Entity.IdCounter = 0;
+
+  Entity.prototype = {
+    game:null,
+    components:{},
+    id:0,
+    name:null,
+
+    // Signal fired when a component is added : (entity, component)
+    componentAdded:null,
+
+    // Signal fired when a component is removed : (entity, component)
+    componentRemoved:null,
+
+    initialize:function(options)
+    {
+      
+    },
+
+    onAdded:function(game)
+    {
+      this.game = game;
+      this.setup();
+    },
+
+    setup:function()
+    {
+
+    },
+
+    addComponent:function(component)
+    {
+      if (component.componentId == undefined)
       {
-        this.addComponent(componentName, options.components[componentName]);
+        throw "Component not registered";
       }
-    }
-  },
-
-  onAdded:function(game)
-  {
-    this.game = game;
-    this.setup();
-  },
-
-  setup:function()
-  {
-
-  },
-
-  addComponent:function(componentName, component)
-  {
-    if (this.components[componentName])
-    {
-      throw "Existing component with name "+componentName;
-    }
-    component.name = componentName;
-    this.components[componentName] = component;
-    this.componentList.push(component);
-    component.onAdded();
-    this.componentAdded.dispatch(this, component);
-  },
-
-  getComponentByType:function(type)
-  {
-    for (var i = 0; i < this.componentList.length; ++i)
-    {
-      var component = this.componentList[i];
-      if (component instanceof type)
+      if (this.components[component.componentId])
       {
-        return component;
+        throw "Existing component with id "+componentId;
       }
-    }
-    return null;
-  },
+      this.components[component.componentId] = component;
+      js.safeInvoke(component, component.setup);
+      this.componentAdded.dispatch(this, component);
+    },
 
-  hasComponentOfType:function(type)
-  {
-    return Array.some(this.componentList, function(component) { 
-      return component instanceof type;
-    });
-  },
-
-  removeComponent:function(component)
-  {
-    var idx = Array.indexOf(this.componentList, component);
-    if (idx == -1)
+    getComponentById:function(id)
     {
-      throw "Cannot find component";
-    }
-    return removeComponentByName(component.name);
-  },
+      return this.components[id];
+    },
 
-  removeComponentByName:function(componentName)
-  {
-    var component = this.components[componentName];
-    if (!component)
+    hasComponentOfType:function(id)
     {
-      throw "Cannot find component with name "+componentName;
-    }
-    this.componentList.erase(component);
-    delete this.components[componentName];
-    component.onRemoved();
-    this.componentRemoved.dispatch(this, component);
-  },
+      return this.components[id] != null;
+    },
 
-  destroy:function()
-  {
-
-  },
-
-  onRemoved:function()
-  {
-    for (componentName in components)
+    removeComponent:function(component)
     {
-      removeComponent(componentName);
-    }
-    this.destroy();
-    this.game = null;
-  }
-});
+      return removeComponentById(component.name);
+    },
 
-Entity.IdCounter = 0;
+    removeComponentById:function(id)
+    {
+      var component = this.components[id];
+      if (!component)
+      {
+        throw "Cannot find component with id "+id;
+      }
+      delete this.components[id];
+      js.safeInvoke(component, component.destroy);
+      this.componentRemoved.dispatch(this, component);
+    },
+
+    destroy:function()
+    {
+
+    },
+
+    onRemoved:function()
+    {
+      for (var componentId in components)
+      {
+        removeComponentById(componentId);
+      }
+      this.destroy();
+      this.game = null;
+    }
+  };
+})();

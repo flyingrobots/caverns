@@ -1,22 +1,10 @@
-var Component = new Class({
+(function(){
+  this.Component = {
+    IdCounter:0,
 
-  onAdded:function()
-  {
-    this.setup();
-  },
-
-  setup:function()
-  {
-
-  },
-
-  destroy:function()
-  {
-
-  },
-
-  onRemoved:function()
-  {
-    this.destroy();
-  }
-});
+    register:function(component)
+    {
+      component.prototype.componentId = Component.IdCounter++;
+    }
+  };
+})();
