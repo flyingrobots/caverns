@@ -68,7 +68,12 @@
   	newEntity([new Cat, new Shoes]);
   	newEntity([new Cat]);
 
-  	var system = new System();
+  	var systemType = function(){};
+    System.register(systemType);
+
+    --HOW SHOULD THIS BEST WORK WITHOUT INHERITANCE??  MAYBE SYSTEMS NEED IT?
+
+    var system = new systemType();
   	system.createNodeList({
   		animal:Animal,
   		shoes:Shoes

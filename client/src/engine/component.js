@@ -2,9 +2,9 @@
   this.Component = {
     IdCounter:0,
 
-    register:function(component)
+    register:function(componentType)
     {
-      component.prototype.componentId = Component.IdCounter++;
+      componentType.prototype.componentId = Component.IdCounter++;
     }
   };
 })();

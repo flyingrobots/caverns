@@ -48,7 +48,7 @@ var SystemRegistry = (function()
     js.insertWhen(_systems, system, function(item, compare) {
       return item.priority < compare.priority;
     });
-    system.setup(Game);
+    system.onAdded();
 
     if (_.isFunction(system.update))
     {
@@ -68,7 +68,7 @@ var SystemRegistry = (function()
       throw "Cannot find system";
     }
     _systemsToUpdate.erase(system);
-    system.destroy();
+    system.onRemoved();
   }
 
   var _tickUnpauseableSystems = function(dt) {
