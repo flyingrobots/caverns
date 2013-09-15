@@ -1,23 +1,37 @@
-var MovementSystem = new Class({Extends:System,
+(function(){
 
-  initialize:function()
+  this.MovementSystem = function()
   {
-    this.parent();
-    this.moverNodes = this.createNodeList({
-      kinetics:KineticsComponent,
-      xform:TransformComponent
-    });
-  },
+    this.initialize();
+  };
 
-  update:function(dT)
-  {
-    this.moverNodes.forEachNode(function(node) {
-      var kinetics = node.kinetics;
-      var xform = node.xform;
+  MovementSystem.prototype = {
 
-      xform.position.x += kinetics.speed.x*dT;
-      xform.position.y += kinetics.speed.y*dT;
-    });
-  }
+    initialize:function()
+    {
 
-});
+    },
+
+    setup:function()
+    {
+      this.moverNodes = this.createNodeList({
+        kinetics:KineticsComponent,
+        xform:TransformComponent
+      });
+    },
+
+    update:function(dt)
+    {
+      this.moverNodes.forEachNode(function(node) {
+        var kinetics = node.kinetics;
+        var xform = node.xform;
+
+        xform.position.x += kinetics.speed.x*dt;
+        xform.position.y += kinetics.speed.y*dt;
+      });
+    }
+
+  };
+
+  System.register(MovementSystem);
+})();

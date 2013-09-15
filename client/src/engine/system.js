@@ -18,6 +18,7 @@
   var createNodeList = function(contract)
   {
     var nodeList = new SystemNodeList(contract);
+    this.nodeLists = this.nodeLists || [];
     this.nodeLists.push(nodeList);
     if (_.isFunction(this.nodeAdded))
     {
@@ -27,7 +28,10 @@
     {
       nodeList.nodeRemoved.add(this.nodeRemoved, this);
     }
-    this.nodeListAdded.dispatch(this, nodeList);
+    if (this.nodeListAdded)
+    {
+      this.nodeListAdded.dispatch(this, nodeList);
+    }
     return nodeList;
   };
 
@@ -49,8 +53,6 @@
 
   var onSystemAdded = function()
   {
-
-    this.nodeLists = [];
     this.id = System.IdCounter++;
     this.nodeListAdded = new signals.Signal();
     js.safeInvoke(this, this.setup);

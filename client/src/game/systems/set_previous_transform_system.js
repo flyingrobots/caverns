@@ -1,19 +1,30 @@
-var SetPreviousTransformSystem = new Class({Extends:System,
-
-  initialize:function()
+(function(){
+  this.SetPreviousTransformSystem = function()
   {
-    this.parent();
-    this.nodeList = this.createNodeList({
-      xform:TransformComponent,
-      lastXform:PreviousTransformComponent
-    });
-  },
+    this.initialize();
+  };
 
-  update:function(dT)
-  {
-    this.nodeList.forEachNode(function(node){
-      node.lastXform.setData(node.xform);
-    });
-  }
+  SetPreviousTransformSystem.prototype = {
+    initialize:function()
+    {
+      
+    },
 
-});
+    setup:function()
+    {
+      this.nodeList = this.createNodeList({
+        xform:TransformComponent,
+        lastXform:PreviousTransformComponent
+      });
+    },
+
+    update:function(dt)
+    {
+      this.nodeList.forEachNode(function(node){
+        node.lastXform.setData(node.xform);
+      });
+    }
+  };
+
+  System.register(SetPreviousTransformSystem);
+})();
