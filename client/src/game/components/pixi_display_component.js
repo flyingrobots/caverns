@@ -6,8 +6,6 @@
 
   PixiDisplayComponent.prototype = {
 
-    displayObject:null,
-
     initialize:function(displayObject)
     {
       this.displayObject = displayObject;

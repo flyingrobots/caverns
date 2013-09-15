@@ -1,40 +1,32 @@
 (function(){
   this.Entity = function(options)
   {
-    options = options || {}
-
-    this.id = Entity.IdCounter++;
-
-    this.componentAdded = new signals.Signal();
-    this.componentRemoved = new signals.Signal();
-
-    if (options.components)
-    {
-      assert(_.isArray(options.components), "Components must be an array");
-
-      _.each(options.components, function(component) {
-        this.addComponent(component);
-      });
-    }
+    this.initialize(options);
   };
 
   Entity.IdCounter = 0;
 
   Entity.prototype = {
-    game:null,
-    components:{},
-    id:0,
-    name:null,
-
-    // Signal fired when a component is added : (entity, component)
-    componentAdded:null,
-
-    // Signal fired when a component is removed : (entity, component)
-    componentRemoved:null,
 
     initialize:function(options)
     {
-      
+      this.components = {};
+
+      options = options || {}
+
+      this.id = Entity.IdCounter++;
+
+      this.componentAdded = new signals.Signal();
+      this.componentRemoved = new signals.Signal();
+
+      if (options.components)
+      {
+        assert(_.isArray(options.components), "Components must be an array");
+
+        _.each(options.components, function(component) {
+          this.addComponent(component);
+        }.bind(this));
+      }
     },
 
     onAdded:function(game)
@@ -56,26 +48,31 @@
       }
       if (this.components[component.componentId])
       {
-        throw "Existing component with id "+componentId;
+        throw "Existing component with id " + component.componentId;
       }
       this.components[component.componentId] = component;
       js.safeInvoke(component, component.setup);
       this.componentAdded.dispatch(this, component);
     },
 
-    getComponentById:function(id)
+    getComponent:function(componentType)
     {
-      return this.components[id];
+      return this.components[componentType.prototype.componentId];
     },
 
-    hasComponentOfType:function(id)
+    hasComponent:function(componentType)
     {
-      return this.components[id] != null;
+      return this.components[componentType.prototype.componentId] != null;
     },
 
     removeComponent:function(component)
     {
-      return removeComponentById(component.name);
+      return this.removeComponentById(component.componentId);
+    },
+
+    removeComponentByType:function(componentType)
+    {
+      return this.removeComponentById(componentType.prototype.componentId);
     },
 
     removeComponentById:function(id)

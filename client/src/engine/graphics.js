@@ -21,7 +21,7 @@ var Graphics = (function()
   }
 
   _pixi.initialize = function(options) {
-    options = js.defaults(options, {
+    options = _.defaults(options, {
       bgColor: 0x66ff99,
       useCanvas: false,
       width: 640,

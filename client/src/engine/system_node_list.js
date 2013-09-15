@@ -21,24 +21,17 @@
   };
   SystemNodeList.prototype = {
 
-    contract:null,
-    nodes:[],
-    entities:{},
-
-    // Signal fired when a node is added : (nodelist, node)
-    nodeAdded:null,
-
-    // Signal fired when a node is removed : (nodelist, node)
-    nodeRemoved:null,
-
     initialize:function(contract)
     {
       assert(contract && contract instanceof Object, "Must specify contract data object");
 
+      this.contract = [];
+      this.nodes = [];
+      this.entities = {};
+
       this.nodeAdded = new signals.Signal();
       this.nodeRemoved = new signals.Signal();
-
-      this.contract = [];
+      
       Object.each(contract, function(componentType, propertyName) {
         this.contract.push({componentType:componentType, propertyName:propertyName});
       }.bind(this));
@@ -69,7 +62,7 @@
         var node = {};
         Array.each(this.contract, function(contractData)
         {
-          node[contractData.propertyName] = entity.getComponentByType(contractData.componentType);
+          node[contractData.propertyName] = entity.getComponent(contractData.componentType);
         });
         this.entities[entity.id] = this.nodes.length;
         this.nodes.push(node);
@@ -92,7 +85,7 @@
     {
       return Array.every(this.contract, function(contractData)
       {
-        return entity.hasComponentOfType(contractData.componentType);
+        return entity.hasComponent(contractData.componentType);
       });
     },
 

@@ -6,10 +6,6 @@
   
   TransformComponent.prototype = {
 
-    position:{x:0,y:0},
-    scale:{x:1,y:1},
-    rotation:0,
-
     initialize:function(options)
     {
       this.options = _.defaults(options || {}, {  

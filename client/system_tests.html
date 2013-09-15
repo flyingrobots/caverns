@@ -14,12 +14,15 @@
   <script src="deps/pixi-js/bin/pixi.dev.js"></script>
   <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/js-signals.git/dist/signals.js"></script>
+  <script src="deps/underscore.git/underscore-min.js"></script>
 
   <script src="src/engine/utils.js"></script>
   <script src="src/engine/graphics.js"></script>
   <script src="src/engine/component.js"></script>
   <script src="src/engine/entity.js"></script>
   <script src="src/engine/world.js"></script>
+  <script src="src/engine/state_machine.js"></script>
+  <script src="src/engine/system_registry.js"></script>
   <script src="src/engine/game.js"></script>
   <script src="src/engine/system.js"></script>
   <script src="src/engine/system_node_list.js"></script>
@@ -28,12 +31,19 @@
 <body>
   <script>
 
+    var makeComponent = function()
+    {
+      var c = function() {};
+      Component.register(c);
+      return c;
+    }
+
   	// -- Test Components
-  	var Animal = new Class({Extends:Component});
-  	var Cat = new Class({Extends:Animal, initialize:function(){var a = 5}});
-  	var Dog = new Class({Extends:Animal});
-  	var Shoes = new Class({Extends:Component});
-  	var Socks = new Class({Extends:Component});
+  	var Animal = makeComponent();
+  	var Cat = makeComponent();
+  	var Dog = makeComponent();
+  	var Shoes = makeComponent();
+  	var Socks = makeComponent();
 
   	// -- Helper Functions
   	var numNodesInSystem = function(system)
@@ -47,39 +57,34 @@
 
   	var newEntity = function(components)
   	{
-  		var componentMap = {};
-  		for (var i = 0; i < components.length; ++i)
-  		{
-  			componentMap[i.toString()] = new components[i];
-  		}
-      return game.world.addEntity(new Entity({components:componentMap}));
+      return game.world.addEntity(new Entity({components:components}));
   	};
 
   	// -- Setup
-  	game.initialize();
+  	game = new Game();
 
   	newEntity([]);
-  	newEntity([Animal,Shoes]);
-  	newEntity([Cat,Shoes]);
-  	newEntity([Cat]);
+  	newEntity([new Animal, new Shoes]);
+  	newEntity([new Cat, new Shoes]);
+  	newEntity([new Cat]);
 
   	var system = new System();
   	system.createNodeList({
   		animal:Animal,
   		shoes:Shoes
   	});
-  	game.addSystem(system);
+  	SystemRegistry.addSystem(system);
 
-  	assert(numNodesInSystem(system) == 2);
+  	assert(numNodesInSystem(system) == 1);
 
-    var entity = newEntity([Animal,Shoes]);
-    assert(numNodesInSystem(system) == 3);
-
-    entity.removeComponentByName("0");
+    var entity = newEntity([new Animal,new Shoes]);
     assert(numNodesInSystem(system) == 2);
 
-    entity.addComponent("animal",new Animal());
-    assert(numNodesInSystem(system) == 3);
+    entity.removeComponentByType(Animal);
+    assert(numNodesInSystem(system) == 1);
+
+    entity.addComponent(new Animal);
+    assert(numNodesInSystem(system) == 2);
 
   </script>
   </body>

@@ -1,12 +1,15 @@
 (function(){
   this.StateMachine = function()
   {
-
+    this.initialize();
   };
 
   StateMachine.prototype = 
   {
-    currentState:null,
+    initialize:function()
+    {
+      this.currentState = null;
+    },
 
     changeState:function(state)
     {

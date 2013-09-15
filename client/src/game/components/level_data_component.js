@@ -7,14 +7,12 @@
 
   LevelDataComponent.prototype = {
 
-    definition:null,
-
-    /*get width() { return this.definition.numTilesX * this.definition.tileWidth; },
+    get width() { return this.definition.numTilesX * this.definition.tileWidth; },
     get height() { return this.definition.numTilesY * this.definition.tileHeight; },
     get numTilesX()  { return this.definition.numTilesX; },
     get numTilesY() { return this.definition.numTilesY; },
     get tileWidth()  { return this.definition.tileWidth; },
-    get tileHeight() { return this.definition.tileHeight; },*/
+    get tileHeight() { return this.definition.tileHeight; },
 
     initialize:function(definition)
     {

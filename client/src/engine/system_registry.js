@@ -31,12 +31,13 @@ var SystemRegistry = (function()
   };
   
   api.initialize = function(world) {
+    this.world = world;
     world.entityAdded.add(_onEntityAdded);
     world.entityRemoved.add(_onEntityRemoved)
   }
 
   api.addSystem = function(system, options) {
-    options = js.defaults(options, {
+    options = _.defaults(options || {}, {
       unpauseable: false,
       priority:0
     });
@@ -44,18 +45,18 @@ var SystemRegistry = (function()
     system.unpauseable = options.unpauseable;
     system.priority = options.priority;
 
-    Array.insertWhen(_systems, system, function(item, compare) {
+    js.insertWhen(_systems, system, function(item, compare) {
       return item.priority < compare.priority;
     });
     system.setup(Game);
 
-    if (js.isFunction(system.update))
+    if (_.isFunction(system.update))
     {
       _systemsToUpdate.push(system);
     }
 
     // Add world entities to system
-    Game.world.entities.each(function(entity)
+    this.world.entities.each(function(entity)
     {
       system.updateEntityMembership(entity);
     });

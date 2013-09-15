@@ -1,23 +1,17 @@
 (function(){
+  
   this.World = function(game)
   {
     this.initialize(game);
   };
+
   World.prototype = {
-
-    entities:[],
-    entityDefs:{},
-    game:null,
-
-    // Signal fired when an entity is added : (world, entity)
-    entityAdded:null,
-
-    // Signal fired when an entity is removed : (world, entity)
-    entityRemoved:null,
 
     initialize:function(game)
     {
       this.game = game;
+      this.entities = [];
+      this.entityDefs = {};
       this.entityAdded = new signals.Signal();
       this.entityRemoved = new signals.Signal();
     },
