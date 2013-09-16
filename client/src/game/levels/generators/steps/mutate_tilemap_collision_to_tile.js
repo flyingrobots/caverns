@@ -1,26 +1,33 @@
-var MutateTilemapCollisionToTileStep = new Class({ Extends:MutateTilemapStep,
-  options:{
-    tileId:"tile_rock"
-  },
-
-  initialize:function(options)
+(function(){
+  
+  this.MutateTilemapCollisionToTileStep = function(options)
   {
-    this.parent(options);
-  }, 
+    this.initialize(options);
+  };
 
-  runInternal:function(data)
-  {
-    var collisionMap = data.tilemapDefinition.collisionMap;
+  _.extend(MutateTilemapCollisionToTileStep.prototype, new MutateTilemapStep(), {
 
-    for (var i = 0; i < this.tilemap.numTilesX; ++i)
+    initialize:function(options)
     {
-      for (var j = 0; j < this.tilemap.numTilesY; ++j)
+      this.options = _.defaults(options || {}, {
+        tileId:"tile_rock"
+      });
+    },
+
+    runInternal:function(data)
+    {
+      var collisionMap = data.tilemapDefinition.collisionMap;
+
+      for (var i = 0; i < this.tilemap.numTilesX; ++i)
       {
-        if (collisionMap[i][j] == 1)
+        for (var j = 0; j < this.tilemap.numTilesY; ++j)
         {
-          this.tilemap.setTile(i,j,this.options.tileId);
+          if (collisionMap[i][j] == 1)
+          {
+            this.tilemap.setTile(i,j,this.options.tileId);
+          }
         }
       }
     }
-  }
-});
+  });
+})();

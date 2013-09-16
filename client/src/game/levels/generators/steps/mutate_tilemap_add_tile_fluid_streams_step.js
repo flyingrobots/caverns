@@ -1,85 +1,88 @@
-var MutateTilemapAddTileFluidStreamsStep = new Class({ Extends:MutateTilemapStep,
-  options:
+(function(){
+  
+  this.MutateTilemapAddTileFluidStreamsStep = function(options)
   {
-    numStreams:4,
-    tileId:null
-  },
+    this.initialize(options);
+  };
 
-  collisionMap:null,
-
-  initialize:function(options)
-  {
-    this.parent(options);
-  },
-
-  runInternal:function(data)
-  {
-    assert(data.tilemapDefinition.collisionMap != null, "Must have collision map");
-
-    this.collisionMap = data.tilemapDefinition.collisionMap;
-
-    // Add streams
-    for (var i = 0; i < this.options.numStreams; ++i)
+  _.extend(MutateTilemapAddTileFluidStreamsStep.prototype, new MutateTilemapStep(), {
+    initialize:function(options)
     {
-      this.addRandomStream();
-    }
-  },
+      this.options = _.defaults(options || {}, {
+        numStreams:4,
+        tileId:null
+      });
+    },
 
-  addRandomStream:function()
-  {
-    // Get a random tile
-    var tile = {x:0,y:0};
-    var attempts = 0;
-    const maxAttempts = 1000;
-    do
+    runInternal:function(data)
     {
-      tile.x = Math.floor(Math.random()*this.numTilesX);
-      tile.y = Math.floor(Math.random()*this.numTilesY);
-    } while(this.collisionMap[tile.x][tile.y] == 1 && attempts++ < maxAttempts);
-    if (attempts >= maxAttempts)
-    {
-      return;
-    }
+      assert(data.tilemapDefinition.collisionMap != null, "Must have collision map");
 
-    // Move up until we find the ceiling
-    while (tile.y-1 >= 0 && this.collisionMap[tile.x][tile.y-1] == 0) { tile.y -= 1; }
+      this.collisionMap = data.tilemapDefinition.collisionMap;
 
-    // Start the stream flow
-    var streamCreators = [tile];
-    while (streamCreators.length > 0)
-    {
-      var tile = streamCreators.splice(0,1)[0];
-      this.tilemap.setTile(tile.x, tile.y, this.options.tileId);
-
-      // Can the flow move down?
-      if (this.isViableWaterLocation(tile.x,tile.y+1))
+      // Add streams
+      for (var i = 0; i < this.options.numStreams; ++i)
       {
-        streamCreators.push({x:tile.x,y:tile.y+1});
-        continue;
+        this.addRandomStream();
+      }
+    },
+
+    addRandomStream:function()
+    {
+      // Get a random tile
+      var tile = {x:0,y:0};
+      var attempts = 0;
+      const maxAttempts = 1000;
+      do
+      {
+        tile.x = Math.floor(Math.random()*this.numTilesX);
+        tile.y = Math.floor(Math.random()*this.numTilesY);
+      } while(this.collisionMap[tile.x][tile.y] == 1 && attempts++ < maxAttempts);
+      if (attempts >= maxAttempts)
+      {
+        return;
       }
 
-      // If the thing below us is filled, move left and right
-      if (this.isTileFilled(tile.x, tile.y+1))
+      // Move up until we find the ceiling
+      while (tile.y-1 >= 0 && this.collisionMap[tile.x][tile.y-1] == 0) { tile.y -= 1; }
+
+      // Start the stream flow
+      var streamCreators = [tile];
+      while (streamCreators.length > 0)
       {
-        if (this.isViableWaterLocation(tile.x-1,tile.y))
+        var tile = streamCreators.splice(0,1)[0];
+        this.tilemap.setTile(tile.x, tile.y, this.options.tileId);
+
+        // Can the flow move down?
+        if (this.isViableWaterLocation(tile.x,tile.y+1))
         {
-          streamCreators.push({x:tile.x-1,y:tile.y});
+          streamCreators.push({x:tile.x,y:tile.y+1});
+          continue;
         }
-        if (this.isViableWaterLocation(tile.x+1,tile.y))
+
+        // If the thing below us is filled, move left and right
+        if (this.isTileFilled(tile.x, tile.y+1))
         {
-          streamCreators.push({x:tile.x+1,y:tile.y});
+          if (this.isViableWaterLocation(tile.x-1,tile.y))
+          {
+            streamCreators.push({x:tile.x-1,y:tile.y});
+          }
+          if (this.isViableWaterLocation(tile.x+1,tile.y))
+          {
+            streamCreators.push({x:tile.x+1,y:tile.y});
+          }
         }
       }
+    },
+
+    isViableWaterLocation:function(x,y)
+    {
+      return ArrayUtils.isInBounds2D(this.collisionMap, x, y) && this.tilemap.tiles[x][y] == null;
+    },
+
+    isTileFilled:function(x,y)
+    {
+      return ArrayUtils.isInBounds2D(this.collisionMap,x,y) && this.collisionMap[x][y] == 1;
     }
-  },
-
-  isViableWaterLocation:function(x,y)
-  {
-    return ArrayUtils.isInBounds2D(this.collisionMap, x, y) && this.tilemap.tiles[x][y] == null;
-  },
-
-  isTileFilled:function(x,y)
-  {
-    return ArrayUtils.isInBounds2D(this.collisionMap,x,y) && this.collisionMap[x][y] == 1;
-  }
-});
+  });
+})();

@@ -1,33 +1,35 @@
-var MutateCollisionStep = new Class({ Implements:Options,
+(function(){
   
-  options:{},
-  numTilesX:0,
-  numTilesY:0,
-  collisionMap:null,
-
-  initialize:function(options)
+  this.MutateCollisionStep = function()
   {
-    this.setOptions(options);
-  },
+    this.initialize();
+  };
 
-  run:function(data)
-  {
-    assert(data.tilemapDefinition.collisionMap != null, "Must have collision map");
+  MutateCollisionStep.prototype = {
+    initialize:function()
+    {
+      
+    },
 
-    this.numTilesX = data.tilemapDefinition.numTilesX;
-    this.numTilesY = data.tilemapDefinition.numTilesY;
-    this.collisionMap = data.tilemapDefinition.collisionMap;
+    run:function(data)
+    {
+      assert(data.tilemapDefinition.collisionMap != null, "Must have collision map");
 
-    this.runInternal(data);
-  },
+      this.numTilesX = data.tilemapDefinition.numTilesX;
+      this.numTilesY = data.tilemapDefinition.numTilesY;
+      this.collisionMap = data.tilemapDefinition.collisionMap;
 
-  runInternal:function(data)
-  {
-    throw new "Must override in concrete class";
-  },
+      this.runInternal(data);
+    },
 
-  isTileFilled:function(x,y)
-  {
-    return ArrayUtils.isInBounds2D(this.collisionMap,x,y) && this.collisionMap[x][y] == 1;
-  }
-});
+    runInternal:function(data)
+    {
+      throw new "Must override in concrete class";
+    },
+
+    isTileFilled:function(x,y)
+    {
+      return ArrayUtils.isInBounds2D(this.collisionMap,x,y) && this.collisionMap[x][y] == 1;
+    }
+  };
+})();

@@ -1,25 +1,30 @@
-var MutateTilemapStep = new Class({ Implements:Options,
-
-  tilemap:null,
-
-  initialize:function(options)
+(function(){
+  
+  this.MutateTilemapStep = function()
   {
-    this.setOptions(options);
-  },
+    this.initialize();
+  };
 
-  run:function(data)
-  {
-    assert(data.tilemapDefinition != null, "Must have tilemap definition!");
+  MutateTilemapStep.prototype = {
+    initialize:function()
+    {
+      
+    },
 
-    this.tilemap = data.tilemapDefinition;
-    this.numTilesX = this.tilemap.numTilesX;
-    this.numTilesY = this.tilemap.numTilesY;
+    run:function(data)
+    {
+      assert(data.tilemapDefinition != null, "Must have tilemap definition!");
 
-    this.runInternal(data);
-  },
+      this.tilemap = data.tilemapDefinition;
+      this.numTilesX = this.tilemap.numTilesX;
+      this.numTilesY = this.tilemap.numTilesY;
 
-  runInternal:function(data)
-  {
-    throw "Must override in concrete class!";
-  }
-});
+      this.runInternal(data);
+    },
+
+    runInternal:function(data)
+    {
+      throw "Must override in concrete class!";
+    }
+  };
+})();

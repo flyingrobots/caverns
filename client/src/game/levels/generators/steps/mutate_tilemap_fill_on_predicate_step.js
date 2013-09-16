@@ -1,26 +1,30 @@
-var MutateTilemapFillOnPredicateStep = new Class({ Extends:MutateTilemapStep,
-  options:
+(function(){
+  
+  this.MutateTilemapFillOnPredicateStep = function(options)
   {
-    predicate:null,
-    tileId:null
-  },
+    this.initialize(options);
+  };
 
-  initialize:function(options)
-  {
-    this.parent(options);
-  },
-
-  runInternal:function(data)
-  {
-    for (var x = 0; x < this.numTilesX; ++x)
+  _.extend(MutateTilemapFillOnPredicateStep.prototype, new MutateTilemapStep(), {
+    initialize:function(options)
     {
-      for (var y = 0; y < this.numTilesY; ++y)
+      this.options = _.defaults(options || {}, {
+        predicate:null,
+        tileId:null
+      });
+    },
+    runInternal:function(data)
+    {
+      for (var x = 0; x < this.numTilesX; ++x)
       {
-        if (this.options.predicate(this.tilemap, x, y))
+        for (var y = 0; y < this.numTilesY; ++y)
         {
-          this.tilemap.setTile(x,y,this.options.tileId);
+          if (this.options.predicate(this.tilemap, x, y))
+          {
+            this.tilemap.setTile(x,y,this.options.tileId);
+          }
         }
       }
     }
-  }
-});
+  });
+})();
