@@ -1,33 +1,35 @@
-var CreateCollisionStep = new Class({ Implements:Options,
-
-  options:{},
-  numTilesX:0,
-  numTilesY:0,
-  collisionMap:null,
-
-  initialize:function(options)
+(function(){
+  
+  this.CreateCollisionStep = function()
   {
-    this.setOptions(options);
-  },
+    this.initialize();
+  };
 
-  run:function(data)
-  {
-    this.numTilesX = data.tilemapDefinition.numTilesX;
-    this.numTilesY = data.tilemapDefinition.numTilesY;
+  CreateCollisionStep.prototype = {
+    initialize:function()
+    {
+      
+    },
 
-    data.tilemapDefinition.collisionMap = ArrayUtils.createArray2D(this.numTilesX, this.numTilesY, 1);
-    this.collisionMap = data.tilemapDefinition.collisionMap;
+    run:function(data)
+    {
+      this.numTilesX = data.tilemapDefinition.numTilesX;
+      this.numTilesY = data.tilemapDefinition.numTilesY;
 
-    this.runInternal();
-  },
+      data.tilemapDefinition.collisionMap = ArrayUtils.createArray2D(this.numTilesX, this.numTilesY, 1);
+      this.collisionMap = data.tilemapDefinition.collisionMap;
 
-  runInternal:function(data)
-  {
-    throw new "Must override in concrete class";
-  },
+      this.runInternal();
+    },
 
-  isTileFilled:function(x,y)
-  {
-    return ArrayUtils.isInBounds2D(this.collisionMap,x,y) && this.collisionMap[x][y] == 1;
-  }
-});
+    runInternal:function(data)
+    {
+      throw new "Must override in concrete class";
+    },
+
+    isTileFilled:function(x,y)
+    {
+      return ArrayUtils.isInBounds2D(this.collisionMap,x,y) && this.collisionMap[x][y] == 1;
+    }
+  };
+})();
