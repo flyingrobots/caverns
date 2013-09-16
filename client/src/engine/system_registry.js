@@ -9,7 +9,7 @@ var SystemRegistry = (function()
 
   var _updateEntitySystemMembership = function(entity)
   {
-    _systems.each(function(system)
+    _.each(_systems, function(system)
     {
       system.updateEntityMembership(entity);
     });
@@ -56,7 +56,7 @@ var SystemRegistry = (function()
     }
 
     // Add world entities to system
-    this.world.entities.each(function(entity)
+    _.each(this.world.entities, function(entity)
     {
       system.updateEntityMembership(entity);
     });
@@ -72,13 +72,13 @@ var SystemRegistry = (function()
   }
 
   var _tickUnpauseableSystems = function(dt) {
-    Array.each(Array.filter(_systemsToUpdate, function(system){return system.unpauseable}), function(system) {
+    _.each(_.filter(_systemsToUpdate, function(system){return system.unpauseable}), function(system) {
       system.update(dt);
     });
   }
 
   var _tickAllSystems = function(dt) {
-    Array.each(_systemsToUpdate, function(system) {
+    _.each(_systemsToUpdate, function(system) {
       system.update(dt);
     });
   }

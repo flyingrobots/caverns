@@ -1,4 +1,5 @@
 (function(){
+  
   this.SetPreviousTransformSystem = function()
   {
     this.initialize();

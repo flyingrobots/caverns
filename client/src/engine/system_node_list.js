@@ -32,14 +32,14 @@
       this.nodeAdded = new signals.Signal();
       this.nodeRemoved = new signals.Signal();
       
-      Object.each(contract, function(componentType, propertyName) {
+      _.each(contract, function(componentType, propertyName) {
         this.contract.push({componentType:componentType, propertyName:propertyName});
       }.bind(this));
     },
 
     forEachNode:function(callback)
     {
-      Array.each(this.nodes, callback);
+      _.each(this.nodes, callback);
     },
 
     updateMembership:function(entity)
@@ -60,7 +60,7 @@
       if (this.matches(entity))
       {
         var node = {};
-        Array.each(this.contract, function(contractData)
+        _.each(this.contract, function(contractData)
         {
           node[contractData.propertyName] = entity.getComponent(contractData.componentType);
         });
@@ -83,7 +83,7 @@
 
     matches:function(entity)
     {
-      return Array.every(this.contract, function(contractData)
+      return _.every(this.contract, function(contractData)
       {
         return entity.hasComponent(contractData.componentType);
       });

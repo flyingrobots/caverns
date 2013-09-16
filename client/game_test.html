@@ -12,7 +12,6 @@
   </style>
   
   <script src="deps/pixi-js/bin/pixi.dev.js"></script>
-  <script src="deps/mootools/mootools-core-1.4.5-full-nocompat.js"></script>
   <script src="deps/seedrandom/seedrandom.js"></script>
   <script src="deps/js-signals.git/dist/signals.min.js"></script>
   <script src="deps/underscore.git/underscore-min.js"></script>
@@ -39,7 +38,6 @@
 
   <script src="src/game/systems/pixi_rendering_system.js"></script>
   <script src="src/game/systems/set_previous_transform_system.js"></script>
-  <script src="src/game/systems/tilemap_collision_system.js"></script>
   <script src="src/game/systems/player_input_system.js"></script>
   <script src="src/game/systems/movement_system.js"></script>
   <script src="src/game/systems/jitter_position_system.js"></script>
@@ -111,7 +109,6 @@
       SystemRegistry.addSystem(new SetPreviousTransformSystem(),  {priority:GamePriorities.PreUpdate});
       SystemRegistry.addSystem(new PlayerInputSystem(Input),      {priority:GamePriorities.Update});
       SystemRegistry.addSystem(new MovementSystem(),              {priority:GamePriorities.Update});
-      SystemRegistry.addSystem(new TilemapCollisionSystem(),      {priority:GamePriorities.Update});
       SystemRegistry.addSystem(new PixiRenderingSystem(),         {priority:GamePriorities.PostUpdate});
       
       for(var i = 0; i < 1; ++i)

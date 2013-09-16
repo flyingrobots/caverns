@@ -16,14 +16,17 @@ var _startGameLoop = function (game) {
 var _demoObjects = [];
 var _wireframe = true;
 
-this.Game = new Class({ Implements:Options,
+this.Game = function(options)
+{
+  this.initialize(options);
+};
 
-  options: {
-    graphics:{}
-  },
+Game.prototype = {
 
   initialize:function(options) {
-    this.setOptions(options);
+    this.options = _.defaults(options || {}, {
+      graphics:{}
+    });
 
     this.timeScale = 1.0;
     this.stateMachine = new StateMachine();
@@ -162,5 +165,5 @@ this.Game = new Class({ Implements:Options,
     
     Graphics.enableDebugSprites();*/
   }
-});
+};
 })();
