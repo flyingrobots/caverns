@@ -28,6 +28,8 @@
   <script src="src/engine/component.js"></script>
   <script src="src/engine/entity.js"></script>
 
+  <script src="src/game/utils/array_utils.js"></script>
+
   <script src="src/game/components/pixi_display_component.js"></script>
   <script src="src/game/components/transform_component.js"></script>
   <script src="src/game/components/bounding_box_component.js"></script>
@@ -41,6 +43,22 @@
   <script src="src/game/systems/player_input_system.js"></script>
   <script src="src/game/systems/movement_system.js"></script>
   <script src="src/game/systems/jitter_position_system.js"></script>
+
+  <script src="src/game/levels/tilemap_definition.js"></script>
+  <script src="src/game/levels/cavern_renderer.js"></script>
+  <script src="src/game/levels/generators/tilemap_generator.js"></script>
+  <script src="src/game/levels/generators/cellular_automata.js"></script>
+  <script src="src/game/levels/generators/steps/create_collision_step.js"></script>
+  <script src="src/game/levels/generators/steps/create_collision_cavern_automata_step.js"></script>
+  <script src="src/game/levels/generators/steps/create_collision_cavern_miner_step.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_collision_step.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_collision_remove_small_islands_step.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_collision_smooth_step.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_tilemap_step.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_tilemap_add_tile_fluid_streams_step.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_tilemap_collision_to_tile.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_tilemap_fill_empty_tiles_from_bottom_step.js"></script>
+  <script src="src/game/levels/generators/steps/mutate_tilemap_fill_on_predicate_step.js"></script>
 
   <script src="src/test/game_priorities.js"></script>
   
@@ -67,36 +85,79 @@
       var createBoxSprite = function()
       {
         var gfx = new PIXI.Graphics();
-        gfx.beginFill(Math.random()*0xffffff);
-        gfx.drawRect(-25,-25,50,50);
+        gfx.beginFill(0xffffff);
+        gfx.drawRect(-2,-6,4,8);
         return gfx;
       };
 
       var createTestEntity = function(){
-        var scale = Math.random()*0.4+0.2;
+        //var scale = Math.random()*0.4+0.2;
         return new Entity({components:
           [
             new PixiDisplayComponent(createBoxSprite()),
             new KineticsComponent({
-              maxSpeed:{x:25,y:25},
-              acceleration:{x:20,y:20}
+              maxSpeed:{x:40,y:40},
+              acceleration:{x:70,y:70}
             }),
             new PlayerComponent(),
             new PreviousTransformComponent(),
             new TransformComponent({
-              position:{x:50+Math.random()*(document.width-100),
-                        y:50+Math.random()*(document.height-100)},
-              rotation:Math.random()*3.14,
-              scale:{x:scale,y:scale}
+              position:{x:50+Math.random()*(350),
+                        y:50+Math.random()*(350)},
+              //rotation:Math.random()*3.14,
+              //scale:{x:scale,y:scale}
             })
           ]
         });
       };
 
+      var createLevelEntity = function()
+      {
+        var generator = new TilemapGenerator({
+          numTilesX:100,
+          numTilesY:100,
+          tileWidth:4,
+          tileHeight:4
+        });
+        generator.addStep(new CreateCollisionCavernMinerStep({numIterations:400}));
+        generator.addStep(new MutateCollisionSmoothStep());
+        generator.addStep(new MutateCollisionRemoveSmallIslandsStep());
+        generator.addStep(new MutateTilemapCollisionToTileStep({tileId:"tile_rock"}));
+        generator.addStep(new MutateTilemapFillEmptyTilesFromBottomStep({tileId:"tile_lava"}));
+        generator.addStep(new MutateTilemapAddTileFluidStreamsStep({tileId:"tile_water"}));
+        generator.addStep(new MutateTilemapFillOnPredicateStep({
+          predicate:function(tilemap,x,y)
+          {
+            if (tilemap.tiles[x][y] != null)
+            {
+              return false;
+            }
+
+            if (y-1 >= 0 && tilemap.tiles[x][y-1] == null && y+1 < tilemap.numTilesY && tilemap.collisionMap[x][y+1] == 1)
+            {
+              return true;
+            }
+            return false;
+          },
+          tileId:"tile_grass"
+        }));
+
+        var tilemapDefinition = generator.generate();
+        //console.log(JSON.stringify(tilemapDefinition));
+
+        var tilemapRenderer = new CavernRenderer(tilemapDefinition);
+
+        return new Entity({components:[
+            new PixiDisplayComponent(tilemapRenderer.sprite),
+            new TransformComponent(),
+            new LevelDataComponent(tilemapDefinition),
+        ]});
+      };
+
       var graphicsOptions = {
         useCanvas: true,
-        width: document.width,
-        height: document.height
+        width: 400,
+        height: 400
       };
 
       var gameOptions = {
@@ -110,11 +171,9 @@
       SystemRegistry.addSystem(new PlayerInputSystem(Input),      {priority:GamePriorities.Update});
       SystemRegistry.addSystem(new MovementSystem(),              {priority:GamePriorities.Update});
       SystemRegistry.addSystem(new PixiRenderingSystem(),         {priority:GamePriorities.PostUpdate});
-      
-      for(var i = 0; i < 1; ++i)
-      {
-        game.world.addEntity(createTestEntity());
-      }
+
+      game.world.addEntity(createLevelEntity());
+      game.world.addEntity(createTestEntity());
       game.start();
     }
   
