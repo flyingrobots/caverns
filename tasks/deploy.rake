@@ -26,7 +26,7 @@ def deployJasmine targetDirectoryPath
   projectRoot = RakeHelper::projectRoot
   depsRoot = "#{projectRoot}/deps"
   jasmineRoot = "#{depsRoot}/jasmine.git"
-  tmpDir = "/tmp/caverns-rake/deploy/jasmine"
+  tmpDir = "/tmp/caverns_rake/deploy/jasmine"
 
   FileUtils.rm_rf tmpDir
   FileUtils.mkdir_p tmpDir
