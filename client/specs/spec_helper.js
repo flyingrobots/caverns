@@ -13,7 +13,8 @@ this.SpecHelper.supportsSystemAPI = function(system) {
 this.SpecHelper.createPhysicsWorldDouble = function() {
   return {
     initialize: function(opts) {},
-    addBody: function(x, y, opts, shapeFunc) {}
+    addBody: function(x, y, opts, shapeFunc) {},
+    tick: function(dt) {}
   };
 }
 

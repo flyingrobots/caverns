@@ -2,23 +2,63 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Jasmine Spec Runner v2.0.0-rc2</title>
 
+  <title>Jasmine Spec Runner v2.0.0-rc2</title>
   <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.0.0-rc2/jasmine_favicon.png">
   <link rel="stylesheet" type="text/css" href="lib/jasmine-2.0.0-rc2/jasmine.css">
+
+<!--
+
+  # Jasmine
+
+  These are the scripts required to use Jasmine. Don't mess with this junk
+  unless you know what you're doing.
+
+-->
 
   <script type="text/javascript" src="lib/jasmine-2.0.0-rc2/jasmine.js"></script>
   <script type="text/javascript" src="lib/jasmine-2.0.0-rc2/jasmine-html.js"></script>
   <script type="text/javascript" src="lib/jasmine-2.0.0-rc2/boot.js"></script>
 
-  <script type="text/javascript" src="lib/underscore-min.js"></script>
-  <script type="text/javascript" src="specs/spec_helper.js"></script>
+<!--
+  
+  # Lib
 
-  <!-- caverns src here -->
+  Add lib scripts here.
+
+-->
+
+  <script type="text/javascript" src="lib/underscore-min.js"></script>
+
+<!--
+
+  # Caverns Source
+
+  Add src files from caverns here:
+
+-->
+  
+  <!-- src/engine/
   <script type="text/javascript" src="src/engine/system.js"></script>
+
+  <!-- src/game/components/ -->
+  <script type="text/javascript" src="src/game/components/transform_component.js"></script>
+  <script type="text/javascript" src="src/game/components/box2d_body_component.js"></script>
+  <script type="text/javascript" src="src/game/components/box2d_shape_component.js"></script>
+
+  <!-- src/game/systems/ -->
   <script type="text/javascript" src="src/game/systems/box2d_physics_system.js"></script>
 
-  <!-- source specs here -->
+<!--
+  
+  # Specs
+  
+  **Note:**
+  To add a spec to SpecRunner.html, source its JavaScript file here:
+
+-->
+
+  <script type="text/javascript" src="specs/spec_helper.js"></script>
   <script type="text/javascript" src="specs/box2d_physics_system_spec.js"></script>
 
 </head>
