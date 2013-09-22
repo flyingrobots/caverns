@@ -7,6 +7,8 @@ describe("Box2d Physics System", function() {
     world = SpecHelper.createPhysicsWorldDouble();
     spyOn(world, 'initialize');
     spyOn(world, 'addBody');
+    spyOn(world, 'tick');
+    
     physics = new Box2dPhysicsSystem(world);
   });
 
@@ -46,6 +48,7 @@ describe("Box2d Physics System", function() {
   describe("Updating the Box2dPhysicsSystem", function() {
 
     beforeEach(function() {
+      physics.initialize();
       physics.update(1.0 / 30.0);
     });
 
