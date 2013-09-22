@@ -1,15 +1,28 @@
+require 'find'
+
 import "#{File.dirname(__FILE__)}/tasks/deploy.rake"
 import "#{File.dirname(__FILE__)}/tasks/node.rake"
 import "#{File.dirname(__FILE__)}/tasks/pixi.rake"
 import "#{File.dirname(__FILE__)}/tasks/server.rake"
 
+#------------------------------------------------------------------------------
 Rake::TaskManager.record_task_metadata = true
 
+#------------------------------------------------------------------------------
 task :default do
   Rake::application.options.show_tasks = :tasks
   Rake.application.options.show_task_pattern = //
   Rake.application.display_tasks_and_comments()
 end
 
+#------------------------------------------------------------------------------
 desc "Installs everything you'll need"
 task :install => ['node:install', 'pixi:install']
+
+#------------------------------------------------------------------------------
+desc "Restores the working tree to its pristine state"
+task :pristine do
+  $stdout.puts RakeHelper::blue("== Restoring #{RakeHelper::projectRoot} to pristine state ==")
+  Dir.chdir(RakeHelper::projectRoot) { RakeHelper::GitHelper.obliterate }
+end
+

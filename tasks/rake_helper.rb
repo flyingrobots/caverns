@@ -1,11 +1,11 @@
 require 'stringio'
 require 'fileutils'
 
-module RakeHelper
+# TODO: Consider making "doit" and "sudoit" more useful by capturing the
+# result from the system call... maybe add some options to run the command
+# on another thread or in a child process?
 
-  # TODO: Consider making "doit" and "sudoit" more useful by capturing the
-  # result from the system call... maybe add some options to run the command
-  # on another thread or in a child process?
+module RakeHelper
 
   #----------------------------------------------------------------------------
   def self.yellow message
@@ -27,7 +27,6 @@ module RakeHelper
     if opts[:quiet]
       system "#{command} > /dev/null"
     else
-      $stdout.puts "#{command}"
       system "#{command}"
     end
   end
@@ -84,7 +83,6 @@ module RakeHelper
   end
 
   #############################################################################
-
   class GitHelper
 
     #--------------------------------------------------------------------------
@@ -127,6 +125,13 @@ module RakeHelper
     #--------------------------------------------------------------------------
     def self.nuke
       RakeHelper::doit "git checkout . && git clean -df"
+    end
+
+    #--------------------------------------------------------------------------
+    def self.obliterate
+      $stdout.puts RakeHelper::red("☠ Obliterating files ignored by git and cleaning in #{Dir.getwd}")
+      RakeHelper::doit "git clean -dfx"
+      $stdout.puts RakeHelper::green("✔ #{Dir.getwd} git repo is now pristine")
     end
 
  end
