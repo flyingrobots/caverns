@@ -23,6 +23,11 @@ module RakeHelper
   end
 
   #----------------------------------------------------------------------------
+  def self.red message
+    "\e[31m#{message}\e[0m"
+  end
+
+  #----------------------------------------------------------------------------
   def self.doit command, opts = {}
     if opts[:quiet]
       system "#{command} > /dev/null"
