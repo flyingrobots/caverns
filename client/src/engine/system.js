@@ -69,8 +69,10 @@
 
   this.System = 
   {
+    // FIXME: how is this used??
     IdCounter:0,
 
+    // FIXME: this does not appear to work...
     register:function(systemType)
     {
       systemType.prototype.onAdded = onSystemAdded;
@@ -78,6 +80,15 @@
       systemType.prototype.createNodeList = createNodeList;
       systemType.prototype.destroyNodeList = destroyNodeList;
       systemType.prototype.updateEntityMembership = updateEntityMembership;
+    },
+
+    registerInstance: function(system) {
+      var prototype = Object.getPrototypeOf(system);
+      prototype.onAdded = onSystemAdded;
+      prototype.onRemoved = onSystemRemoved;
+      prototype.createNodeList = createNodeList;
+      prototype.destroyNodeList = destroyNodeList;
+      prototype.updateEntityMembership = updateEntityMembership;
     }
   };
 

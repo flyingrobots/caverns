@@ -76,12 +76,47 @@ def deployUnderscoreJS targetDirectoryPath
 
 end
 
+=begin
+
+# js-signals
+
+An event system library.
+
+## Deployment Steps
+
+1. Download zip file to a temporary directory.
+2. Unzip.
+3. Copy to target directory path.
+
+=end
+
+def deployJsSignals targetDirectoryPath
+
+  $stdout.puts RakeHelper::blue("== Deploying js-signals ==")
+
+  if File.exist? "#{targetDirectoryPath}/signals.min.js"
+    $stdout.puts "(js-signals already deployed)"
+  else
+    tmpDir = "/tmp/caverns_rake/deploy/js-signals"
+    RakeHelper::doit "rm -rf #{tmpDir}; mkdir -p #{tmpDir}"
+    Dir.chdir(tmpDir) {
+      RakeHelper::doit "git clone https://github.com/millermedeiros/js-signals.git ."
+      RakeHelper::doit "cp dist/signals.min.js #{targetDirectoryPath}"
+    }
+    RakeHelper::doit "rm -rf #{tmpDir}"
+  end
+
+  $stdout.puts RakeHelper::green("✔ Deployed js-signals to #{targetDirectoryPath}/signals.min.js")
+
+end
+
 #------------------------------------------------------------------------------
 desc 'Exports all dependencies required to run the client in offline mode'
 task 'deploy:offline' do
   clientLibPath = "#{RakeHelper::projectRoot}/client/lib"
   deployJasmine clientLibPath
   deployUnderscoreJS clientLibPath
+  deployJsSignals clientLibPath
 end
 
 #------------------------------------------------------------------------------

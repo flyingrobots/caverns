@@ -8,7 +8,6 @@ describe("Box2d Physics System", function() {
     spyOn(world, 'initialize');
     spyOn(world, 'addBody');
     physics = new Box2dPhysicsSystem(world);
-    physics.setup();
   });
 
   afterEach(function() {
@@ -30,10 +29,18 @@ describe("Box2d Physics System", function() {
       expect(physics.world).not.toBe(null);
     });
 
+  });
+
+  describe("Initializing a Box2dPhysicsSystem instance", function() {
+
+    beforeEach(function() {
+      physics.initialize();
+    });
+
     it("should initialize its physics world instance", function() {
       expect(world.initialize).toHaveBeenCalled();
     });
-
+    
   });
 
   describe("Updating the Box2dPhysicsSystem", function() {

@@ -23,7 +23,7 @@
 
     initialize:function(contract)
     {
-      assert(contract && contract instanceof Object, "Must specify contract data object");
+      // assert(contract && contract instanceof Object, "Must specify contract data object");
 
       this.contract = [];
       this.nodes = [];
