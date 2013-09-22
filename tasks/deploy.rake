@@ -12,33 +12,27 @@ require "#{File.dirname(__FILE__)}/rake_helper"
   
   ## Deployment Steps:
 
-  1. Sync the submodule to the latest `origin/master` commit.
-  2. Copy the release candidate zip from dist/ to a temporary directory
-  3. Unzip the release
+  1. Clone the Jasmine git repo to a temporary directory
+  2. Unzip the release candidate zip
   4. Copy the contents of the unzipped 'lib' directory to the deployment target directory
 
 =end
 
 def deployJasmine targetDirectoryPath
 
-  $stdout.puts RakeHelper::blue("== Jasmine ==")
+  $stdout.puts RakeHelper::blue("== Deploying Jasmine ==")
 
-  projectRoot = RakeHelper::projectRoot
-  depsRoot = "#{projectRoot}/deps"
-  jasmineRoot = "#{depsRoot}/jasmine.git"
   tmpDir = "/tmp/caverns_rake/deploy/jasmine"
+  RakeHelper::doit "rm -rf #{tmpDir}; mkdir -p #{tmpDir}"
 
-  FileUtils.rm_rf tmpDir
-  FileUtils.mkdir_p tmpDir
-
-  RakeHelper::deployDependency(jasmineRoot, targetDirectoryPath) {
-    RakeHelper::doit "mkdir -p #{tmpDir}"
-    RakeHelper::doit "cp #{jasmineRoot}/dist/jasmine-standalone-*-rc*.* #{tmpDir}"
-    Dir.chdir(tmpDir) {
-      RakeHelper::doit "unzip -oqq #{tmpDir}/jasmine-standalone-2.0.0-rc2"
-    }
-    RakeHelper::doit "cp -r #{tmpDir}/lib/ #{targetDirectoryPath}"
+  Dir.chdir(tmpDir) {
+    $stdout.puts "(working in #{tmpDir})"
+    RakeHelper::doit "git clone https://github.com/pivotal/jasmine.git git/"
+    RakeHelper::doit "unzip -o git/dist/jasmine-standalone-2.0.0-rc2"
+    RakeHelper::doit "cp -r lib/ #{targetDirectoryPath}"
   }
+
+  RakeHelper::doit "rm -rf #{tmpDir}"
 
   $stdout.puts RakeHelper::green("✔ Jasmine deployed to #{targetDirectoryPath}")
 

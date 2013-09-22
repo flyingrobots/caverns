@@ -32,6 +32,7 @@ module RakeHelper
     if opts[:quiet]
       system "#{command} > /dev/null"
     else
+      $stdout.puts "#{command}"
       system "#{command}"
     end
   end
@@ -69,22 +70,6 @@ module RakeHelper
   def self.blowUp message
     $stderr.puts message
     raise message
-  end
-
-  #----------------------------------------------------------------------------
-  def self.deployDependency submodulePath, binPath
-    FileUtils.mkdir_p binPath
-
-    # update to latest origin/master, yield, then clean up
-    Dir.chdir(submodulePath) do
-      GitHelper.syncWithOrigin "master"
-      yield binPath
-      GitHelper.nuke
-    end
-
-    # TODO: consider commiting a submodule update if the submoudle commit has
-    # changed (maybe run integration tests against this dependency first?)
-
   end
 
   #############################################################################
