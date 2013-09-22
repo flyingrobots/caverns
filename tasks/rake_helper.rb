@@ -9,7 +9,7 @@ module RakeHelper
 
   #----------------------------------------------------------------------------
   def self.yellow message
-    "#\e[33m#{message}\e[0m"
+    "\e[33m#{message}\e[0m"
   end
 
   #----------------------------------------------------------------------------
@@ -137,6 +137,12 @@ module RakeHelper
       $stdout.puts RakeHelper::red("☠ Obliterating files ignored by git and cleaning in #{Dir.getwd}")
       RakeHelper::doit "git clean -dfx"
       $stdout.puts RakeHelper::green("✔ #{Dir.getwd} git repo is now pristine")
+    end
+
+    #--------------------------------------------------------------------------
+    def self.purge
+      $stdout.puts RakeHelper::yellow("⚠ Removing files ignored by git in #{Dir.getwd}")
+      RakeHelper::doit "git clean -fX"
     end
 
  end

@@ -26,3 +26,11 @@ task :pristine do
   Dir.chdir(RakeHelper::projectRoot) { RakeHelper::GitHelper.obliterate }
 end
 
+#------------------------------------------------------------------------------
+desc "Cleans the repository of ignored files"
+task :clean do
+  $stdout.puts RakeHelper::blue("== Purging repository of ignored files ==")
+  Dir.chdir(RakeHelper::projectRoot) { RakeHelper::GitHelper.purge }
+  $stdout.puts RakeHelper::green("✔ All clean")
+end
+
