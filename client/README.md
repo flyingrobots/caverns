@@ -10,6 +10,14 @@ This process has been automated by the `test:client` rake task:
 
 Please do not push commits to `origin master` that fails tests. (That sort of thing belongs on a `dev` or `wip` branch.)
 
+# Adding Tests
+
+1. [Read about Jasmine](http://pivotal.github.io/jasmine/).
+2. Add your specs to the `specs` directory.
+3. Source your specs in `SpecRunner.html`.
+
+That's it!
+
 ## Test Workflow Improvements
 
 * Convert old tests into Jasmine specs
