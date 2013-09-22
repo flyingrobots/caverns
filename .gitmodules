@@ -19,3 +19,6 @@
 [submodule "client/deps/underscore.git"]
 	path = client/deps/underscore.git
 	url = https://github.com/jashkenas/underscore.git
+[submodule "deps/jasmine.git"]
+	path = deps/jasmine.git
+	url = https://github.com/pivotal/jasmine.git

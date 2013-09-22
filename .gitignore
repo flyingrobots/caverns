@@ -1,2 +1,12 @@
+# OSX file junk
 .DS_store
+
+# anything that comes from installing a node module
 node_modules/
+
+# vim swap files
+*.swp
+
+# client/lib/ (produced by `rake deploy:offline`)
+client/lib/
+
