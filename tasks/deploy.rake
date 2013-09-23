@@ -84,9 +84,8 @@ An event system library.
 
 ## Deployment Steps
 
-1. Download zip file to a temporary directory.
-2. Unzip.
-3. Copy to target directory path.
+1. Clone js-signals git repo to a temporary directory
+2. Copy to target directory path.
 
 =end
 
@@ -95,7 +94,7 @@ def deployJsSignals targetDirectoryPath
   $stdout.puts RakeHelper::blue("== Deploying js-signals ==")
 
   if File.exist? "#{targetDirectoryPath}/signals.min.js"
-    $stdout.puts "(js-signals already deployed)"
+    $stdout.puts "○ js-signals already deployed"
   else
     tmpDir = "/tmp/caverns_rake/deploy/js-signals"
     RakeHelper::doit "rm -rf #{tmpDir}; mkdir -p #{tmpDir}"
@@ -122,6 +121,7 @@ end
 #------------------------------------------------------------------------------
 desc 'Runs client tests'
 task 'test:client' => ['deploy:offline'] do
+  $stdout.puts RakeHelper::blue("== Opening SpecRunner.html ==")
   RakeHelper::doit "open #{RakeHelper::projectRoot}/client/SpecRunner.html"
 end
 
