@@ -1,18 +1,13 @@
 (function(){
 
-  this.Box2dBodyComponent = function(options) {
-    this.initialize(options);
+  function Box2dBodyComponent() {
+    this.fixed = false;
+    this.restitution = 0.6;
+    this.friction = 0.3;
+    this.rotation = 0;
+    Component.registerInstance(this);
   }
-  
-  Box2dBodyComponent.prototype = {
-    initialize: function(options) {
-      this.fixed = false;
-      this.restitution = 0.6;
-      this.friction = 0.3;
-      this.rotation = 0;
-    }
-  }
-  
-  Component.register(Box2dBodyComponent);
+
+  this.Box2dBodyComponent = Box2dBodyComponent;
 
 })();

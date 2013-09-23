@@ -2,13 +2,10 @@ describe("Box2d Physics System", function() {
 
   var world = null;
   var physics = null;
+  var helper = new SpecHelper();
 
   beforeEach(function() {
-    world = SpecHelper.createPhysicsWorldDouble();
-    spyOn(world, 'initialize');
-    spyOn(world, 'addBody');
-    spyOn(world, 'tick');
-    
+    world = helper.createPhysicsWorldSpy();
     physics = new Box2dPhysicsSystem(world);
   });
 
@@ -24,7 +21,7 @@ describe("Box2d Physics System", function() {
     });
 
     it("should support the System API", function() {
-      SpecHelper.supportsSystemAPI(physics);
+      helper.expectSystemAPI(physics);
     });
 
     it("should have a physics world instance", function() {
