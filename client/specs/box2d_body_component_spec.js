@@ -11,62 +11,37 @@ describe("Box2d Body Component", function() {
     body = null;
   });
 
-  describe("A new Box2dBodyComponent", function() {
-
+  describe("A Box2dBodyComponent instance", function() {
    it("should not be null", function() {
      expect(body).not.toBe(null);
    });
-
-   it("should support the Component API", function() {
+   
+   it("should be an instance of 'Component'", function() {
      helper.expectComponentAPI(body);
    });
 
    describe("should have a 'fixed' property", function() {
-
-     it("that is defined", function() {
-       expect(body.fixed).toBeDefined();
+     it("that is a Boolean", function() {
+       helper.expectPropertyOfType(body, 'fixed', Boolean);
      });
-
-     it("that is a Boolean value", function() {
-       expect(body.fixed).toEqual(jasmine.any(Boolean));
-     });
-
    });
 
    describe("should have a 'restitution' property", function() {
-
-     it("that is defined", function() {
-       expect(body.restitution).toBeDefined();
+     it("that is a Number", function() {
+       helper.expectPropertyOfType(body, 'restitution', Number);
      });
-
-     it("that is a number", function() {
-       expect(body.restitution).toEqual(jasmine.any(Number));
-     });
-
    });
 
    describe("should have a 'friction' property", function() {
-
-     it("that is defined", function() {
-       expect(body.friction).toBeDefined();
+     it("that is a Number", function() {
+       helper.expectPropertyOfType(body, 'friction', Number);
      });
-
-     it("that is a number", function() {
-       expect(body.friction).toEqual(jasmine.any(Number));
-     });
-
    });
 
    describe("should have a 'rotation' property", function() {
-
-     it("should be defined", function() {
-       expect(body.rotation).toBeDefined();
+     it("that is a Number", function() {
+       helper.expectPropertyOfType(body, 'rotation', Number);
      });
-
-     it("should be a number", function() {
-       expect(body.rotation).toEqual(jasmine.any(Number));
-     });
-
    });
 
  });

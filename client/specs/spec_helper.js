@@ -4,6 +4,11 @@
 
   }
 
+  SpecHelper.prototype.expectPropertyOfType = function(obj, name, type) {
+    expect(obj[name]).toBeDefined();
+    expect(obj[name]).toEqual(jasmine.any(type));
+  }
+
   SpecHelper.prototype.expectSystemAPI = function(obj) {
     expect(_.isFunction(obj.onAdded)).toBe(true);
     expect(_.isFunction(obj.onRemoved)).toBe(true);
