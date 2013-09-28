@@ -5,7 +5,7 @@ describe("Box2d Physics System", function() {
   var helper = new SpecHelper();
 
   beforeEach(function() {
-    world = helper.createPhysicsWorldSpy();
+    world = helper.createBox2dPhysicsWorldSpy();
     physics = new Box2dPhysicsSystem(world);
   });
 

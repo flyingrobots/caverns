@@ -21,18 +21,18 @@
    expect(_.isNumber(obj.componentId)).toBe(true); 
   }
 
-  SpecHelper.prototype.createPhysicsWorldSpy = function() {
-    var world = {
+  SpecHelper.prototype.createBox2dPhysicsWorldSpy = function() {
+    var spy = {
       initialize: function(opts) {},
       addBody: function(x, y, opts, shapeFunc) {},
       tick: function(dt) {}
     };
 
-    spyOn(world, 'initialize');
-    spyOn(world, 'addBody');
-    spyOn(world, 'tick');
+    spyOn(spy, 'initialize');
+    spyOn(spy, 'addBody');
+    spyOn(spy, 'tick');
 
-    return world;
+    return spy;
   }
 
   this.SpecHelper = SpecHelper;
