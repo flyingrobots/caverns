@@ -20,26 +20,20 @@ describe("Box2d Body Component", function() {
      helper.expectComponentAPI(body);
    });
 
-   describe("should have a 'fixed' property", function() {
-     it("that is a Boolean", function() {
+   describe("its properties", function() {
+     it("should have a 'fixed' property", function() {
        helper.expectPropertyOfType(body, 'fixed', Boolean);
      });
-   });
 
-   describe("should have a 'restitution' property", function() {
-     it("that is a Number", function() {
+     it("should have a 'restitution' property", function() {
        helper.expectPropertyOfType(body, 'restitution', Number);
      });
-   });
 
-   describe("should have a 'friction' property", function() {
-     it("that is a Number", function() {
+     it("should have a 'friction' property", function() {
        helper.expectPropertyOfType(body, 'friction', Number);
      });
-   });
 
-   describe("should have a 'rotation' property", function() {
-     it("that is a Number", function() {
+     it("should have a 'rotation' property", function() {
        helper.expectPropertyOfType(body, 'rotation', Number);
      });
    });
