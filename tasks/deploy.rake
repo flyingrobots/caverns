@@ -1,34 +1,27 @@
 require "#{File.dirname(__FILE__)}/rake_helper"
 
-=begin
-
-# Jasmine
-
-Jasmine is a behavior-driven development framework for testing JavaScript
-code. It does not rely on the DOM or require any other JavaScript frameworks,
-and is therefore suitable for testing both the client and server code.
-
-For more information, see [Jasmine](http://pivotal.github.io/jasmine/)
-
-## Deployment Steps:
-
-1. Clone the Jasmine git repo to a temporary directory
-2. Unzip the release candidate zip
-4. Copy the contents of the unzipped 'lib' directory to the deployment target directory
-
-=end
-
-def deployJasmine targetDirectoryPath
-
-  $stdout.puts RakeHelper::blue("== Deploying Jasmine ==")
-
-  # TODO maybe this check isn't robust enough, but it will do for now...
-  if File.exist? "#{targetDirectoryPath}/jasmine-2.0.0-rc2/jasmine.js"
-    
-    $stdout.puts "○ Jasmine already deployed" 
-
+def alreadyDeployed? name, deploymentPath
+  if File.exist? deploymentPath
+    $stdout.puts "○ #{name} is already deployed" 
+    return true
   else
+    return false 
+  end
+end
 
+def deploy name, targetPath, &block
+  $stdout.puts RakeHelper::blue("== Deploying #{name} ==")
+  $stdout.puts "(to #{targetPath})"
+
+  unless alreadyDeployed?(name, targetPath)
+    yield block
+  end
+
+  $stdout.puts RakeHelper::green("✔ #{name} deployed to #{targetPath}")
+end
+
+def deployJasmine targetPath
+  deploy('Jasmine', "#{targetPath}/jasmine-2.0.0-rc2") {
     tmpDir = "/tmp/caverns_rake/deploy/jasmine"
     RakeHelper::doit "rm -rf #{tmpDir}; mkdir -p #{tmpDir}"
 
@@ -36,89 +29,50 @@ def deployJasmine targetDirectoryPath
       $stdout.puts "(working in #{tmpDir})"
       RakeHelper::doit "git clone https://github.com/pivotal/jasmine.git git/"
       RakeHelper::doit "unzip -o git/dist/jasmine-standalone-2.0.0-rc2"
-      RakeHelper::doit "cp -r lib/ #{targetDirectoryPath}"
+      RakeHelper::doit "cp -r lib/ #{targetPath}"
     }
 
     RakeHelper::doit "rm -rf #{tmpDir}"
-
-  end
-
-  $stdout.puts RakeHelper::green("✔ Jasmine deployed to #{targetDirectoryPath}")
-
+  }
 end
 
-=begin
-
-# Underscore
-
-Underscore is a lightweight JavaScript utility belt library. For more
-information, see [underscorejs.org](http://underscorejs.org/).
-
-## Deployment Steps
-
-1. Download a copy of underscore-min.js to the target directory path.
-
-=end
-
-def deployUnderscoreJS targetDirectoryPath
-
-  $stdout.puts RakeHelper::blue("== Deploying UnderscoreJS ==")
-  
-  underscoreFilepath = "#{targetDirectoryPath}/underscore-min.js"
-
-  unless File.exist? underscoreFilepath 
-    RakeHelper::doit "curl -o #{targetDirectoryPath}/underscore-min.js http://underscorejs.org/underscore-min.js"
-  else
-    $stdout.puts "○ UnderscoreJS already deployed"
-  end
-
-  $stdout.puts RakeHelper::green("✔ Downloaded to #{targetDirectoryPath}/underscore-min.js")
-
+def deployUnderscoreJS targetPath
+  underscoreFilepath = "#{targetPath}/underscore-min.js"
+  deploy('Underscore js', underscoreFilepath) {
+    RakeHelper::doit "curl -o #{underscoreFilepath} http://underscorejs.org/underscore-min.js"
+  }
 end
 
-=begin
-
-# js-signals
-
-An event system library.
-
-## Deployment Steps
-
-1. Clone js-signals git repo to a temporary directory
-2. Copy to target directory path.
-
-=end
-
-def deployJsSignals targetDirectoryPath
-
-  $stdout.puts RakeHelper::blue("== Deploying js-signals ==")
-
-  if File.exist? "#{targetDirectoryPath}/signals.min.js"
-    $stdout.puts "○ js-signals already deployed"
-  else
+def deployJsSignals targetPath
+  signalsFilepath = "#{targetPath}/signals.min.js"
+  deploy('signals', signalsFilepath) {
     tmpDir = "/tmp/caverns_rake/deploy/js-signals"
     RakeHelper::doit "rm -rf #{tmpDir}; mkdir -p #{tmpDir}"
     Dir.chdir(tmpDir) {
       RakeHelper::doit "git clone https://github.com/millermedeiros/js-signals.git ."
-      RakeHelper::doit "cp dist/signals.min.js #{targetDirectoryPath}"
+      RakeHelper::doit "cp dist/signals.min.js #{targetPath}"
     }
     RakeHelper::doit "rm -rf #{tmpDir}"
-  end
-
-  $stdout.puts RakeHelper::green("✔ Deployed js-signals to #{targetDirectoryPath}/signals.min.js")
-
+  }
 end
 
-#------------------------------------------------------------------------------
+def deployBox2d targetPath
+  box2dPath = "#{targetPath}/box2d.js"
+  deploy('Box2d', box2dPath) {
+    # TODO download this for reals
+    RakeHelper::doit "cp #{RakeHelper::projectRoot}/client/deps/box2d-js/*.js #{targetPath}"
+  }
+end
+
 desc 'Exports all dependencies required to run the client in offline mode'
 task 'deploy:offline' do
-  clientLibPath = "#{RakeHelper::projectRoot}/client/lib"
-  deployJasmine clientLibPath
-  deployUnderscoreJS clientLibPath
-  deployJsSignals clientLibPath
+  libDirPath = "#{RakeHelper::projectRoot}/client/lib"
+  deployJasmine libDirPath
+  deployUnderscoreJS libDirPath
+  deployJsSignals libDirPath
+  deployBox2d libDirPath
 end
 
-#------------------------------------------------------------------------------
 desc 'Runs client tests'
 task 'test:client' => ['deploy:offline'] do
   $stdout.puts RakeHelper::blue("== Opening SpecRunner.html ==")

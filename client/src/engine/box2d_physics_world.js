@@ -1,5 +1,3 @@
-// Box2dPhysicsWorld.js
-// Created by flyingrobots
 (function() {
 
   function Box2dPhysicsWorld(opts) {
@@ -39,5 +37,7 @@
   Box2dPhysicsWorld.prototype.tick = function(dt) {
     this.world.Step(dt, 1);
   }
+
+  this.Box2dPhysicsWorld = Box2dPhysicsWorld;
 
 })();
