@@ -37,7 +37,7 @@ def deployJasmine targetPath
 end
 
 def deployUnderscoreJS targetPath
-  underscoreFilepath = "#{targetPath}/underscore-min.js"
+  underscoreFilepath = targetPath
   deploy('Underscore js', underscoreFilepath) {
     RakeHelper::doit "curl -o #{underscoreFilepath} http://underscorejs.org/underscore-min.js"
   }
@@ -60,7 +60,7 @@ def deployBox2d targetPath
   box2dPath = "#{targetPath}/box2d.js"
   deploy('Box2d', box2dPath) {
     # TODO download this for reals
-    RakeHelper::doit "cp #{RakeHelper::projectRoot}/client/deps/box2d-js/*.js #{targetPath}"
+    RakeHelper::doit "cp #{RakeHelper::projectRoot}/client/deps/box2d-js/ #{targetPath}"
   }
 end
 
