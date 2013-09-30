@@ -37,7 +37,7 @@ def deployJasmine targetPath
 end
 
 def deployUnderscoreJS targetPath
-  underscoreFilepath = targetPath
+  underscoreFilepath = "#{targetPath}/underscore-min.js"
   deploy('Underscore js', underscoreFilepath) {
     RakeHelper::doit "curl -o #{underscoreFilepath} http://underscorejs.org/underscore-min.js"
   }
