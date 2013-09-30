@@ -60,7 +60,7 @@ def deployBox2d targetPath
   box2dPath = "#{targetPath}/box2d.js"
   deploy('Box2d', box2dPath) {
     # TODO download this for reals
-    RakeHelper::doit "cp #{RakeHelper::projectRoot}/client/deps/box2d-js/ #{targetPath}"
+    RakeHelper::doit "cp -r #{RakeHelper::projectRoot}/client/deps/box2d-js/ #{targetPath}"
   }
 end
 
